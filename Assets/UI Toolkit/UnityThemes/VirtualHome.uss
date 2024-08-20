@@ -1,0 +1,143 @@
+Label {
+    -unity-font: url('project://database/Assets/Fonts/Inconsolata-VariableFont_wdth,wght.ttf?fileID=12800000&guid=42da6aa80bfd42646b35590685f4c565&type=3#Inconsolata-VariableFont_wdth,wght');
+    -unity-font-definition: initial;
+}
+
+.h1 {
+    -unity-font: url('project://database/Assets/Fonts/Inconsolata-VariableFont_wdth,wght.ttf?fileID=12800000&guid=42da6aa80bfd42646b35590685f4c565&type=3#Inconsolata-VariableFont_wdth,wght');
+    -unity-font-definition: initial;
+    font-size: 26px;
+    -unity-font-style: bold;
+}
+
+.nav-bar {
+    position: absolute;
+    bottom: 0;
+    width: 393px;
+    left: 0;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    height: 65px;
+    padding-right: 5px;
+    padding-left: 5px;
+    padding-bottom: 10px;
+    padding-top: 0;
+    flex-direction: row;
+}
+
+.nav-button {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.nav-button:disabled {
+    background-color: rgb(217, 217, 217);
+}
+
+.top-bar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    width: 393px;
+    height: 65px;
+    padding-top: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
+    flex-direction: row;
+    align-items: auto;
+    justify-content: space-between;
+}
+
+.heart {
+    flex-grow: 1;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    width: 40px;
+    height: 40px;
+    background-image: url('project://database/Assets/Sprites/Heart.png?fileID=21300000&guid=cc0c5ea916c19b645985e4c1b9fc95f3&type=3#Heart');
+}
+
+.heart-filled {
+    background-image: url('project://database/Assets/Sprites/Heart-fill.png?fileID=21300000&guid=2e7a094cb7b9c5843bba3a20d371997f&type=3#Heart-fill');
+}
+
+.star {
+    flex-grow: 0;
+    width: 50px;
+    height: 50px;
+    background-image: url('project://database/Assets/Sprites/Star.png?fileID=21300000&guid=18e63a8a19bff1042b73e533d1587fa3&type=3#Star');
+    -unity-background-scale-mode: scale-to-fit;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+    align-self: flex-start;
+    justify-content: space-between;
+}
+
+.star-filled {
+    background-image: url('project://database/Assets/Sprites/Star-fill.png?fileID=21300000&guid=237de873972d2914b8fbd9cfaabe1c80&type=3#Star-fill');
+}
+
+#Product-Box {
+    border-left-color: rgb(117, 117, 117);
+    border-right-color: rgb(117, 117, 117);
+    border-top-color: rgb(117, 117, 117);
+    border-bottom-color: rgb(117, 117, 117);
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    border-bottom-left-radius: 6px;
+    margin-left: 10px;
+    margin-bottom: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+}
+
+#Bundle-Box {
+    border-left-color: rgb(117, 117, 117);
+    border-right-color: rgb(117, 117, 117);
+    border-top-color: rgb(117, 117, 117);
+    border-bottom-color: rgb(117, 117, 117);
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    border-bottom-left-radius: 6px;
+    margin-left: 10px;
+    margin-bottom: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+}
+
+.unity-base-text-field__input {
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    background-color: rgba(255, 255, 255, 0);
+    border-left-color: rgb(117, 117, 117);
+    border-right-color: rgb(117, 117, 117);
+    border-top-color: rgb(117, 117, 117);
+    border-bottom-color: rgb(117, 117, 117);
+}
