@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:GroupBox name="Product-Line" style="background-color: rgb(217, 217, 217); padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 5px; margin-left: 0; height: 50px; border-top-left-radius: 16px; border-top-right-radius: 16px; border-bottom-right-radius: 16px; border-bottom-left-radius: 16px; flex-direction: row;">
+        <ui:VisualElement name="Product-Image" style="flex-grow: 0; background-image: url(&apos;project://database/Assets/Sprites/Table.jpg?fileID=21300000&amp;guid=951cc115260d6904ea6beec214961708&amp;type=3#Table&apos;); -unity-background-scale-mode: scale-to-fit; align-self: flex-start; width: 35px; height: 35px; margin-top: 8px; margin-right: 5px; margin-bottom: 6px; margin-left: 10px; border-top-left-radius: 6px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px;" />
+        <ui:Label tabindex="-1" text="Table" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Product-Name" style="position: absolute; left: 50px; font-size: 12px;" />
+        <ui:Label tabindex="-1" text="Description" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Product-Short" style="position: absolute; left: 50px; top: 20px; font-size: 12px;" />
+        <ui:Label tabindex="-1" text="$000" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Product-Price" style="align-self: auto; position: absolute; right: 0; color: rgba(61, 61, 61, 0.59);" />
+    </ui:GroupBox>
+</ui:UXML>

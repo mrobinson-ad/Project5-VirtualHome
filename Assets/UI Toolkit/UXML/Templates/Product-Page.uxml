@@ -1,0 +1,12 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:GroupBox name="Product-Page" style="position: absolute; left: 0; top: 177px; width: 100%; height: 600px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;">
+        <ui:VisualElement name="Product-Image" style="flex-grow: 1; position: absolute; align-self: center; width: 290px; height: 290px; background-image: url(&apos;project://database/Assets/Sprites/Table.jpg?fileID=21300000&amp;guid=951cc115260d6904ea6beec214961708&amp;type=3#Table&apos;);" />
+        <ui:VisualElement name="Heart" class="heart heart-filled" style="flex-grow: 1; position: absolute; align-self: flex-end; top: 20px; right: 20px;" />
+        <ui:Label tabindex="-1" text="Table" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Product-Name" class="h1" style="left: 30px; top: 300px; align-self: flex-start;" />
+        <ui:Label tabindex="-1" text="Table" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Product-Tag" class="tag" />
+        <ui:Label tabindex="-1" text="$000" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Product-Price" style="left: 30px; top: 300px; font-size: 34px; height: 46px; align-self: flex-start;" />
+        <ui:Label tabindex="-1" text="Description" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Product-Description" style="left: 30px; top: 300px; font-size: 18px; color: rgb(117, 117, 117); align-self: flex-start;" />
+        <ui:DropdownField label="Color" index="0" choices="Wood, White" name="Color-Dropdown" style="left: 30px; flex-direction: column; top: 300px; margin-left: 0; margin-top: 5px; width: 80%; align-self: auto; height: auto; margin-bottom: 15px;" />
+        <ui:Button text="Add to cart" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Cart-Button" style="left: 0; top: 300px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; align-items: center; align-self: center; width: 230px; flex-grow: 1; flex-shrink: 1; max-height: 40px; height: auto; background-color: rgb(44, 44, 44); color: rgb(245, 245, 245); border-top-left-radius: 9px; border-top-right-radius: 9px; border-bottom-right-radius: 9px; border-bottom-left-radius: 9px; -unity-font-style: bold; font-size: 18px;" />
+    </ui:GroupBox>
+</ui:UXML>

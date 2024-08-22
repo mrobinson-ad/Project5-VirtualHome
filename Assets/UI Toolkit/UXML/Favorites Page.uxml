@@ -1,4 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="Product-Line" src="project://database/Assets/UI%20Toolkit/UXML/Templates/Product-Line.uxml?fileID=9197481963319205126&amp;guid=bf41a9f8c02bff640bc2aaa021c1cf89&amp;type=3#Product-Line" />
+    <ui:Template name="Product-Grid" src="project://database/Assets/UI%20Toolkit/UXML/Templates/Product-Grid.uxml?fileID=9197481963319205126&amp;guid=b89985daecdee814da7b402043aaf5bf&amp;type=3#Product-Grid" />
+    <ui:Template name="Product-Page" src="project://database/Assets/UI%20Toolkit/UXML/Templates/Product-Page.uxml?fileID=9197481963319205126&amp;guid=9ac5b94e50b452a4a905670ff0aa361d&amp;type=3#Product-Page" />
     <Style src="project://database/Assets/UI%20Toolkit/UnityThemes/VirtualHome.uss?fileID=7433441132597879392&amp;guid=980025167d3f7f74e9651ac8734173f2&amp;type=3#VirtualHome" />
     <ui:GroupBox name="Top-Bar" class="top-bar">
         <ui:VisualElement name="Star" class="star star-filled" style="flex-grow: 0; width: 50px; height: 50px; border-top-left-radius: 4px; border-top-right-radius: 4px; border-bottom-right-radius: 4px; border-bottom-left-radius: 4px; align-self: flex-start; justify-content: space-between;" />
@@ -11,4 +14,28 @@
         <ui:VisualElement name="User" class="nav-button" style="flex-grow: 1; background-image: url(&apos;project://database/Assets/Sprites/User.png?fileID=21300000&amp;guid=8f95e2cb642366749b586a397a944d9c&amp;type=3#User&apos;); -unity-background-scale-mode: scale-to-fit;" />
         <ui:VisualElement name="Cart" class="nav-button" style="flex-grow: 1; background-image: url(&apos;project://database/Assets/Sprites/Shopping%20cart.png?fileID=21300000&amp;guid=3f8fe338948e035459432ae7ecac6796&amp;type=3#Shopping cart&apos;); -unity-background-scale-mode: scale-to-fit;" />
     </ui:GroupBox>
+    <ui:Label tabindex="-1" text="Favorites" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Favorites-Label" class="h1" style="position: absolute; top: 15%; left: 10px;" />
+    <ui:GroupBox name="View-Box" style="position: absolute; top: 11%; right: 14px; width: 105px; height: 50px; background-color: rgb(217, 217, 217); padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; flex-direction: row; align-items: stretch; justify-content: space-between;">
+        <ui:VisualElement name="List-View" style="flex-grow: 1; background-image: url(&apos;project://database/Assets/Sprites/List.png?fileID=21300000&amp;guid=eecb1d370dde2564984029724dae1b43&amp;type=3#List&apos;); -unity-background-scale-mode: scale-to-fit;" />
+        <ui:VisualElement name="Grid-View" style="flex-grow: 1; background-image: url(&apos;project://database/Assets/Sprites/Grid.png?fileID=21300000&amp;guid=c66e533eb1b499f43b6bf0eb52f079ef&amp;type=3#Grid&apos;); -unity-background-scale-mode: scale-to-fit;" />
+    </ui:GroupBox>
+    <ui:ScrollView name="List-Scroll" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" style="position: absolute; top: 20%; width: 100%; height: 70%; padding-top: 10px; padding-right: 20px; padding-left: 20px; padding-bottom: 5px; justify-content: flex-start; visibility: visible; display: none;">
+        <ui:Instance template="Product-Line" name="Product-Line" />
+        <ui:Instance template="Product-Line" name="Product-Line" />
+        <ui:Instance template="Product-Line" name="Product-Line" />
+        <ui:Instance template="Product-Line" name="Product-Line" />
+        <ui:Instance template="Product-Line" name="Product-Line" />
+        <ui:Instance template="Product-Line" name="Product-Line" />
+    </ui:ScrollView>
+    <ui:ScrollView name="Grid-Scroll" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" horizontal-page-size="1" class="grid-scroll" style="position: absolute; top: 170px; width: 100%; height: 70%; padding-top: 10px; padding-right: 15px; padding-left: 15px; padding-bottom: 5px; justify-content: flex-start; visibility: visible; display: none; flex-direction: row; flex-wrap: wrap; left: 0; align-items: flex-start; align-self: auto;">
+        <ui:Instance template="Product-Grid" name="Product-Grid" style="width: 150px; align-items: auto; align-self: flex-start;" />
+        <ui:Instance template="Product-Grid" name="Product-Grid" style="width: 150px; align-items: auto; align-self: flex-start;" />
+        <ui:Instance template="Product-Grid" name="Product-Grid" style="width: 150px; align-items: auto; align-self: flex-start;" />
+        <ui:Instance template="Product-Grid" name="Product-Grid" style="width: 150px; align-items: auto; align-self: flex-start;" />
+        <ui:Instance template="Product-Grid" name="Product-Grid" style="width: 150px; align-items: auto; align-self: flex-start;" />
+        <ui:Instance template="Product-Grid" name="Product-Grid" style="width: 150px; align-items: auto; align-self: flex-start;" />
+        <ui:Instance template="Product-Grid" name="Product-Grid" style="width: 150px; align-items: auto; align-self: flex-start;" />
+        <ui:Instance template="Product-Grid" name="Product-Grid" style="width: 150px; align-items: auto; align-self: flex-start;" />
+    </ui:ScrollView>
+    <ui:Instance template="Product-Page" name="Product-Page" style="display: none;" />
 </ui:UXML>

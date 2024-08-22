@@ -1,3 +1,35 @@
+.unity-base-text-field__input {
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    background-color: rgba(255, 255, 255, 0);
+    border-left-color: rgb(117, 117, 117);
+    border-right-color: rgb(117, 117, 117);
+    border-top-color: rgb(117, 117, 117);
+    border-bottom-color: rgb(117, 117, 117);
+}
+
+#Grid-Scroll .unity-scroll-view__content-container--vertical {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-self: center;
+    justify-content: space-between;
+    align-items: stretch;
+}
+
+#Grid-Scroll .unity-scroll-view__content-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-self: flex-start;
+    justify-content: space-around;
+    align-items: auto;
+}
+
 Label {
     -unity-font: url('project://database/Assets/Fonts/Inconsolata-VariableFont_wdth,wght.ttf?fileID=12800000&guid=42da6aa80bfd42646b35590685f4c565&type=3#Inconsolata-VariableFont_wdth,wght');
     -unity-font-definition: initial;
@@ -126,18 +158,58 @@ Label {
     margin-top: 5px;
 }
 
-.unity-base-text-field__input {
-    border-top-width: 1px;
-    border-right-width: 1px;
-    border-bottom-width: 1px;
-    border-left-width: 1px;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-    border-bottom-right-radius: 20px;
-    border-bottom-left-radius: 20px;
+#Product-Grid {
+    margin-right: 0;
+    margin-bottom: 20px;
+    margin-top: 0;
+    margin-left: 0;
+    align-self: auto;
+}
+
+.tag {
+    left: 30px;
+    top: 300px;
+    align-items: flex-start;
+    align-self: flex-start;
+    -unity-text-align: upper-center;
+    padding-top: 6px;
+    padding-right: 6px;
+    padding-bottom: 6px;
+    padding-left: 6px;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    color: rgb(53, 125, 86);
+    background-color: rgb(207, 247, 211);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.unity-base-field__input {
+    padding-top: 0;
+    padding-right: 5px;
+    padding-bottom: 0;
+    padding-left: 10px;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
     background-color: rgba(255, 255, 255, 0);
-    border-left-color: rgb(117, 117, 117);
-    border-right-color: rgb(117, 117, 117);
-    border-top-color: rgb(117, 117, 117);
-    border-bottom-color: rgb(117, 117, 117);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-left-color: rgb(217, 217, 217);
+    border-right-color: rgb(217, 217, 217);
+    border-top-color: rgb(217, 217, 217);
+    border-bottom-color: rgb(217, 217, 217);
+    height: 30px;
+}
+
+.unity-base-popup-field__arrow {
+    background-image: url('project://database/Assets/Sprites/Chevron%20down.png?fileID=21300000&guid=04ccb8e28a357dd4fa207bc40db15923&type=3#Chevron down');
+    margin-right: 5px;
 }
