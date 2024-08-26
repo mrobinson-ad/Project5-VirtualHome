@@ -1,5 +1,4 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:Template name="Bundle-Box" src="project://database/Assets/UI%20Toolkit/UXML/Templates/Bundle-Box.uxml?fileID=9197481963319205126&amp;guid=aa3de69b579e3034998572c887a884ef&amp;type=3#Bundle-Box" />
     <Style src="project://database/Assets/UI%20Toolkit/UnityThemes/VirtualHome.uss?fileID=7433441132597879392&amp;guid=980025167d3f7f74e9651ac8734173f2&amp;type=3#VirtualHome" />
     <ui:GroupBox name="Top-Bar" class="top-bar">
         <ui:VisualElement name="Star" class="star" />
@@ -15,10 +14,5 @@
     <ui:Label tabindex="-1" text="Flash Sales" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Flash-Label" class="h1" style="position: absolute; top: 15%; margin-left: 10px;" />
     <ui:ScrollView mode="Horizontal" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" touch-scroll-type="Clamped" name="Flash-Scroll" style="position: absolute; top: 20%; flex-grow: 1; width: 100%; height: 240px; flex-direction: column;" />
     <ui:Label tabindex="-1" text="Bundle Sales" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Bundle-Label" class="h1" style="position: absolute; top: 50%; margin-left: 10px;" />
-    <ui:ScrollView mode="Horizontal" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" touch-scroll-type="Clamped" name="Bundle-Scroll" style="position: absolute; top: 55%; flex-grow: 1; width: 100%; height: 240px; flex-direction: column;">
-        <ui:Instance template="Bundle-Box" name="Bundle-Box" />
-        <ui:Instance template="Bundle-Box" name="Bundle-Box" />
-        <ui:Instance template="Bundle-Box" name="Bundle-Box" />
-        <ui:Instance template="Bundle-Box" name="Bundle-Box" />
-    </ui:ScrollView>
+    <ui:ScrollView mode="Horizontal" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" touch-scroll-type="Clamped" name="Bundle-Scroll" style="position: absolute; top: 55%; flex-grow: 1; width: 100%; height: 240px; flex-direction: column;" />
 </ui:UXML>

@@ -166,6 +166,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 92b3404561022684d950b7b18e165052, type: 2}
   - {fileID: 11400000, guid: 3018c3f7eda0d3047b71383b5e6620ee, type: 2}
   - {fileID: 11400000, guid: 89a8b376a64397345a7ac068bfbdc362, type: 2}
+  bundleList:
+  - {fileID: 11400000, guid: b57c724b407eb9e4eb042175ed7acc1c, type: 2}
 --- !u!4 &198971087
 Transform:
   m_ObjectHideFlags: 0
@@ -349,8 +351,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PanelSettings: {fileID: 11400000, guid: 4f3c01fcaf8d9ed45a6c23e8eebf9e2e, type: 2}
   m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: b770d118455b1f843b4fcdaebcf6a977,
-    type: 3}
+  sourceAsset: {fileID: 0}
   m_SortingOrder: 0
 --- !u!4 &521926874
 Transform:
@@ -397,6 +398,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   favoriteList: []
+  favoriteBundleList: []
 --- !u!4 &1249031996
 Transform:
   m_ObjectHideFlags: 0

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cf799ad47dca9e4c8a8991f4a7d15db, type: 3}
+  m_Name: BasicBundle
+  m_EditorClassIdentifier: 
+  content:
+    bundle:
+    - {fileID: 11400000, guid: 92b3404561022684d950b7b18e165052, type: 2}
+    - {fileID: 11400000, guid: 89a8b376a64397345a7ac068bfbdc362, type: 2}
+    - {fileID: 11400000, guid: 3018c3f7eda0d3047b71383b5e6620ee, type: 2}
+  bundleName: Classic Bundle
+  bundlePrice: 0
+  bundleSale: 
+  bundleDescription: The perfect fit for your living room
+  bundlePercent: 0.2
