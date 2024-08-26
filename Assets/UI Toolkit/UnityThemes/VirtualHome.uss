@@ -92,22 +92,22 @@ Label {
 .heart {
     flex-grow: 1;
     position: absolute;
-    right: 10px;
+    right: 0;
     top: 10px;
     width: 40px;
     height: 40px;
-    background-image: url('project://database/Assets/Sprites/Heart.png?fileID=21300000&guid=cc0c5ea916c19b645985e4c1b9fc95f3&type=3#Heart');
+    background-image: url('project://database/Assets/Sprites/UI/Heart.png?fileID=21300000&guid=cc0c5ea916c19b645985e4c1b9fc95f3&type=3#Heart');
 }
 
 .heart-filled {
-    background-image: url('project://database/Assets/Sprites/Heart-fill.png?fileID=21300000&guid=2e7a094cb7b9c5843bba3a20d371997f&type=3#Heart-fill');
+    background-image: url('project://database/Assets/Sprites/UI/Heart-fill.png?fileID=21300000&guid=2e7a094cb7b9c5843bba3a20d371997f&type=3#Heart-fill');
 }
 
 .star {
     flex-grow: 0;
     width: 50px;
     height: 50px;
-    background-image: url('project://database/Assets/Sprites/Star.png?fileID=21300000&guid=18e63a8a19bff1042b73e533d1587fa3&type=3#Star');
+    background-image: url('project://database/Assets/Sprites/UI/Star.png?fileID=21300000&guid=18e63a8a19bff1042b73e533d1587fa3&type=3#Star');
     -unity-background-scale-mode: scale-to-fit;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
@@ -118,29 +118,10 @@ Label {
 }
 
 .star-filled {
-    background-image: url('project://database/Assets/Sprites/Star-fill.png?fileID=21300000&guid=237de873972d2914b8fbd9cfaabe1c80&type=3#Star-fill');
+    background-image: url('project://database/Assets/Sprites/UI/Star-fill.png?fileID=21300000&guid=237de873972d2914b8fbd9cfaabe1c80&type=3#Star-fill');
 }
 
 #Product-Box {
-    border-left-color: rgb(117, 117, 117);
-    border-right-color: rgb(117, 117, 117);
-    border-top-color: rgb(117, 117, 117);
-    border-bottom-color: rgb(117, 117, 117);
-    border-top-width: 2px;
-    border-right-width: 2px;
-    border-bottom-width: 2px;
-    border-left-width: 2px;
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
-    border-bottom-right-radius: 6px;
-    border-bottom-left-radius: 6px;
-    margin-left: 10px;
-    margin-bottom: 5px;
-    margin-right: 5px;
-    margin-top: 5px;
-}
-
-#Bundle-Box {
     border-left-color: rgb(117, 117, 117);
     border-right-color: rgb(117, 117, 117);
     border-top-color: rgb(117, 117, 117);
@@ -212,7 +193,7 @@ Label {
 }
 
 .unity-base-popup-field__arrow {
-    background-image: url('project://database/Assets/Sprites/Chevron%20down.png?fileID=21300000&guid=04ccb8e28a357dd4fa207bc40db15923&type=3#Chevron down');
+    background-image: url('project://database/Assets/Sprites/UI/Chevron%20down.png?fileID=21300000&guid=04ccb8e28a357dd4fa207bc40db15923&type=3#Chevron down');
     margin-right: 5px;
 }
 

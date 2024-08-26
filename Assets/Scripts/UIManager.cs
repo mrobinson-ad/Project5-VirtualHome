@@ -54,15 +54,13 @@ namespace VirtualHome
 
             foreach (var product in productList)
             {
-                // Find and instantiate the template
                 VisualTreeAsset template = uITemplates.Find(t => t.name == "Product-Box");
 
                 if (template != null)
                 {
-                    // Clone the template into a new VisualElement
+
                     VisualElement newItem = template.CloneTree();
 
-                    // Find and assign values to elements in the template
                     newItem.Q<Label>("Product-Name").text = product.productName;
                     newItem.Q<Label>("Product-Price").text = $"<s>${product.productPrice} </s>";
                     newItem.Q<Label>("Product-Price-Sale").text = $"${product.productSale}";
