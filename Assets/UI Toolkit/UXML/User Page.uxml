@@ -1,0 +1,33 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/UnityThemes/VirtualHome.uss?fileID=7433441132597879392&amp;guid=980025167d3f7f74e9651ac8734173f2&amp;type=3#VirtualHome" />
+    <ui:GroupBox name="Top-Bar" class="top-bar">
+        <ui:VisualElement name="Star" style="flex-grow: 0; width: 50px; height: 50px; background-image: url(&apos;project://database/Assets/Sprites/Star.png?fileID=21300000&amp;guid=18e63a8a19bff1042b73e533d1587fa3&amp;type=3#Star&apos;); -unity-background-scale-mode: scale-to-fit; border-top-left-radius: 4px; border-top-right-radius: 4px; border-bottom-right-radius: 4px; border-bottom-left-radius: 4px; align-self: flex-start; justify-content: space-between;" />
+        <ui:VisualElement name="Bell" style="flex-grow: 0; width: 50px; height: 50px; background-image: url(&apos;project://database/Assets/Sprites/Bell.png?fileID=21300000&amp;guid=fe77035b3cc6c144380f2fa74276d5a8&amp;type=3#Bell&apos;); -unity-background-scale-mode: scale-to-fit; border-top-left-radius: 4px; border-top-right-radius: 4px; border-bottom-right-radius: 4px; border-bottom-left-radius: 4px; align-self: flex-end;" />
+    </ui:GroupBox>
+    <ui:GroupBox name="Navigation-Bar" class="nav-bar nav-button">
+        <ui:VisualElement name="Percent" class="nav-button" style="flex-grow: 1; background-image: url(&apos;project://database/Assets/Sprites/Percent.png?fileID=21300000&amp;guid=f9eab16b1d952c842b3979886ad52f1b&amp;type=3#Percent&apos;); -unity-background-scale-mode: scale-to-fit;" />
+        <ui:VisualElement name="Search" class="nav-button" style="flex-grow: 1; background-image: url(&apos;project://database/Assets/Sprites/Search.png?fileID=21300000&amp;guid=15d2882f5a1611a4eb88db44cece4ce1&amp;type=3#Search&apos;); -unity-background-scale-mode: scale-to-fit; padding-top: 0; padding-right: 0; margin-right: 0; margin-left: 0;" />
+        <ui:VisualElement name="Camera" class="nav-button" style="flex-grow: 1; background-image: url(&apos;project://database/Assets/Sprites/Camera.png?fileID=21300000&amp;guid=72c29d900cb7f35438b13fb351610f11&amp;type=3#Camera&apos;); -unity-background-scale-mode: scale-to-fit;" />
+        <ui:VisualElement name="User" class="nav-button" style="flex-grow: 1; background-image: url(&apos;project://database/Assets/Sprites/User.png?fileID=21300000&amp;guid=8f95e2cb642366749b586a397a944d9c&amp;type=3#User&apos;); -unity-background-scale-mode: scale-to-fit;" />
+        <ui:VisualElement name="Cart" class="nav-button" style="flex-grow: 1; background-image: url(&apos;project://database/Assets/Sprites/Shopping%20cart.png?fileID=21300000&amp;guid=3f8fe338948e035459432ae7ecac6796&amp;type=3#Shopping cart&apos;); -unity-background-scale-mode: scale-to-fit;" />
+    </ui:GroupBox>
+    <ui:VisualElement name="Login-Box" style="flex-grow: 0; flex-direction: row; align-items: flex-end; justify-content: center; top: 20px; display: flex;">
+        <ui:Button text="Sign In" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Sign-In-Button" class="button-black" style="min-width: 100px; max-height: 35px; font-size: 14px; top: auto; align-self: center; background-color: rgb(227, 227, 227); color: rgb(44, 44, 44);" />
+        <ui:Button text="Register" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Register-Button" class="button-black" style="min-width: 100px; max-height: 35px; font-size: 14px; top: auto; align-self: center;" />
+    </ui:VisualElement>
+    <ui:VisualElement name="User-Name-Box" style="flex-grow: 0; flex-direction: row; align-items: flex-end; justify-content: center; top: 20px; display: none;">
+        <ui:Label tabindex="-1" text="USERNAME" parse-escape-sequences="true" display-tooltip-when-elided="true" name="User-Name-Label" class="h1" style="top: auto;" />
+    </ui:VisualElement>
+    <ui:ScrollView name="Shortcut-View" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" style="top: 10%; flex-grow: 0; justify-content: center; align-items: center; background-color: rgb(227, 227, 227); border-top-left-radius: 16px; border-top-right-radius: 16px; border-bottom-right-radius: 16px; border-bottom-left-radius: 16px; margin-right: 10px; margin-left: 10px; padding-bottom: 10px;">
+        <ui:Label tabindex="-1" text="Shortcuts" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Shortcut-Label" class="h1" style="align-self: center; top: auto;" />
+        <ui:Button text="Purchase history" parse-escape-sequences="true" display-tooltip-when-elided="true" name="History-Button" class="button-white">
+            <ui:Label tabindex="-1" text="&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" style="align-self: flex-end; margin-right: 0; padding-right: 0; padding-left: 0;" />
+        </ui:Button>
+        <ui:Button text="Redeem code" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Redeem-Button" class="button-white">
+            <ui:VisualElement name="Down" style="flex-grow: 0; align-self: flex-end; background-image: url(&apos;project://database/Assets/Sprites/Chevron%20down.png?fileID=21300000&amp;guid=04ccb8e28a357dd4fa207bc40db15923&amp;type=3#Chevron down&apos;); width: 13px; height: 13px; flex-shrink: 0; -unity-background-scale-mode: scale-to-fit; margin-right: 5px; margin-top: 2px;" />
+        </ui:Button>
+        <ui:Button text="Manage billing information" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Billing-Button" class="button-white">
+            <ui:Label tabindex="-1" text="&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" style="align-self: flex-end; margin-right: 0; padding-right: 0; padding-left: 0;" />
+        </ui:Button>
+    </ui:ScrollView>
+</ui:UXML>

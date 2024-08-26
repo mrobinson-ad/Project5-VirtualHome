@@ -231,6 +231,8 @@ Label {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
+    -unity-font-definition: initial;
+    -unity-font: url('project://database/Assets/Fonts/Inconsolata-VariableFont_wdth,wght.ttf?fileID=12800000&guid=42da6aa80bfd42646b35590685f4c565&type=3#Inconsolata-VariableFont_wdth,wght');
 }
 
 .unity-base-popup-field__text {
@@ -245,4 +247,33 @@ Label {
     border-top-right-radius: 4px;
     border-bottom-right-radius: 4px;
     border-bottom-left-radius: 4px;
+}
+
+.button-white {
+    max-width: 180px;
+    max-height: 45px;
+    min-width: 280px;
+    min-height: 30px;
+    font-size: 14px;
+    background-color: rgb(245, 245, 245);
+    color: rgb(27, 27, 27);
+    border-left-color: rgb(217, 217, 217);
+    border-right-color: rgb(217, 217, 217);
+    border-top-color: rgb(217, 217, 217);
+    border-bottom-color: rgb(217, 217, 217);
+    margin-top: 10px;
+    align-items: stretch;
+    -unity-text-align: middle-left;
+    -unity-font-style: bold;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    -unity-font-definition: initial;
+    -unity-font: url('project://database/Assets/Fonts/Inconsolata-VariableFont_wdth,wght.ttf?fileID=12800000&guid=42da6aa80bfd42646b35590685f4c565&type=3#Inconsolata-VariableFont_wdth,wght');
+    align-self: center;
 }
