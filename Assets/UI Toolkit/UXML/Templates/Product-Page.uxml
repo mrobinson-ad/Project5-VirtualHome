@@ -4,7 +4,7 @@
         <ui:VisualElement name="Product-Image" style="flex-grow: 1; position: absolute; align-self: center; width: 290px; height: 290px; background-image: url(&apos;project://database/Assets/Sprites/Table.jpg?fileID=21300000&amp;guid=951cc115260d6904ea6beec214961708&amp;type=3#Table&apos;);" />
         <ui:VisualElement name="Heart" class="heart heart-filled" style="flex-grow: 1; position: absolute; align-self: flex-end; top: 20px; right: 20px;" />
         <ui:Label tabindex="-1" text="Table" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Product-Name" class="h1" style="left: 30px; top: 300px; align-self: flex-start;" />
-        <ui:Label tabindex="-1" text="Table" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Product-Tag" class="tag" />
+        <ui:VisualElement name="Tag-Box" style="flex-grow: 0; left: 0; top: 300px; min-height: auto; min-width: auto; flex-direction: row;" />
         <ui:Label tabindex="-1" text="$000" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Product-Price" style="left: 30px; top: 300px; font-size: 34px; height: 46px; align-self: flex-start;" />
         <ui:Label tabindex="-1" text="Description" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Product-Description" style="left: 30px; top: 300px; font-size: 18px; color: rgb(117, 117, 117); align-self: flex-start;" />
         <ui:DropdownField label="Color" index="0" choices="Wood, White" name="Color-Dropdown" style="left: 30px; flex-direction: column; top: 300px; margin-left: 0; margin-top: 5px; width: 80%; align-self: auto; height: auto; margin-bottom: 15px;" />

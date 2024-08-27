@@ -9,6 +9,11 @@ public class FavoriteManager : MonoBehaviour
     public List<Product_SO> favoriteList;
 
     public List<Bundle_SO> favoriteBundleList;
+
+    public List<Product_SO> cartList;
+
+    public List<Bundle_SO> cartBundleList;
+    
     private void Awake()
     {
         if (Instance != null && Instance != this)

@@ -13,10 +13,18 @@ MonoBehaviour:
   m_Name: Lamp
   m_EditorClassIdentifier: 
   productName: Lamp
-  productSprite: {fileID: 21300000, guid: dd12a0f9838c32c48840191aee828c3e, type: 3}
+  productSprites:
+  - {fileID: 21300000, guid: dd12a0f9838c32c48840191aee828c3e, type: 3}
   prefab: {fileID: 0}
   productPrice: 67
   productSale: 42
   productDescription: 
   productShortDescription: Baroque three legged lamp
+  isSale: 0
+  tags:
+  - Lamp
+  colors:
+  - Classic
+  - Modern
+  materials: []
   productDimension: {x: 0, y: 0, z: 0}

@@ -17,7 +17,7 @@
 #Grid-Scroll .unity-scroll-view__content-container--vertical {
     flex-direction: row;
     flex-wrap: wrap;
-    align-self: center;
+    align-self: flex-start;
     justify-content: space-between;
     align-items: stretch;
 }
@@ -26,8 +26,8 @@
     flex-direction: row;
     flex-wrap: wrap;
     align-self: flex-start;
-    justify-content: space-around;
-    align-items: auto;
+    justify-content: space-between;
+    align-items: stretch;
 }
 
 Label {
@@ -140,14 +140,6 @@ Label {
     margin-top: 5px;
 }
 
-#Product-Grid {
-    margin-right: 0;
-    margin-bottom: 20px;
-    margin-top: 0;
-    margin-left: 0;
-    align-self: auto;
-}
-
 .tag {
     left: 30px;
     top: 300px;
@@ -257,4 +249,41 @@ Label {
     -unity-font-definition: initial;
     -unity-font: url('project://database/Assets/Fonts/Inconsolata-VariableFont_wdth,wght.ttf?fileID=12800000&guid=42da6aa80bfd42646b35590685f4c565&type=3#Inconsolata-VariableFont_wdth,wght');
     align-self: center;
+}
+
+.box-view {
+}
+
+.box-view:disabled {
+    background-color: rgb(117, 117, 117);
+}
+
+#Product-Grid {
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+
+.product-page {
+    width: 100%;
+    height: 80%;
+    top: 10%;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    left: 0;
+    transition-property: left;
+    transition-duration: 4s;
+    transition-timing-function: ease-in-sine;
+}
+
+.product-page-off {
+    width: 100%;
+    height: 80%;
+    top: 10%;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    left: 100%;
 }

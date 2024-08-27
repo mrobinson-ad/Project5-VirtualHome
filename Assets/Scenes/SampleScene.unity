@@ -162,6 +162,9 @@ MonoBehaviour:
   uITemplates:
   - {fileID: 9197481963319205126, guid: 60d08b2f7c21cb143badfeda28e8791a, type: 3}
   - {fileID: 9197481963319205126, guid: aa3de69b579e3034998572c887a884ef, type: 3}
+  - {fileID: 9197481963319205126, guid: bf41a9f8c02bff640bc2aaa021c1cf89, type: 3}
+  - {fileID: 9197481963319205126, guid: b89985daecdee814da7b402043aaf5bf, type: 3}
+  - {fileID: 9197481963319205126, guid: 4b689d01a0c348c4c98a8354ca48c701, type: 3}
   productList:
   - {fileID: 11400000, guid: 92b3404561022684d950b7b18e165052, type: 2}
   - {fileID: 11400000, guid: 3018c3f7eda0d3047b71383b5e6620ee, type: 2}
@@ -399,6 +402,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   favoriteList: []
   favoriteBundleList: []
+  cartList: []
+  cartBundleList: []
 --- !u!4 &1249031996
 Transform:
   m_ObjectHideFlags: 0

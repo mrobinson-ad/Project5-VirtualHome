@@ -78,12 +78,17 @@ namespace VirtualHome
                     newItem.Q<Label>("Product-Name").text = product.productName;
                     newItem.Q<Label>("Product-Price").text = $"<s>${product.productPrice} </s>";
                     newItem.Q<Label>("Product-Price-Sale").text = $"${product.productSale}";
-                    newItem.Q<VisualElement>("Product-Image-Box").style.backgroundImage = new StyleBackground(product.productSprite);
+                    newItem.Q<VisualElement>("Product-Image-Box").style.backgroundImage = new StyleBackground(product.productSprites[0]);
                     newItem.Q<Label>("Product-Short").text = product.productShortDescription;
+
+                    newItem.Q<VisualElement>("Product-Image-Box").RegisterCallback<ClickEvent>(evt =>
+                    {
+                        SetProductPage(product);
+                    });
                     var heart = newItem.Q<VisualElement>("Heart");
 
                     if (FavoriteManager.Instance.favoriteList.Contains(product))
-                    heart.AddToClassList("heart-filled");
+                        heart.AddToClassList("heart-filled");
 
                     heart.RegisterCallback<ClickEvent>(evt =>
                     {
@@ -118,13 +123,13 @@ namespace VirtualHome
 
                     for (int i = 0; i < 3; i++)
                     {
-                        newItem.Q<VisualElement>("Product-Image-" + i).style.backgroundImage = new StyleBackground(bundle.content.bundle[i].productSprite);
+                        newItem.Q<VisualElement>("Product-Image-" + i).style.backgroundImage = new StyleBackground(bundle.content.bundle[i].productSprites[0]);
                     }
-                    
+
                     var heart = newItem.Q<VisualElement>("Heart");
 
                     if (FavoriteManager.Instance.favoriteBundleList.Contains(bundle))
-                    heart.AddToClassList("heart-filled");
+                        heart.AddToClassList("heart-filled");
 
                     heart.RegisterCallback<ClickEvent>(evt =>
                     {
@@ -139,7 +144,7 @@ namespace VirtualHome
                             FavoriteManager.Instance.favoriteBundleList.Remove(bundle);
                         }
                     });
-                    BundleView.Add(newItem);    
+                    BundleView.Add(newItem);
                 }
             }
             SetNavBar();
@@ -148,6 +153,7 @@ namespace VirtualHome
 
         #endregion
 
+        #region LoadSearch
         private void LoadSearch()
         {
             currentPage = CurrentPage.Search;
@@ -155,29 +161,134 @@ namespace VirtualHome
             currentUIDocument.visualTreeAsset = uIDocuments.Find(doc => doc.name == "Search Page");
             root = currentUIDocument.rootVisualElement;
 
+
             SetNavBar();
             root.Q<VisualElement>("Search").SetEnabled(false);
         }
+
+        #endregion
+
+        #region LoadUser
 
         private void LoadUser()
         {
             throw new NotImplementedException();
         }
 
+        #endregion
+
+        #region LoadCart
+
         private void LoadCart()
         {
             throw new NotImplementedException();
         }
 
+        #endregion
+
+        #region LoadFavorites
         private void LoadFavorites()
         {
-            throw new NotImplementedException();
+            currentPage = CurrentPage.Favorites;
+            // Sets the current Page to Favorites and the root reference
+            currentUIDocument.visualTreeAsset = uIDocuments.Find(doc => doc.name == "Favorites Page");
+            root = currentUIDocument.rootVisualElement;
+
+            SetListView();
+
+            SetNavBar();
+            var star = root.Q<VisualElement>("Star");
+            star.pickingMode = PickingMode.Ignore;
+            star.AddToClassList("star-filled");
+
+            var gridView = root.Q<VisualElement>("Grid-View");
+            var listView = root.Q<VisualElement>("List-View");
+
+            gridView.RegisterCallback<ClickEvent>(evt =>
+            {
+                SetGridView();
+                listView.SetEnabled(true);
+            });
+
+            listView.RegisterCallback<ClickEvent>(evt =>
+            {
+                SetListView();
+                gridView.SetEnabled(true);
+            });
+
         }
+
+        private void SetListView()
+        {
+            ScrollView listView = root.Q<ScrollView>("List-Scroll");
+            listView.Clear();
+            listView.style.display = DisplayStyle.Flex;
+            root.Q<VisualElement>("Grid-Scroll").style.display = DisplayStyle.None;
+            root.Q<VisualElement>("List-View").SetEnabled(false);
+
+            foreach (var product in FavoriteManager.Instance.favoriteList)
+            {
+                VisualTreeAsset template = uITemplates.Find(t => t.name == "Product-Line");
+
+                if (template != null)
+                {
+                    VisualElement newItem = template.CloneTree();
+
+                    newItem.Q<Label>("Product-Name").text = product.productName;
+                    newItem.Q<Label>("Product-Price").text = $"${product.productPrice}";
+                    newItem.Q<VisualElement>("Product-Image").style.backgroundImage = new StyleBackground(product.productSprites[0]);
+                    newItem.Q<Label>("Product-Short").text = product.productShortDescription;
+                    newItem.Q<VisualElement>("Remove-Product").RegisterCallback<ClickEvent>(evt =>
+                    {
+                        FavoriteManager.Instance.favoriteList.Remove(product);
+                        listView.Remove(newItem);
+                    });
+                    listView.Add(newItem);
+                }
+            }
+        }
+
+        private void SetGridView()
+        {
+            ScrollView gridView = root.Q<ScrollView>("Grid-Scroll");
+            gridView.Clear();
+            gridView.style.display = DisplayStyle.Flex;
+            root.Q<VisualElement>("List-Scroll").style.display = DisplayStyle.None;
+            root.Q<VisualElement>("Grid-View").SetEnabled(false);
+
+
+            foreach (var product in FavoriteManager.Instance.favoriteList)
+            {
+                VisualTreeAsset template = uITemplates.Find(t => t.name == "Product-Grid");
+
+                if (template != null)
+                {
+                    VisualElement newItem = template.CloneTree();
+
+                    newItem.Q<Label>("Product-Name").text = product.productName;
+                    newItem.Q<Label>("Product-Price").text = $"${product.productPrice}";
+                    newItem.Q<VisualElement>("Product-Image").style.backgroundImage = new StyleBackground(product.productSprites[0]);
+                    newItem.Q<Label>("Product-Short").text = product.productShortDescription;
+                    newItem.Q<VisualElement>("Remove-Product").RegisterCallback<ClickEvent>(evt =>
+                    {
+                        FavoriteManager.Instance.favoriteList.Remove(product);
+                        gridView.Remove(newItem);
+                    });
+                    gridView.Add(newItem);
+                }
+            }
+        }
+
+        #endregion
+
+        #region LoadAR
 
         private void LoadAR()
         {
             throw new NotImplementedException();
         }
+
+        #endregion
 
         private void SetNavBar()
         {
@@ -211,7 +322,65 @@ namespace VirtualHome
                 LoadAR();
             });
         }
-        #endregion
 
+        private void SetProductPage(Product_SO product)
+        {
+            Debug.Log(product.productName);
+            GroupBox page = root.Q<GroupBox>("Product-Page");
+            VisualTreeAsset template = uITemplates.Find(t => t.name == "Product-Tag");
+            page.Q<VisualElement>("Tag-Box").Clear();
+            if (template != null)
+            {
+                foreach (var tag in product.tags)
+                {
+                    VisualElement newItem = template.CloneTree();
+
+                    newItem.Q<Label>("Product-Tag").text = tag;
+                    page.Q<VisualElement>("Tag-Box").Add(newItem);
+                }
+            }
+            page.Q<Label>("Product-Name").text = product.productName;
+            page.Q<Label>("Product-Price").text = $"${product.productPrice}";
+            if (product.isSale)
+            {
+                page.Q<Label>("Product-Price-Sale").text = $"<s>${product.productPrice} </s>";
+                page.Q<Label>("Product-Price-Sale").style.visibility = Visibility.Visible;
+                page.Q<Label>("Product-Price").text = $"${product.productSale}";
+            }
+
+            page.Q<VisualElement>("Product-Image").style.backgroundImage = new StyleBackground(product.productSprites[0]);
+            page.Q<Label>("Product-Description").text = product.productShortDescription;
+
+            var colorDropdown = page.Q<DropdownField>("Color-Dropdown");
+            colorDropdown.choices.Clear();
+            colorDropdown.choices.AddRange(product.colors);
+            colorDropdown.value = product.colors[0];
+
+            page.Q<VisualElement>("Return-Arrow").RegisterCallback<ClickEvent>(evt =>
+            {
+                page.AddToClassList("product-page-off");
+            });
+
+            VisualElement heart = page.Q<VisualElement>("Heart");
+            if (FavoriteManager.Instance.favoriteList.Contains(product))
+                heart.AddToClassList("heart-filled");
+
+            heart.RegisterCallback<ClickEvent>(evt =>
+            {
+                if (!heart.ClassListContains("heart-filled"))
+                {
+                    heart.AddToClassList("heart-filled");
+                    FavoriteManager.Instance.favoriteList.Add(product);
+                }
+                else
+                {
+                    heart.RemoveFromClassList("heart-filled");
+                    FavoriteManager.Instance.favoriteList.Remove(product);
+                }
+            });
+            page.RemoveFromClassList("product-page-off");
+        }
     }
+    #endregion
+
 }
