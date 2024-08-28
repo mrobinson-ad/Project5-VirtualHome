@@ -272,9 +272,6 @@ Label {
     margin-bottom: 0;
     margin-left: 0;
     left: 0;
-    transition-property: left;
-    transition-duration: 4s;
-    transition-timing-function: ease-in-sine;
 }
 
 .product-page-off {

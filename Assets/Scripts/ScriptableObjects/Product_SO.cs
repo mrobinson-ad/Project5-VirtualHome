@@ -17,6 +17,7 @@ public class Product_SO : ScriptableObject
     public bool isSale;
     public List<string> tags;
     public List<string> colors;
+    public string selectedColor;
     public List<Material> materials;
     public Vector3 productDimension;
 }

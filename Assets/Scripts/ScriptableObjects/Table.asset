@@ -15,17 +15,19 @@ MonoBehaviour:
   productName: Coffee Table
   productSprites:
   - {fileID: 21300000, guid: 49c14d67dc89a4b49bebd56c71b461e9, type: 3}
+  - {fileID: 21300000, guid: 2acd29327915c5d4bb018324e6c19419, type: 3}
   prefab: {fileID: 0}
   productPrice: 137
   productSale: 87
   productDescription: 
   productShortDescription: An elegant black coffee table
-  isSale: 0
+  isSale: 1
   tags:
   - Table
   - Coffee table
   colors:
   - Black
   - Oak
+  selectedColor: 
   materials: []
   productDimension: {x: 0, y: 0, z: 0}

@@ -68,42 +68,44 @@ namespace VirtualHome
             ScrollView FlashView = root.Q<ScrollView>("Flash-Scroll");
             foreach (var product in productList)
             {
-                VisualTreeAsset template = uITemplates.Find(t => t.name == "Product-Box");
-
-                if (template != null)
+                if (product.isSale)
                 {
+                    VisualTreeAsset template = uITemplates.Find(t => t.name == "Product-Box");
 
-                    VisualElement newItem = template.CloneTree();
-
-                    newItem.Q<Label>("Product-Name").text = product.productName;
-                    newItem.Q<Label>("Product-Price").text = $"<s>${product.productPrice} </s>";
-                    newItem.Q<Label>("Product-Price-Sale").text = $"${product.productSale}";
-                    newItem.Q<VisualElement>("Product-Image-Box").style.backgroundImage = new StyleBackground(product.productSprites[0]);
-                    newItem.Q<Label>("Product-Short").text = product.productShortDescription;
-
-                    newItem.Q<VisualElement>("Product-Image-Box").RegisterCallback<ClickEvent>(evt =>
+                    if (template != null)
                     {
-                        SetProductPage(product);
-                    });
-                    var heart = newItem.Q<VisualElement>("Heart");
 
-                    if (FavoriteManager.Instance.favoriteList.Contains(product))
-                        heart.AddToClassList("heart-filled");
+                        VisualElement newItem = template.CloneTree();
 
-                    heart.RegisterCallback<ClickEvent>(evt =>
-                    {
-                        if (!heart.ClassListContains("heart-filled"))
+                        newItem.Q<Label>("Product-Name").text = product.productName;
+                        newItem.Q<Label>("Product-Price").text = $"<s>${product.productPrice} </s>";
+                        newItem.Q<Label>("Product-Price-Sale").text = $"${product.productSale}";
+                        newItem.Q<VisualElement>("Product-Image-Box").style.backgroundImage = new StyleBackground(product.productSprites[0]);
+                        newItem.Q<Label>("Product-Short").text = product.productShortDescription;
+                        var heart = newItem.Q<VisualElement>("Heart");
+                        newItem.Q<VisualElement>("Product-Image-Box").RegisterCallback<ClickEvent>(evt =>
                         {
+                            SetProductPage(product, heart);
+                        });
+
+                        if (FavoriteManager.Instance.favoriteList.Contains(product))
                             heart.AddToClassList("heart-filled");
-                            FavoriteManager.Instance.favoriteList.Add(product);
-                        }
-                        else
+
+                        heart.RegisterCallback<ClickEvent>(evt =>
                         {
-                            heart.RemoveFromClassList("heart-filled");
-                            FavoriteManager.Instance.favoriteList.Remove(product);
-                        }
-                    });
-                    FlashView.Add(newItem);
+                            if (!heart.ClassListContains("heart-filled"))
+                            {
+                                heart.AddToClassList("heart-filled");
+                                FavoriteManager.Instance.favoriteList.Add(product);
+                            }
+                            else
+                            {
+                                heart.RemoveFromClassList("heart-filled");
+                                FavoriteManager.Instance.favoriteList.Remove(product);
+                            }
+                        });
+                        FlashView.Add(newItem);
+                    }
                 }
             }
             //Instantiates the templates to populate the Bundle sales scroll view
@@ -235,8 +237,18 @@ namespace VirtualHome
                     VisualElement newItem = template.CloneTree();
 
                     newItem.Q<Label>("Product-Name").text = product.productName;
-                    newItem.Q<Label>("Product-Price").text = $"${product.productPrice}";
+
+                    if (product.isSale)
+                        newItem.Q<Label>("Product-Price").text = $"${product.productSale}";
+                    else
+                        newItem.Q<Label>("Product-Price").text = $"${product.productPrice}";
+
                     newItem.Q<VisualElement>("Product-Image").style.backgroundImage = new StyleBackground(product.productSprites[0]);
+                    newItem.Q<VisualElement>("Product-Image").RegisterCallback<ClickEvent>(evt =>
+                    {
+                        SetProductPage(product, newItem);
+                    });
+
                     newItem.Q<Label>("Product-Short").text = product.productShortDescription;
                     newItem.Q<VisualElement>("Remove-Product").RegisterCallback<ClickEvent>(evt =>
                     {
@@ -266,8 +278,18 @@ namespace VirtualHome
                     VisualElement newItem = template.CloneTree();
 
                     newItem.Q<Label>("Product-Name").text = product.productName;
-                    newItem.Q<Label>("Product-Price").text = $"${product.productPrice}";
+
+                    if (product.isSale)
+                        newItem.Q<Label>("Product-Price").text = $"${product.productSale}";
+                    else
+                        newItem.Q<Label>("Product-Price").text = $"${product.productPrice}";
+
                     newItem.Q<VisualElement>("Product-Image").style.backgroundImage = new StyleBackground(product.productSprites[0]);
+                    newItem.Q<VisualElement>("Product-Image").RegisterCallback<ClickEvent>(evt =>
+                    {
+                        SetProductPage(product, newItem);
+                    });
+
                     newItem.Q<Label>("Product-Short").text = product.productShortDescription;
                     newItem.Q<VisualElement>("Remove-Product").RegisterCallback<ClickEvent>(evt =>
                     {
@@ -323,7 +345,7 @@ namespace VirtualHome
             });
         }
 
-        private void SetProductPage(Product_SO product)
+        private void SetProductPage(Product_SO product, VisualElement templateHeart)
         {
             Debug.Log(product.productName);
             GroupBox page = root.Q<GroupBox>("Product-Page");
@@ -348,36 +370,63 @@ namespace VirtualHome
                 page.Q<Label>("Product-Price").text = $"${product.productSale}";
             }
 
-            page.Q<VisualElement>("Product-Image").style.backgroundImage = new StyleBackground(product.productSprites[0]);
+
             page.Q<Label>("Product-Description").text = product.productShortDescription;
 
             var colorDropdown = page.Q<DropdownField>("Color-Dropdown");
             colorDropdown.choices.Clear();
             colorDropdown.choices.AddRange(product.colors);
-            colorDropdown.value = product.colors[0];
+            if (product.selectedColor == "")
+                product.selectedColor = product.colors[0];
+            colorDropdown.value = product.selectedColor;
+            page.Q<VisualElement>("Product-Image").style.backgroundImage = new StyleBackground(product.productSprites[product.colors.IndexOf(product.selectedColor)]);
 
-            page.Q<VisualElement>("Return-Arrow").RegisterCallback<ClickEvent>(evt =>
+            EventCallback<ChangeEvent<string>> colorChange = evt =>
             {
-                page.AddToClassList("product-page-off");
-            });
+                product.selectedColor = colorDropdown.value;
+                page.Q<VisualElement>("Product-Image").style.backgroundImage = new StyleBackground(product.productSprites[product.colors.IndexOf(product.selectedColor)]);
+            };
+
+            colorDropdown.RegisterCallback(colorChange);
+
+
 
             VisualElement heart = page.Q<VisualElement>("Heart");
-            if (FavoriteManager.Instance.favoriteList.Contains(product))
-                heart.AddToClassList("heart-filled");
 
-            heart.RegisterCallback<ClickEvent>(evt =>
+            EventCallback<ClickEvent> heartClick = evt =>
+                {
+                    if (!heart.ClassListContains("heart-filled"))
+                    {
+                        heart.AddToClassList("heart-filled");
+                        templateHeart.AddToClassList("heart-filled");
+                        FavoriteManager.Instance.favoriteList.Add(product);
+                    }
+                    else
+                    {
+                        heart.RemoveFromClassList("heart-filled");
+                        templateHeart.RemoveFromClassList("heart-filled");
+                        FavoriteManager.Instance.favoriteList.Remove(product);
+                    }
+                };
+
+            if (heart != null)
             {
-                if (!heart.ClassListContains("heart-filled"))
-                {
+                if (FavoriteManager.Instance.favoriteList.Contains(product))
                     heart.AddToClassList("heart-filled");
-                    FavoriteManager.Instance.favoriteList.Add(product);
-                }
-                else
-                {
-                    heart.RemoveFromClassList("heart-filled");
-                    FavoriteManager.Instance.favoriteList.Remove(product);
-                }
-            });
+                heart.RegisterCallback(heartClick);
+            }
+            var returnArrow = page.Q<VisualElement>("Return-Arrow");
+
+            EventCallback<ClickEvent> returnClick = evt =>
+            {
+                colorDropdown.UnregisterCallback(colorChange);
+                if (heart != null)
+                    heart.UnregisterCallback(heartClick);
+                page.AddToClassList("product-page-off");
+            };
+
+            returnArrow.RegisterCallback(returnClick);
+
             page.RemoveFromClassList("product-page-off");
         }
     }
