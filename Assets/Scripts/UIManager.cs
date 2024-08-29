@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
 using System;
+using System.Net.Http.Headers;
 
 namespace VirtualHome
 {
@@ -38,6 +39,8 @@ namespace VirtualHome
         public ContentHandler contentHandler;
 
         public GameObject mainCamera;
+
+        public CartDebugger cartDebugger;
 
 
         private void Awake()
@@ -186,7 +189,74 @@ namespace VirtualHome
 
         private void LoadCart()
         {
-            throw new NotImplementedException();
+            currentPage = CurrentPage.Cart;
+            // Sets the current Page to Favorites and the root reference
+            currentUIDocument.visualTreeAsset = uIDocuments.Find(doc => doc.name == "Cart Page");
+            root = currentUIDocument.rootVisualElement;
+
+            SetCartList();
+
+            SetNavBar();
+            root.Q<VisualElement>("Cart").SetEnabled(false);
+        }
+
+        private void SetCartList()
+        {
+            ScrollView listView = root.Q<ScrollView>("List-Scroll");
+            listView.Clear();
+            float totalPrice = 0;
+            if (FavoriteManager.Instance.cartDict != null)
+                foreach (var item in FavoriteManager.Instance.cartDict)
+                {
+                    VisualTreeAsset template = uITemplates.Find(t => t.name == "Product-Line-Cart");
+                    CartItem cartItem = item.Key;
+                    Product_SO product = cartItem.product;
+                    if (template != null)
+                    {
+                        VisualElement newItem = template.CloneTree();
+
+                        newItem.Q<Label>("Product-Name").text = product.productName;
+
+                        if (product.isSale)
+                        {
+                            totalPrice += float.Parse(product.productSale) * item.Value;
+                            newItem.Q<Label>("Product-Price").text = $"${product.productSale}";
+                        }
+                        else
+                        {
+                            totalPrice += float.Parse(product.productPrice) * item.Value;
+                            newItem.Q<Label>("Product-Price").text = $"${product.productPrice}";
+                        }
+
+                        newItem.Q<VisualElement>("Product-Image").style.backgroundImage = new StyleBackground(product.productSprites[product.colors.IndexOf(product.selectedColor)]);
+                        newItem.Q<Label>("Product-Amount").text = "x" + item.Value;
+                        newItem.Q<Label>("Product-Color").text = item.Key.color;
+
+                        newItem.Q<VisualElement>("Remove-Product").RegisterCallback<ClickEvent>(evt =>
+                        {
+                            FavoriteManager.Instance.cartDict[cartItem]--;
+                            if (product.isSale)
+                            {
+                                totalPrice -= float.Parse(product.productSale);
+                                root.Q<Label>("Total-Label").text = $"Total: ${totalPrice}";
+                            }
+                            else
+                            {
+                                totalPrice -= float.Parse(product.productPrice);
+                                root.Q<Label>("Total-Label").text = $"Total: ${totalPrice}";
+                            }
+                            if (FavoriteManager.Instance.cartDict[cartItem] <= 0)
+                            {
+                                FavoriteManager.Instance.cartDict.Remove(cartItem);
+                                listView.Remove(newItem);
+                                return;
+                            }
+                            newItem.Q<Label>("Product-Amount").text = "x" + FavoriteManager.Instance.cartDict[cartItem];
+                        });
+                        listView.Add(newItem);
+                    }
+                }
+            root.Q<Label>("Total-Label").text = $"Total: ${totalPrice}";
         }
 
         #endregion
@@ -318,7 +388,7 @@ namespace VirtualHome
             mainCamera.SetActive(false);
             SceneManager.LoadScene(1, LoadSceneMode.Additive);
             StartCoroutine(WaitLoad());
-            
+
             ScrollView scrollView = root.Q<ScrollView>("Model-View");
             foreach (var product in productList)
             {
@@ -451,7 +521,26 @@ namespace VirtualHome
 
             colorDropdown.RegisterCallback(colorChange);
 
+            VisualElement cartButton = page.Q<VisualElement>("Cart-Button");
 
+            EventCallback<ClickEvent> cartClick = evt =>
+            {
+                CartItem cartItem = new CartItem(product, product.selectedColor);
+                var cartDict = FavoriteManager.Instance.cartDict;
+                if (cartDict == null)
+                {
+                    FavoriteManager.Instance.cartDict = new Dictionary<CartItem, int>();
+                    cartDict = FavoriteManager.Instance.cartDict;
+                }
+                if (!cartDict.TryAdd(cartItem, 1))
+                {
+                    // Increment the count if the item was already present
+                    cartDict[cartItem]++;
+                }
+                cartDebugger.LogCartContents(cartDict);
+            };
+
+            cartButton.RegisterCallback(cartClick);
 
             VisualElement heart = page.Q<VisualElement>("Heart");
 
@@ -481,6 +570,7 @@ namespace VirtualHome
 
             EventCallback<ClickEvent> returnClick = evt =>
             {
+                cartButton.UnregisterCallback(cartClick);
                 colorDropdown.UnregisterCallback(colorChange);
                 if (heart != null)
                     heart.UnregisterCallback(heartClick);

@@ -167,6 +167,7 @@ MonoBehaviour:
   - {fileID: 9197481963319205126, guid: b89985daecdee814da7b402043aaf5bf, type: 3}
   - {fileID: 9197481963319205126, guid: 4b689d01a0c348c4c98a8354ca48c701, type: 3}
   - {fileID: 9197481963319205126, guid: ab8bc5927a7ee4a42aac3ab65d6ab833, type: 3}
+  - {fileID: 9197481963319205126, guid: 4203368de2a0dc54bb832d50d63fdc9f, type: 3}
   productList:
   - {fileID: 11400000, guid: 92b3404561022684d950b7b18e165052, type: 2}
   - {fileID: 11400000, guid: 3018c3f7eda0d3047b71383b5e6620ee, type: 2}
@@ -175,6 +176,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b57c724b407eb9e4eb042175ed7acc1c, type: 2}
   contentHandler: {fileID: 0}
   mainCamera: {fileID: 330585543}
+  cartDebugger: {fileID: 343902789}
 --- !u!4 &198971087
 Transform:
   m_ObjectHideFlags: 0
@@ -327,6 +329,50 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
+--- !u!1 &343902788
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 343902790}
+  - component: {fileID: 343902789}
+  m_Layer: 0
+  m_Name: CartDebugger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &343902789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 343902788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 524494ad05d23414bbee8612bebf4048, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &343902790
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 343902788}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5.7809978, y: -0.43533662, z: -2.5155737}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &521926872
 GameObject:
   m_ObjectHideFlags: 0
@@ -406,7 +452,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   favoriteList: []
   favoriteBundleList: []
-  cartList: []
   cartBundleList: []
 --- !u!4 &1249031996
 Transform:
@@ -431,3 +476,4 @@ SceneRoots:
   - {fileID: 521926874}
   - {fileID: 198971087}
   - {fileID: 1249031996}
+  - {fileID: 343902790}

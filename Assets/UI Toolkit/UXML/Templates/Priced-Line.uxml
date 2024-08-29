@@ -1,7 +1,8 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <ui:VisualElement name="Priced-Line" style="flex-grow: 0; width: 100%; height: 35px; justify-content: flex-start; flex-direction: row; align-items: center; border-bottom-color: rgba(117, 117, 117, 0.69); border-bottom-width: 1px;">
         <ui:Label tabindex="-1" text="Name" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Product-Name" style="left: 10px; align-self: center; -unity-text-align: upper-left; font-size: 16px;" />
-        <ui:Label tabindex="-1" text="$000" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Product-Price" style="left: 65%; align-self: center; -unity-text-align: upper-left; font-size: 16px; flex-direction: column; right: auto; color: rgb(117, 117, 117);" />
-        <ui:Label tabindex="-1" text="&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Product-Price" style="left: 65%; align-self: center; -unity-text-align: upper-left; font-size: 16px; flex-direction: column; right: auto; color: rgb(117, 117, 117); border-bottom-color: rgb(117, 117, 117);" />
+        <ui:Label tabindex="-1" text="1x $000" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Product-Price" style="left: 40%; align-self: center; -unity-text-align: upper-left; font-size: 16px; flex-direction: column; right: auto; color: rgb(117, 117, 117);" />
+        <ui:Label tabindex="-1" text="$000" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Product-Total" style="left: 50%; align-self: center; -unity-text-align: upper-left; font-size: 16px; flex-direction: column; right: auto; color: rgb(117, 117, 117); border-bottom-color: rgb(117, 117, 117);" />
+        <ui:Label tabindex="-1" text="Name" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Product-Color" style="left: -70px; align-self: center; -unity-text-align: upper-left; font-size: 14px; color: rgb(117, 117, 117);" />
     </ui:VisualElement>
 </ui:UXML>

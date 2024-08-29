@@ -1,5 +1,4 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:Template name="Product-Line" src="project://database/Assets/UI%20Toolkit/UXML/Templates/Product-Line.uxml?fileID=9197481963319205126&amp;guid=bf41a9f8c02bff640bc2aaa021c1cf89&amp;type=3#Product-Line" />
     <ui:Template name="Recommended-Box" src="project://database/Assets/UI%20Toolkit/UXML/Templates/Recommended-Box.uxml?fileID=9197481963319205126&amp;guid=2c5a36522adb84e4d9797844d126bdd6&amp;type=3#Recommended-Box" />
     <ui:Template name="Priced-Line" src="project://database/Assets/UI%20Toolkit/UXML/Templates/Priced-Line.uxml?fileID=9197481963319205126&amp;guid=e3fc04f34d1e3274bbd7fd7fb8a06839&amp;type=3#Priced-Line" />
     <Style src="project://database/Assets/UI%20Toolkit/UnityThemes/VirtualHome.uss?fileID=7433441132597879392&amp;guid=980025167d3f7f74e9651ac8734173f2&amp;type=3#VirtualHome" />
@@ -14,14 +13,9 @@
         <ui:VisualElement name="User" class="nav-button" style="flex-grow: 1; background-image: url(&apos;project://database/Assets/Sprites/UI/User.png?fileID=21300000&amp;guid=8f95e2cb642366749b586a397a944d9c&amp;type=3#User&apos;); -unity-background-scale-mode: scale-to-fit;" />
         <ui:VisualElement name="Cart" class="nav-button" style="flex-grow: 1; background-image: url(&apos;project://database/Assets/Sprites/UI/Shopping%20cart.png?fileID=21300000&amp;guid=3f8fe338948e035459432ae7ecac6796&amp;type=3#Shopping cart&apos;); -unity-background-scale-mode: scale-to-fit;" />
     </ui:GroupBox>
-    <ui:VisualElement name="Cart-View" style="flex-grow: 1; position: absolute; width: 100%; height: 100%; display: flex;">
+    <ui:VisualElement name="Cart-View" picking-mode="Ignore" style="flex-grow: 1; position: absolute; width: 100%; height: 100%; display: flex;">
         <ui:Label tabindex="-1" text="Cart" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Cart-Label" class="h1" style="left: 10px; top: 15%;" />
-        <ui:ScrollView name="List-Scroll" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" style="position: absolute; top: 20%; width: 100%; height: 30%; padding-top: 10px; padding-right: 20px; padding-left: 20px; padding-bottom: 5px; justify-content: flex-start; visibility: visible; display: flex;">
-            <ui:Instance template="Product-Line" name="Product-Line" />
-            <ui:Instance template="Product-Line" name="Product-Line" />
-            <ui:Instance template="Product-Line" name="Product-Line" />
-            <ui:Instance template="Product-Line" name="Product-Line" />
-        </ui:ScrollView>
+        <ui:ScrollView name="List-Scroll" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" style="position: absolute; top: 20%; width: 100%; height: 30%; padding-top: 10px; padding-right: 20px; padding-left: 20px; padding-bottom: 5px; justify-content: flex-start; visibility: visible; display: flex;" />
         <ui:Button text="Proceed to checkout" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Checkout-Button" class="button-black" style="align-self: flex-end; top: 390px; max-width: 200px; min-width: 180px;" />
         <ui:Label tabindex="-1" text="Total: $000" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Total-Label" style="left: 10px; top: 355px; font-size: 20px; -unity-font-style: bold; color: rgb(117, 117, 117); -unity-text-align: middle-left; align-self: flex-start;" />
         <ui:Label tabindex="-1" text="Recommended" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Recommended-Label" class="h1" style="left: 10px; top: 380px;" />
@@ -32,7 +26,7 @@
             <ui:Instance template="Recommended-Box" name="Recommended-Box" />
         </ui:ScrollView>
     </ui:VisualElement>
-    <ui:VisualElement name="Checkout-View" style="flex-grow: 0; position: absolute; width: 100%; height: 80%; display: none; align-self: auto; align-items: flex-start; top: 80px;">
+    <ui:VisualElement name="Checkout-View" picking-mode="Ignore" style="flex-grow: 0; position: absolute; width: 100%; height: 80%; display: none; align-self: auto; align-items: flex-start; top: 80px;">
         <ui:Label tabindex="-1" text="Order Summary" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Order-Label" class="h1" style="left: 10px; top: auto;" />
         <ui:GroupBox name="Price-List" style="flex-grow: 0; flex-shrink: 1; width: 100%; margin-right: 0; margin-left: 0; margin-bottom: 20px;">
             <ui:Instance template="Priced-Line" name="Priced-Line" />
