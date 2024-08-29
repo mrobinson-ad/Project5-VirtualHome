@@ -16,7 +16,7 @@ MonoBehaviour:
   productSprites:
   - {fileID: 21300000, guid: 383b66b621ea308439c604132faa5568, type: 3}
   - {fileID: 21300000, guid: 8656533b01d0537429eab536f16512b9, type: 3}
-  prefab: {fileID: 0}
+  prefab: {fileID: 456115914855725087, guid: 809563dc332f70e49b13dbbb71afec61, type: 3}
   productPrice: 241
   productSale: 189
   productDescription: 
@@ -28,5 +28,7 @@ MonoBehaviour:
   - Classic
   - Black
   selectedColor: Black
-  materials: []
+  materials:
+  - {fileID: 2100000, guid: 5524dd051f5298c42a7aeef836d5eaa9, type: 2}
+  - {fileID: 2100000, guid: 0d9f9b67cd44fce4e94810165bf7e6a6, type: 2}
   productDimension: {x: 0, y: 0, z: 0}

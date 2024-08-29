@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/UnityThemes/VirtualHome.uss?fileID=7433441132597879392&amp;guid=980025167d3f7f74e9651ac8734173f2&amp;type=3#VirtualHome" />
+    <ui:VisualElement picking-mode="Ignore" name="Dropdown-Container" style="flex-grow: 0; width: 30%; height: 80%;">
+        <ui:Button text="Models" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Dropdown-Button" class="button-white" style="max-width: none; min-width: auto; width: 100%; justify-content: center;">
+            <ui:VisualElement name="Chevron-Arrow" style="flex-grow: 0; background-image: url(&apos;project://database/Assets/Sprites/UI/Chevron%20down.png?fileID=21300000&amp;guid=04ccb8e28a357dd4fa207bc40db15923&amp;type=3#Chevron down&apos;); align-self: flex-end; width: 15px; height: 15px; -unity-background-scale-mode: scale-to-fit; flex-shrink: 0; align-items: auto; top: 2px; transition-duration: 500ms; transition-property: rotate;" />
+        </ui:Button>
+        <ui:ScrollView name="Model-View" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" style="justify-content: center; align-items: center; padding-top: 10px; display: none;" />
+    </ui:VisualElement>
+    <ui:VisualElement name="Return-Arrow" style="flex-grow: 1; position: absolute; right: 0; top: 0; width: 80px; height: 50px; background-image: url(&apos;project://database/Assets/Sprites/UI/Return.png?fileID=21300000&amp;guid=69273d3baffcee040b3227298b91b23b&amp;type=3#Return&apos;); -unity-background-scale-mode: scale-to-fit;" />
+</ui:UXML>

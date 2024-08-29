@@ -1,0 +1,3 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="Model-Button" style="flex-grow: 1; width: 60px; height: 60px; align-self: center; margin-bottom: 10px; -unity-background-scale-mode: scale-to-fit;" />
+</ui:UXML>

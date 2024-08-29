@@ -16,7 +16,7 @@ MonoBehaviour:
   productSprites:
   - {fileID: 21300000, guid: 49c14d67dc89a4b49bebd56c71b461e9, type: 3}
   - {fileID: 21300000, guid: 2acd29327915c5d4bb018324e6c19419, type: 3}
-  prefab: {fileID: 0}
+  prefab: {fileID: 5052278468339351742, guid: 3acea8b8ad745384fa9a7feabe641426, type: 3}
   productPrice: 137
   productSale: 87
   productDescription: 
@@ -29,5 +29,7 @@ MonoBehaviour:
   - Black
   - Oak
   selectedColor: 
-  materials: []
+  materials:
+  - {fileID: 2100000, guid: 13135e5577b8f904091cf1bb7f901e13, type: 2}
+  - {fileID: 2100000, guid: 7bee1f9e85689704b84045c5c48a3897, type: 2}
   productDimension: {x: 0, y: 0, z: 0}

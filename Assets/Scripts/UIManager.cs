@@ -35,6 +35,9 @@ namespace VirtualHome
         [SerializeField] private List<Bundle_SO> bundleList;
 
         private CurrentPage currentPage = CurrentPage.Sales;
+        public ContentHandler contentHandler;
+
+        public GameObject mainCamera;
 
 
         private void Awake()
@@ -307,7 +310,66 @@ namespace VirtualHome
 
         private void LoadAR()
         {
-            throw new NotImplementedException();
+
+            currentPage = CurrentPage.AR;
+            // Sets the current Page to AR and the root reference
+            currentUIDocument.visualTreeAsset = uIDocuments.Find(doc => doc.name == "AR Page");
+            root = currentUIDocument.rootVisualElement;
+            mainCamera.SetActive(false);
+            SceneManager.LoadScene(1, LoadSceneMode.Additive);
+            StartCoroutine(WaitLoad());
+            
+            ScrollView scrollView = root.Q<ScrollView>("Model-View");
+            foreach (var product in productList)
+            {
+
+                VisualTreeAsset template = uITemplates.Find(t => t.name == "Model-Button");
+
+                if (template != null)
+                {
+                    VisualElement newItem = template.CloneTree();
+
+                    var model = newItem.Q<VisualElement>("Model-Button");
+
+                    model.style.backgroundImage = new StyleBackground(product.productSprites[0]);
+                    model.RegisterCallback<ClickEvent>(evt =>
+                    {
+                        contentHandler.ChangeObject(product);
+                    });
+                    scrollView.Add(newItem);
+                }
+            }
+            bool isDropped = false;
+
+            root.Q<Button>("Dropdown-Button").RegisterCallback<ClickEvent>(evt =>
+            {
+                var chevron = root.Q<VisualElement>("Chevron-Arrow");
+                if (!isDropped)
+                {
+                    chevron.style.rotate = new Rotate(-180);
+                    scrollView.style.display = DisplayStyle.Flex;
+                    isDropped = true;
+                }
+                else
+                {
+                    chevron.style.rotate = new Rotate(180);
+                    scrollView.style.display = DisplayStyle.None;
+                    isDropped = false;
+                }
+            });
+
+            root.Q<VisualElement>("Return-Arrow").RegisterCallback<ClickEvent>(evt =>
+            {
+                SceneManager.UnloadSceneAsync(1);
+                LoadFavorites();
+                mainCamera.SetActive(true);
+            });
+        }
+
+        private IEnumerator WaitLoad()
+        {
+            yield return new WaitForSeconds(2f);
+            contentHandler = GameObject.Find("Plane Finder").GetComponent<ContentHandler>();
         }
 
         #endregion
