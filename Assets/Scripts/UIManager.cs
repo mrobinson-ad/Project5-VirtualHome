@@ -256,7 +256,91 @@ namespace VirtualHome
                         listView.Add(newItem);
                     }
                 }
+            EventCallback<ClickEvent> checkoutClick = evt =>
+            {
+                if (FavoriteManager.Instance.cartDict == null || FavoriteManager.Instance.cartDict.Count == 0)
+                    root.Q<Label>("Empty-Label").style.display = DisplayStyle.Flex;
+                else
+                    SetCheckoutList();
+            };
+            root.Q<Button>("Checkout-Button").RegisterCallback(checkoutClick);
             root.Q<Label>("Total-Label").text = $"Total: ${totalPrice}";
+        }
+
+        private void SetCheckoutList()
+        {
+            root.Q<VisualElement>("Cart-View").style.display = DisplayStyle.None;
+            root.Q<VisualElement>("Checkout-View").style.display = DisplayStyle.Flex;
+            GroupBox checkView = root.Q<GroupBox>("Price-List");
+            checkView.Clear();
+            float totalPrice = 0;
+            VisualTreeAsset template = uITemplates.Find(t => t.name == "Priced-Line");
+            foreach (var item in FavoriteManager.Instance.cartDict)
+            {
+                CartItem cartItem = item.Key;
+                Product_SO product = cartItem.product;
+                if (template != null)
+                {
+                    VisualElement newItem = template.CloneTree();
+
+                    newItem.Q<Label>("Product-Name").text = product.productName;
+
+                    if (product.isSale)
+                    {
+                        totalPrice += float.Parse(product.productSale) * item.Value;
+                        newItem.Q<Label>("Product-Price").text = $"x{item.Value} ${product.productSale}";
+                        newItem.Q<Label>("Product-Total").text = $"${float.Parse(product.productSale) * item.Value}";
+                    }
+                    else
+                    {
+                        totalPrice += float.Parse(product.productPrice) * item.Value;
+                        newItem.Q<Label>("Product-Price").text = $"x{item.Value} ${product.productPrice}";
+                        newItem.Q<Label>("Product-Total").text = $"${float.Parse(product.productPrice) * item.Value}";
+                    }
+
+                    newItem.Q<Label>("Product-Color").text = item.Key.color;
+
+                    checkView.Add(newItem);
+                }
+            }
+            VisualElement taxItem = template.CloneTree();
+            taxItem.Q<Label>("Product-Name").text = "TVA 10%";
+            taxItem.Q<Label>("Product-Color").text = "";
+            taxItem.Q<Label>("Product-Price").text = "";
+            taxItem.Q<Label>("Product-Total").text = $"${totalPrice * 0.1}";
+            checkView.Add(taxItem);
+            Toggle expressShipping = root.Q<Toggle>("Express-Toggle");
+            VisualElement shippingItem = null;
+            EventCallback<ChangeEvent<bool>> shippingChange = evt =>
+            {
+                
+                if (expressShipping.value == true)
+                {
+                    if (shippingItem == null)
+                    {
+                        shippingItem = template.CloneTree();
+                        shippingItem.Q<Label>("Product-Name").text = "Express shipping";
+                        shippingItem.Q<Label>("Product-Color").text = "";
+                        shippingItem.Q<Label>("Product-Price").text = "";
+                        shippingItem.Q<Label>("Product-Total").text = "$14";
+                    }
+                    totalPrice += 14;
+                    taxItem.Q<Label>("Product-Total").text = $"${totalPrice * 0.1}";
+                    root.Q<Label>("Billing-Label").text = $"Total: ${totalPrice * 1.1}";
+                    int insertIndex = Mathf.Max(0, checkView.childCount - 1); 
+                    checkView.Insert(insertIndex, shippingItem); 
+                }
+                else
+                {
+                    totalPrice -= 14;
+                    taxItem.Q<Label>("Product-Total").text = $"${totalPrice * 0.1}";
+                    root.Q<Label>("Billing-Label").text = $"Total: ${totalPrice * 1.1}";
+                    checkView.Remove(shippingItem);
+                }
+            };
+            expressShipping.RegisterCallback(shippingChange);
+
+            root.Q<Label>("Billing-Label").text = $"Total: ${totalPrice * 1.1}";
         }
 
         #endregion
