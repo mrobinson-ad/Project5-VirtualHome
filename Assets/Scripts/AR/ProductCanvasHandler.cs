@@ -44,7 +44,7 @@ public class ProductCanvasHandler : MonoBehaviour
 
     public void DeleteObject()
     {
-        Destroy(this.gameObject);
+        Destroy(transform.parent.gameObject);
     }
 
 

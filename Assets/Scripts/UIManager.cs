@@ -5,7 +5,8 @@ using UnityEngine.UIElements;
 using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
 using System;
-using System.Net.Http.Headers;
+using System.Linq;
+using System.Threading;
 
 namespace VirtualHome
 {
@@ -17,6 +18,13 @@ namespace VirtualHome
         AR,
         User,
         Cart
+    }
+
+    public enum Category
+    {
+        Tables,
+        Sofas,
+        Lamps
     }
 
     public class UIManager : MonoBehaviour
@@ -41,6 +49,8 @@ namespace VirtualHome
         public GameObject mainCamera;
 
         public CartDebugger cartDebugger;
+
+        public int cartAmount = 0;
 
 
         private void Awake()
@@ -71,7 +81,7 @@ namespace VirtualHome
             root = currentUIDocument.rootVisualElement;
 
             //Instantiates the templates to populate the Flash sales scroll view
-            ScrollView FlashView = root.Q<ScrollView>("Flash-Scroll");
+            ScrollView flashView = root.Q<ScrollView>("Flash-Scroll");
             foreach (var product in productList)
             {
                 if (product.isSale)
@@ -80,37 +90,7 @@ namespace VirtualHome
 
                     if (template != null)
                     {
-
-                        VisualElement newItem = template.CloneTree();
-
-                        newItem.Q<Label>("Product-Name").text = product.productName;
-                        newItem.Q<Label>("Product-Price").text = $"<s>${product.productPrice} </s>";
-                        newItem.Q<Label>("Product-Price-Sale").text = $"${product.productSale}";
-                        newItem.Q<VisualElement>("Product-Image-Box").style.backgroundImage = new StyleBackground(product.productSprites[0]);
-                        newItem.Q<Label>("Product-Short").text = product.productShortDescription;
-                        var heart = newItem.Q<VisualElement>("Heart");
-                        newItem.Q<VisualElement>("Product-Image-Box").RegisterCallback<ClickEvent>(evt =>
-                        {
-                            SetProductPage(product, heart);
-                        });
-
-                        if (FavoriteManager.Instance.favoriteList.Contains(product))
-                            heart.AddToClassList("heart-filled");
-
-                        heart.RegisterCallback<ClickEvent>(evt =>
-                        {
-                            if (!heart.ClassListContains("heart-filled"))
-                            {
-                                heart.AddToClassList("heart-filled");
-                                FavoriteManager.Instance.favoriteList.Add(product);
-                            }
-                            else
-                            {
-                                heart.RemoveFromClassList("heart-filled");
-                                FavoriteManager.Instance.favoriteList.Remove(product);
-                            }
-                        });
-                        FlashView.Add(newItem);
+                        SetProductGrid(template, flashView, product);
                     }
                 }
             }
@@ -168,10 +148,109 @@ namespace VirtualHome
             // Sets the current Page to Sales and the root reference
             currentUIDocument.visualTreeAsset = uIDocuments.Find(doc => doc.name == "Search Page");
             root = currentUIDocument.rootVisualElement;
-
-
+            var searchField = root.Q<TextField>("Search-Field");
+            var listScroll = root.Q<ScrollView>("List-Scroll");
+            LoadCategory(root.Q<VisualElement>("Table-Sprite"), Category.Tables);
+            LoadCategory(root.Q<VisualElement>("Sofa-Sprite"), Category.Sofas);
+            LoadCategory(root.Q<VisualElement>("Lamp-Sprite"), Category.Lamps);
+            searchField.RegisterValueChangedCallback(evt =>
+            {
+                listScroll.Clear();
+                if (searchField.value != "Search ...")
+                    LoadResults(searchField.value, listScroll);
+            });
+            root.Q<VisualElement>("Search-X").RegisterCallback<ClickEvent>(evt =>
+            {
+                searchField.value = "Search ...";
+                root.Q<Label>("Category-Label").style.display = DisplayStyle.None;
+                root.Q<ScrollView>("Grid-Scroll").style.display = DisplayStyle.None;
+                root.Q<ScrollView>("Category-Scroll").style.display = DisplayStyle.Flex;
+                listScroll.style.display = DisplayStyle.None;
+            });
             SetNavBar();
             root.Q<VisualElement>("Search").SetEnabled(false);
+        }
+
+        private void LoadCategory(VisualElement ve, Category category)
+        {
+            var gridScroll = root.Q<ScrollView>("Grid-Scroll");
+            var categoryLabel = root.Q<Label>("Category-Label");
+            var categoryScroll = root.Q<ScrollView>("Category-Scroll");
+            VisualTreeAsset template = uITemplates.Find(t => t.name == "Product-Box");
+            ve.RegisterCallback<ClickEvent>(evt =>
+            {
+                gridScroll.Clear();
+                categoryScroll.style.display = DisplayStyle.None;
+                switch (category)
+                {
+                    case Category.Tables:
+                        var tableList = TagProducts("table");
+                        foreach (Product_SO product in tableList)
+                        {
+                            SetProductGrid(template, gridScroll, product);
+                        }
+                        categoryLabel.text = "Tables";
+                        break;
+                    case Category.Sofas:
+                        var sofaList = TagProducts("couch");
+                        foreach (Product_SO product in sofaList)
+                        {
+                            SetProductGrid(template, gridScroll, product);
+                        }
+                        categoryLabel.text = "Sofas";
+                        break;
+                    case Category.Lamps:
+                        var lampList = TagProducts("lamp");
+                        foreach (Product_SO product in lampList)
+                        {
+                            SetProductGrid(template, gridScroll, product);
+                        }
+                        categoryLabel.text = "Lamps";
+                        break;
+                }
+                gridScroll.style.display = DisplayStyle.Flex;
+                categoryLabel.style.display = DisplayStyle.Flex;
+            });
+        }
+
+        private void LoadResults(string input, ScrollView listView)
+        {
+            if (listView.style.display != DisplayStyle.Flex)
+            {
+                var categoryLabel = root.Q<Label>("Category-Label");
+                categoryLabel.text = "Results";
+                categoryLabel.style.display = DisplayStyle.Flex;
+                root.Q<ScrollView>("Grid-Scroll").style.display = DisplayStyle.None;
+                root.Q<ScrollView>("Category-Scroll").style.display = DisplayStyle.None;
+                listView.style.display = DisplayStyle.Flex;
+            }
+            var productList = SearchProducts(input);
+            VisualTreeAsset template = uITemplates.Find(t => t.name == "Product-Line");
+            foreach (var product in productList)
+            {
+
+                if (template != null)
+                {
+                    VisualElement newItem = template.CloneTree();
+
+                    newItem.Q<Label>("Product-Name").text = product.productName;
+
+                    if (product.isSale)
+                        newItem.Q<Label>("Product-Price").text = $"${product.productSale}";
+                    else
+                        newItem.Q<Label>("Product-Price").text = $"${product.productPrice}";
+
+                    newItem.Q<VisualElement>("Product-Image").style.backgroundImage = new StyleBackground(product.productSprites[0]);
+                    newItem.Q<VisualElement>("Product-Image").RegisterCallback<ClickEvent>(evt =>
+                    {
+                        SetProductPage(product, newItem);
+                    });
+
+                    newItem.Q<Label>("Product-Short").text = product.productShortDescription;
+                    newItem.Q<VisualElement>("Remove-Product").style.display = DisplayStyle.None;
+                    listView.Add(newItem);
+                }
+            }
         }
 
         #endregion
@@ -235,6 +314,8 @@ namespace VirtualHome
                         newItem.Q<VisualElement>("Remove-Product").RegisterCallback<ClickEvent>(evt =>
                         {
                             FavoriteManager.Instance.cartDict[cartItem]--;
+                            cartAmount--;
+                            root.Q<Label>("Cart-Amount").text = cartAmount.ToString();
                             if (product.isSale)
                             {
                                 totalPrice -= float.Parse(product.productSale);
@@ -251,6 +332,7 @@ namespace VirtualHome
                                 listView.Remove(newItem);
                                 return;
                             }
+                            
                             newItem.Q<Label>("Product-Amount").text = "x" + FavoriteManager.Instance.cartDict[cartItem];
                         });
                         listView.Add(newItem);
@@ -313,7 +395,7 @@ namespace VirtualHome
             VisualElement shippingItem = null;
             EventCallback<ChangeEvent<bool>> shippingChange = evt =>
             {
-                
+
                 if (expressShipping.value == true)
                 {
                     if (shippingItem == null)
@@ -327,8 +409,8 @@ namespace VirtualHome
                     totalPrice += 14;
                     taxItem.Q<Label>("Product-Total").text = $"${totalPrice * 0.1}";
                     root.Q<Label>("Billing-Label").text = $"Total: ${totalPrice * 1.1}";
-                    int insertIndex = Mathf.Max(0, checkView.childCount - 1); 
-                    checkView.Insert(insertIndex, shippingItem); 
+                    int insertIndex = Mathf.Max(0, checkView.childCount - 1);
+                    checkView.Insert(insertIndex, shippingItem);
                 }
                 else
                 {
@@ -384,10 +466,9 @@ namespace VirtualHome
             listView.style.display = DisplayStyle.Flex;
             root.Q<VisualElement>("Grid-Scroll").style.display = DisplayStyle.None;
             root.Q<VisualElement>("List-View").SetEnabled(false);
-
+            VisualTreeAsset template = uITemplates.Find(t => t.name == "Product-Line");
             foreach (var product in FavoriteManager.Instance.favoriteList)
             {
-                VisualTreeAsset template = uITemplates.Find(t => t.name == "Product-Line");
 
                 if (template != null)
                 {
@@ -514,6 +595,7 @@ namespace VirtualHome
 
             root.Q<VisualElement>("Return-Arrow").RegisterCallback<ClickEvent>(evt =>
             {
+                SceneManager.SetActiveScene(SceneManager.GetSceneByName("Main"));
                 SceneManager.UnloadSceneAsync(1);
                 LoadFavorites();
                 mainCamera.SetActive(true);
@@ -524,12 +606,14 @@ namespace VirtualHome
         {
             yield return new WaitForSeconds(2f);
             contentHandler = GameObject.Find("Plane Finder").GetComponent<ContentHandler>();
+            SceneManager.SetActiveScene(SceneManager.GetSceneByName("AR"));
         }
 
         #endregion
 
         private void SetNavBar()
         {
+            root.Q<Label>("Cart-Amount").text = cartAmount.ToString();
             root.Q<VisualElement>("Percent").RegisterCallback<ClickEvent>(evt =>
             {
                 LoadSales();
@@ -560,7 +644,9 @@ namespace VirtualHome
                 LoadAR();
             });
         }
+        #endregion
 
+        #region SetProductPage
         private void SetProductPage(Product_SO product, VisualElement templateHeart)
         {
             Debug.Log(product.productName);
@@ -621,6 +707,8 @@ namespace VirtualHome
                     // Increment the count if the item was already present
                     cartDict[cartItem]++;
                 }
+                cartAmount++;
+                root.Q<Label>("Cart-Amount").text = cartAmount.ToString();
                 cartDebugger.LogCartContents(cartDict);
             };
 
@@ -665,7 +753,75 @@ namespace VirtualHome
 
             page.RemoveFromClassList("product-page-off");
         }
+
+        private void SetProductGrid(VisualTreeAsset template, ScrollView scrollView, Product_SO product)
+        {
+            VisualElement newItem = template.CloneTree();
+
+            newItem.Q<Label>("Product-Name").text = product.productName;
+            if (product.isSale)
+            {
+                newItem.Q<Label>("Product-Price").text = $"<s>${product.productPrice} </s>";
+                newItem.Q<Label>("Product-Price-Sale").text = $"${product.productSale}";
+            }
+            else
+            {
+                newItem.Q<Label>("Product-Price").text = "";
+                newItem.Q<Label>("Product-Price-Sale").text = $"${product.productPrice}";
+            }
+            newItem.Q<VisualElement>("Product-Image-Box").style.backgroundImage = new StyleBackground(product.productSprites[0]);
+            newItem.Q<Label>("Product-Short").text = product.productShortDescription;
+            var heart = newItem.Q<VisualElement>("Heart");
+            newItem.Q<VisualElement>("Product-Image-Box").RegisterCallback<ClickEvent>(evt =>
+            {
+                SetProductPage(product, heart);
+            });
+
+            if (FavoriteManager.Instance.favoriteList.Contains(product))
+                heart.AddToClassList("heart-filled");
+
+            heart.RegisterCallback<ClickEvent>(evt =>
+            {
+                if (!heart.ClassListContains("heart-filled"))
+                {
+                    heart.AddToClassList("heart-filled");
+                    FavoriteManager.Instance.favoriteList.Add(product);
+                }
+                else
+                {
+                    heart.RemoveFromClassList("heart-filled");
+                    FavoriteManager.Instance.favoriteList.Remove(product);
+                }
+            });
+            scrollView.Add(newItem);
+        }
+
+        #endregion
+        public List<Product_SO> SearchProducts(string searchString)
+        {
+            searchString = searchString.ToLower();
+
+
+            var matchingProducts = productList.Where(product =>
+                product.productName.ToLower().Contains(searchString) ||
+                product.tags.Any(tag => tag.ToLower().Contains(searchString)) ||
+                product.productDescription.ToLower().Contains(searchString) ||
+                product.productShortDescription.ToLower().Contains(searchString)
+            ).ToList();
+
+            return matchingProducts;
+        }
+
+        public List<Product_SO> TagProducts(string tagSearch)
+        {
+            tagSearch = tagSearch.ToLower();
+
+            var matchingProducts = productList.Where(product =>
+            product.tags.Any(tag => tag.ToLower().Contains(tagSearch))
+            ).ToList();
+
+            return matchingProducts;
+        }
     }
-    #endregion
 
 }
