@@ -213,7 +213,7 @@ MonoBehaviour:
   onFinger:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 6664264617933166124}
         m_TargetAssemblyTypeName: ProductCanvasHandler, Assembly-CSharp
         m_MethodName: TogglePanel
         m_Mode: 1

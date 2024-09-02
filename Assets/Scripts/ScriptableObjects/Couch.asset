@@ -16,7 +16,7 @@ MonoBehaviour:
   productSprites:
   - {fileID: 21300000, guid: 383b66b621ea308439c604132faa5568, type: 3}
   - {fileID: 21300000, guid: 8656533b01d0537429eab536f16512b9, type: 3}
-  prefab: {fileID: 456115914855725087, guid: 809563dc332f70e49b13dbbb71afec61, type: 3}
+  prefab: {fileID: 0}
   productPrice: 241
   productSale: 189
   productDescription: 
@@ -32,3 +32,4 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 13135e5577b8f904091cf1bb7f901e13, type: 2}
   - {fileID: 2100000, guid: 7bee1f9e85689704b84045c5c48a3897, type: 2}
   productDimension: {x: 0, y: 0, z: 0}
+  prefabAddress: Assets/Prefabs/SmallCouch.prefab

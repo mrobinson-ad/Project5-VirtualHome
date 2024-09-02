@@ -15,7 +15,7 @@ MonoBehaviour:
   productName: Lamp
   productSprites:
   - {fileID: 21300000, guid: dd12a0f9838c32c48840191aee828c3e, type: 3}
-  prefab: {fileID: 1031140914, guid: abc00000000014212656864115977474, type: 3}
+  prefab: {fileID: 0}
   productPrice: 67
   productSale: 42
   productDescription: 
@@ -29,3 +29,4 @@ MonoBehaviour:
   materials:
   - {fileID: 2100000, guid: abc00000000005415550779342621911, type: 2}
   productDimension: {x: 0, y: 0, z: 0}
+  prefabAddress: Assets/Prefabs/StandingLampS.prefab

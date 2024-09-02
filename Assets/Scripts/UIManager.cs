@@ -332,7 +332,7 @@ namespace VirtualHome
                                 listView.Remove(newItem);
                                 return;
                             }
-                            
+
                             newItem.Q<Label>("Product-Amount").text = "x" + FavoriteManager.Instance.cartDict[cartItem];
                         });
                         listView.Add(newItem);
@@ -555,24 +555,23 @@ namespace VirtualHome
             StartCoroutine(WaitLoad());
 
             ScrollView scrollView = root.Q<ScrollView>("Model-View");
+            VisualTreeAsset template = uITemplates.Find(t => t.name == "Model-Button");
             foreach (var product in productList)
             {
-
-                VisualTreeAsset template = uITemplates.Find(t => t.name == "Model-Button");
-
-                if (template != null)
-                {
-                    VisualElement newItem = template.CloneTree();
-
-                    var model = newItem.Q<VisualElement>("Model-Button");
-
-                    model.style.backgroundImage = new StyleBackground(product.productSprites[0]);
-                    model.RegisterCallback<ClickEvent>(evt =>
+                if (product.prefab != null)
+                    if (template != null)
                     {
-                        contentHandler.ChangeObject(product);
-                    });
-                    scrollView.Add(newItem);
-                }
+                        VisualElement newItem = template.CloneTree();
+
+                        var model = newItem.Q<VisualElement>("Model-Button");
+
+                        model.style.backgroundImage = new StyleBackground(product.productSprites[0]);
+                        model.RegisterCallback<ClickEvent>(evt =>
+                        {
+                            contentHandler.ChangeObject(product);
+                        });
+                        scrollView.Add(newItem);
+                    }
             }
             bool isDropped = false;
 
@@ -723,6 +722,10 @@ namespace VirtualHome
                         heart.AddToClassList("heart-filled");
                         templateHeart.AddToClassList("heart-filled");
                         FavoriteManager.Instance.favoriteList.Add(product);
+                        if (product.prefab == null)
+                        {
+                            product.LoadPrefab();
+                        }
                     }
                     else
                     {
@@ -786,6 +789,10 @@ namespace VirtualHome
                 {
                     heart.AddToClassList("heart-filled");
                     FavoriteManager.Instance.favoriteList.Add(product);
+                    if (product.prefab == null)
+                    {
+                        product.LoadPrefab();
+                    }
                 }
                 else
                 {

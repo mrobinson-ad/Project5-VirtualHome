@@ -284,3 +284,21 @@ Label {
     margin-left: 0;
     left: 100%;
 }
+
+.user-box {
+    width: 85%;
+    height: 40%;
+    align-self: center;
+    border-left-color: rgb(117, 117, 117);
+    border-right-color: rgb(117, 117, 117);
+    border-top-color: rgb(117, 117, 117);
+    border-bottom-color: rgb(117, 117, 117);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+}

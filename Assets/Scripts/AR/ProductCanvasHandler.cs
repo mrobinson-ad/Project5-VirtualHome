@@ -15,6 +15,8 @@ public class ProductCanvasHandler : MonoBehaviour
 
     private void Start()
     {
+        Debug.Log("ProductCanvasHandler Start method called.");
+        Debug.Log(product.productName);
         TextMeshProUGUI[] Labels = infoPanel.GetComponentsInChildren<TextMeshProUGUI>();
 
         if (Labels.Length >= 2)
