@@ -4,19 +4,22 @@
         <ui:VisualElement name="Star" style="flex-grow: 0; width: 50px; height: 50px; background-image: url(&apos;project://database/Assets/Sprites/UI/Star.png?fileID=21300000&amp;guid=18e63a8a19bff1042b73e533d1587fa3&amp;type=3#Star&apos;); -unity-background-scale-mode: scale-to-fit; border-top-left-radius: 4px; border-top-right-radius: 4px; border-bottom-right-radius: 4px; border-bottom-left-radius: 4px; align-self: flex-start; justify-content: space-between;" />
         <ui:VisualElement name="Bell" style="flex-grow: 0; width: 50px; height: 50px; background-image: url(&apos;project://database/Assets/Sprites/UI/Bell.png?fileID=21300000&amp;guid=fe77035b3cc6c144380f2fa74276d5a8&amp;type=3#Bell&apos;); -unity-background-scale-mode: scale-to-fit; border-top-left-radius: 4px; border-top-right-radius: 4px; border-bottom-right-radius: 4px; border-bottom-left-radius: 4px; align-self: flex-end;" />
     </ui:GroupBox>
-    <ui:GroupBox name="Navigation-Bar" class="nav-bar nav-button">
+    <ui:GroupBox name="Navigation-Bar" class="nav-bar nav-button" style="display: flex;">
         <ui:VisualElement name="Percent" class="nav-button" style="flex-grow: 1; background-image: url(&apos;project://database/Assets/Sprites/UI/Percent.png?fileID=21300000&amp;guid=f9eab16b1d952c842b3979886ad52f1b&amp;type=3#Percent&apos;); -unity-background-scale-mode: scale-to-fit;" />
         <ui:VisualElement name="Search" class="nav-button" style="flex-grow: 1; background-image: url(&apos;project://database/Assets/Sprites/UI/Search.png?fileID=21300000&amp;guid=15d2882f5a1611a4eb88db44cece4ce1&amp;type=3#Search&apos;); -unity-background-scale-mode: scale-to-fit; padding-top: 0; padding-right: 0; margin-right: 0; margin-left: 0;" />
         <ui:VisualElement name="Camera" class="nav-button" style="flex-grow: 1; background-image: url(&apos;project://database/Assets/Sprites/UI/Camera.png?fileID=21300000&amp;guid=72c29d900cb7f35438b13fb351610f11&amp;type=3#Camera&apos;); -unity-background-scale-mode: scale-to-fit;" />
         <ui:VisualElement name="User" class="nav-button" style="flex-grow: 1; background-image: url(&apos;project://database/Assets/Sprites/UI/User.png?fileID=21300000&amp;guid=8f95e2cb642366749b586a397a944d9c&amp;type=3#User&apos;); -unity-background-scale-mode: scale-to-fit;" />
-        <ui:VisualElement name="Cart" class="nav-button" style="flex-grow: 1; background-image: url(&apos;project://database/Assets/Sprites/UI/Shopping%20cart.png?fileID=21300000&amp;guid=3f8fe338948e035459432ae7ecac6796&amp;type=3#Shopping cart&apos;); -unity-background-scale-mode: scale-to-fit;" />
+        <ui:VisualElement name="Cart" class="nav-button" style="flex-grow: 1; background-image: url(&apos;project://database/Assets/Sprites/UI/Shopping%20cart.png?fileID=21300000&amp;guid=3f8fe338948e035459432ae7ecac6796&amp;type=3#Shopping cart&apos;); -unity-background-scale-mode: scale-to-fit;">
+            <ui:Label tabindex="-1" text="0" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Cart-Amount" style="-unity-font-style: bold; font-size: 22px; -unity-text-align: upper-center; left: auto; top: -20px; align-self: flex-end; position: absolute; right: 0; background-color: rgba(117, 117, 117, 0.39); border-top-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-bottom-left-radius: 15px;" />
+        </ui:VisualElement>
     </ui:GroupBox>
     <ui:VisualElement name="Login-Box" style="flex-grow: 0; flex-direction: row; align-items: flex-end; justify-content: center; top: 20px; display: flex;">
-        <ui:Button text="Sign In" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Sign-In-Button" class="button-black" style="min-width: 100px; max-height: 35px; font-size: 14px; top: auto; align-self: center; background-color: rgb(227, 227, 227); color: rgb(44, 44, 44);" />
+        <ui:Button text="Sign in" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Sign-In-Button" class="button-black" style="min-width: 100px; max-height: 35px; font-size: 14px; top: auto; align-self: center; background-color: rgb(227, 227, 227); color: rgb(44, 44, 44);" />
         <ui:Button text="Register" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Register-Button" class="button-black" style="min-width: 100px; max-height: 35px; font-size: 14px; top: auto; align-self: center;" />
     </ui:VisualElement>
-    <ui:VisualElement name="User-Name-Box" style="flex-grow: 0; flex-direction: row; align-items: flex-end; justify-content: center; top: 20px; display: none;">
-        <ui:Label tabindex="-1" text="USERNAME" parse-escape-sequences="true" display-tooltip-when-elided="true" name="User-Name-Label" class="h1" style="top: auto;" />
+    <ui:VisualElement name="User-Name-Box" style="flex-grow: 0; flex-direction: row; align-items: flex-end; justify-content: center; top: 20px; display: none; align-self: center;">
+        <ui:Label tabindex="-1" text="USERNAME" parse-escape-sequences="true" display-tooltip-when-elided="true" name="User-Name-Label" class="h1" style="top: auto; -unity-font-style: normal; justify-content: center;" />
+        <ui:Button text="Logout" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Logout-Button" class="button-black" style="min-width: 75px; max-width: 100px; align-self: flex-end;" />
     </ui:VisualElement>
     <ui:ScrollView name="Shortcut-View" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" style="top: 10%; flex-grow: 0; justify-content: center; align-items: center; background-color: rgb(227, 227, 227); border-top-left-radius: 16px; border-top-right-radius: 16px; border-bottom-right-radius: 16px; border-bottom-left-radius: 16px; margin-right: 10px; margin-left: 10px; padding-bottom: 10px; display: none;">
         <ui:Label tabindex="-1" text="Shortcuts" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Shortcut-Label" class="h1" style="align-self: center; top: auto;" />
@@ -30,8 +33,26 @@
             <ui:Label tabindex="-1" text="&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" style="align-self: flex-end; margin-right: 0; padding-right: 0; padding-left: 0;" />
         </ui:Button>
     </ui:ScrollView>
-    <ui:GroupBox name="Sign-Box" class="user-box" style="align-items: stretch; position: absolute; top: 25%; padding-top: 15px; padding-right: 20px; padding-left: 20px; justify-content: space-between;">
-        <ui:TextField picking-mode="Ignore" label="Email" name="Email-Field" style="flex-direction: column;" />
-        <ui:TextField picking-mode="Ignore" label="Password" name="Password-Field" password="true" mask-character="*" style="flex-direction: column;" />
+    <ui:GroupBox name="Sign-Box" class="user-box" style="align-items: stretch; position: absolute; top: 30%; padding-top: 15px; padding-right: 20px; padding-left: 20px; justify-content: space-around; padding-bottom: 25px; height: 35%; display: flex;">
+        <ui:TextField label="Email" name="Email-Field" style="flex-direction: column; align-self: auto; -unity-text-align: upper-left;" />
+        <ui:TextField label="Password" name="Password-Field" password="true" mask-character="*" style="flex-direction: column;">
+            <ui:Label tabindex="-1" text="Error" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Sign-Error" class="wrong-pass" style="align-self: center; display: none;" />
+        </ui:TextField>
+        <ui:Button text="Sign in" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Sign-In" class="button-black" style="align-self: center; max-width: 95%; min-width: 95%;" />
+        <ui:Label tabindex="-1" text="&lt;u&gt;Forgot password?&lt;/u&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Forgot-Label" style="color: rgb(117, 117, 117);" />
+    </ui:GroupBox>
+    <ui:GroupBox name="Register-Box" class="user-box" style="align-items: stretch; position: absolute; top: 20%; padding-top: 15px; padding-right: 20px; padding-left: 20px; justify-content: space-around; padding-bottom: 25px; height: 55%; display: none;">
+        <ui:TextField label="Username" name="User-Field" style="flex-direction: column;" />
+        <ui:TextField label="Email" name="Email-Field" style="flex-direction: column;" />
+        <ui:TextField label="Password" name="Password-Field" password="true" mask-character="*" style="flex-direction: column;">
+            <ui:Label tabindex="-1" text="Password must include:" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Pass-Label" style="align-self: flex-start; font-size: 11px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 5px;" />
+            <ui:Label tabindex="-1" text="At least 6 characters" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Characters-Label" class="wrong-pass" />
+            <ui:Label tabindex="-1" text="A lowercase and uppercase letter" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Letter-Label" class="wrong-pass" />
+            <ui:Label tabindex="-1" text="A number" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Number-Label" class="wrong-pass" />
+        </ui:TextField>
+        <ui:TextField label="Confirm password" name="Password-Confirm-Field" password="true" mask-character="*" style="flex-direction: column;">
+            <ui:Label tabindex="-1" text="The passwords do not match!" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Different-Label" class="wrong-pass" style="align-self: flex-start; display: none;" />
+        </ui:TextField>
+        <ui:Button text="Register" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Register" class="button-black" style="align-self: center; max-width: 95%; min-width: 95%;" />
     </ui:GroupBox>
 </ui:UXML>

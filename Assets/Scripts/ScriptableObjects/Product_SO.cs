@@ -24,9 +24,12 @@ public class Product_SO : ScriptableObject
     public Vector3 productDimension;
     public string prefabAddress;
 
+    private AsyncOperationHandle<GameObject>? loadedHandle;
+
     public void LoadPrefab()
     {
-        Addressables.LoadAssetAsync<GameObject>(prefabAddress).Completed += OnPrefabLoaded;
+        loadedHandle = Addressables.LoadAssetAsync<GameObject>(prefabAddress);
+        loadedHandle.Value.Completed += OnPrefabLoaded;
 
         void OnPrefabLoaded(AsyncOperationHandle<GameObject> handle)
         {
@@ -40,6 +43,17 @@ public class Product_SO : ScriptableObject
             {
                 Debug.LogError("Failed to load prefab for " + productName);
             }
+        }
+    }
+
+    public void ReleasePrefab()
+    {
+        if (loadedHandle.HasValue)
+        {
+            Addressables.Release(loadedHandle.Value);
+            loadedHandle = null;
+            prefab = null;
+            Debug.Log("Prefab released for " + productName);
         }
     }
 }

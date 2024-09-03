@@ -52,6 +52,8 @@ namespace VirtualHome
 
         public int cartAmount = 0;
 
+        private string currentUser;
+
 
         private void Awake()
         {
@@ -259,7 +261,161 @@ namespace VirtualHome
 
         private void LoadUser()
         {
-            throw new NotImplementedException();
+            currentPage = CurrentPage.User;
+            // Sets the current Page to User and the root reference
+            currentUIDocument.visualTreeAsset = uIDocuments.Find(doc => doc.name == "User Page");
+            root = currentUIDocument.rootVisualElement;
+            var loginBar = root.Q<VisualElement>("Login-Box");
+            var userBar = root.Q<VisualElement>("User-Name-Box");
+            var shortcuts = root.Q<ScrollView>("Shortcut-View");
+            var signBox = root.Q<GroupBox>("Sign-Box");
+            var registerBox = root.Q<GroupBox>("Register-Box");
+            var error = signBox.Q<Label>("Sign-Error");
+            var regError = registerBox.Q<Label>("Different-Label");
+            loginBar.Q<Button>("Sign-In-Button").RegisterCallback<ClickEvent>(evt =>
+            {
+                signBox.Query<TextField>().ForEach(textField => textField.value = string.Empty);
+                error.style.display = DisplayStyle.None;
+                signBox.style.display = DisplayStyle.Flex;
+                registerBox.style.display = DisplayStyle.None;
+                shortcuts.style.display = DisplayStyle.None;
+            });
+            SetSignIn();
+            loginBar.Q<Button>("Register-Button").RegisterCallback<ClickEvent>(evt =>
+            {
+                registerBox.Query<TextField>().ForEach(textField => textField.value = string.Empty);
+                registerBox.style.display = DisplayStyle.Flex;
+                signBox.style.display = DisplayStyle.None;
+                shortcuts.style.display = DisplayStyle.None;
+                regError.style.display = DisplayStyle.None;
+            });
+            SetRegister();
+
+            userBar.Q<Button>("Logout-Button").RegisterCallback<ClickEvent>(evt =>
+            {
+                currentUser = null;
+                userBar.style.display = DisplayStyle.None;
+                loginBar.style.display = DisplayStyle.Flex;
+            });
+
+            SetNavBar();
+
+            #region SetLoginFields
+
+            void SetSignIn()
+            {
+                var emailField = signBox.Q<TextField>("Email-Field");
+                var passwordField = signBox.Q<TextField>("Password-Field");
+                signBox.Q<Button>("Sign-In").RegisterCallback<ClickEvent>(evt =>
+                {
+                    if (string.IsNullOrEmpty(emailField.value) || string.IsNullOrEmpty(passwordField.value))
+                    {
+                        error.text = "Make sure both fields are filled";
+                        error.style.display = DisplayStyle.Flex;
+                        return;
+                    }
+                    if (!UserManager.Instance.IsValidMail(emailField.value))
+                    {
+                        error.text = "Email is invalid";
+                        error.style.display = DisplayStyle.Flex;
+                        return;
+                    }
+                    var userEntry = UserManager.Instance.ValidateUser(emailField.value, passwordField.value); //Uses UserManager to check if email and password match a single UserEntry
+                    if (userEntry != null)
+                    {
+                        currentUser = userEntry.Username;
+                        loginBar.style.display = DisplayStyle.None;
+                        signBox.style.display = DisplayStyle.None;
+                        userBar.style.display = DisplayStyle.Flex;
+                        shortcuts.style.display = DisplayStyle.Flex;
+                        userBar.Q<Label>("User-Name-Label").text = currentUser;
+                        return;
+                    }
+                    else
+                    {
+                        error.text = "Email or password is incorrect";
+                        error.style.display = DisplayStyle.Flex;
+                        return;
+                    }
+                });
+            }
+
+            void SetRegister()
+            {
+                var userField = registerBox.Q<TextField>("User-Field");
+                var emailField = registerBox.Q<TextField>("Email-Field");
+                var passwordField = registerBox.Q<TextField>("Password-Field");
+                var confirmPasswordField = registerBox.Q<TextField>("Password-Confirm-Field");
+                passwordField.RegisterValueChangedCallback(evt =>
+                {
+                    SetClassList(passwordField.Q<Label>("Characters-Label"), "right-pass", passwordField.value.Length >= 6);
+                    SetClassList(passwordField.Q<Label>("Letter-Label"), "right-pass", passwordField.value.Any(char.IsUpper) && passwordField.value.Any(char.IsLower));
+                    SetClassList(passwordField.Q<Label>("Number-Label"), "right-pass", passwordField.value.Any(char.IsDigit));
+                    if (passwordField.value == confirmPasswordField.value)
+                        regError.style.display = DisplayStyle.None;
+                    else
+                    {
+                        regError.style.display = DisplayStyle.Flex;
+                        regError.text = "Passwords must match";
+                    }
+                });
+
+                confirmPasswordField.RegisterValueChangedCallback(evt =>
+                {
+                    if (passwordField.value == confirmPasswordField.value)
+                        regError.style.display = DisplayStyle.None;
+                    else
+                    {
+                        regError.style.display = DisplayStyle.Flex;
+                        regError.text = "Passwords must match";
+                    }
+                });
+
+                registerBox.Q<Button>("Register").RegisterCallback<ClickEvent>(evt =>
+                {
+                    if (string.IsNullOrEmpty(userField.value) || string.IsNullOrEmpty(passwordField.value) || string.IsNullOrEmpty(emailField.value) || string.IsNullOrEmpty(confirmPasswordField.value))
+                    {
+                        regError.style.display = DisplayStyle.Flex;
+                        regError.text = "All fields must be filled";
+                        return;
+                    }
+                    var existingUser = UserManager.Instance.GetUserByEmail(emailField.value);
+                    if (existingUser != null)
+                    {
+                        regError.style.display = DisplayStyle.Flex;
+                        regError.text = "Email is already registered";
+                        return;
+                    }
+                    if (UserManager.Instance.IsValidMail(emailField.value) && passwordField.value == confirmPasswordField.value && passwordField.value.Length >= 6 && passwordField.value.Any(char.IsUpper) && passwordField.value.Any(char.IsLower) && passwordField.value.Any(char.IsDigit))
+                    {
+                        UserManager.Instance.AddUserEntry(userField.value, emailField.value, passwordField.value);
+                        signBox.Query<TextField>().ForEach(textField => textField.value = string.Empty);
+                        error.style.display = DisplayStyle.None;
+                        signBox.style.display = DisplayStyle.Flex;
+                        registerBox.style.display = DisplayStyle.None;
+                    }
+                    else
+                    {
+                        regError.style.display = DisplayStyle.Flex;
+                        regError.text = "Incorrect information";
+                        return;
+                    }
+                });
+            }
+            #endregion
+        }
+        void SetClassList(Label label, string className, bool condition)
+        {
+            if (condition)
+            {
+                if (!label.ClassListContains(className))
+                    label.AddToClassList(className);
+            }
+            else
+            {
+                if (label.ClassListContains(className))
+                    label.RemoveFromClassList(className);
+            }
         }
 
         #endregion
@@ -492,6 +648,7 @@ namespace VirtualHome
                     {
                         FavoriteManager.Instance.favoriteList.Remove(product);
                         listView.Remove(newItem);
+                        product.ReleasePrefab();
                     });
                     listView.Add(newItem);
                 }
@@ -533,6 +690,7 @@ namespace VirtualHome
                     {
                         FavoriteManager.Instance.favoriteList.Remove(product);
                         gridView.Remove(newItem);
+                        product.ReleasePrefab();
                     });
                     gridView.Add(newItem);
                 }
@@ -596,7 +754,7 @@ namespace VirtualHome
             {
                 SceneManager.SetActiveScene(SceneManager.GetSceneByName("Main"));
                 SceneManager.UnloadSceneAsync(1);
-                LoadFavorites();
+                LoadSales();
                 mainCamera.SetActive(true);
             });
         }
@@ -732,6 +890,7 @@ namespace VirtualHome
                         heart.RemoveFromClassList("heart-filled");
                         templateHeart.RemoveFromClassList("heart-filled");
                         FavoriteManager.Instance.favoriteList.Remove(product);
+                        product.ReleasePrefab();
                     }
                 };
 
@@ -798,6 +957,7 @@ namespace VirtualHome
                 {
                     heart.RemoveFromClassList("heart-filled");
                     FavoriteManager.Instance.favoriteList.Remove(product);
+                    product.ReleasePrefab();
                 }
             });
             scrollView.Add(newItem);

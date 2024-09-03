@@ -12,6 +12,7 @@
     border-right-color: rgb(117, 117, 117);
     border-top-color: rgb(117, 117, 117);
     border-bottom-color: rgb(117, 117, 117);
+    -unity-text-align: middle-left;
 }
 
 #Grid-Scroll .unity-scroll-view__content-container--vertical {
@@ -165,11 +166,9 @@ Label {
 .unity-base-field__input {
     padding-top: 0;
     padding-right: 0;
-    padding-bottom: 0;
-    padding-left: 5px;
     margin-top: 0;
     margin-right: 0;
-    margin-bottom: 0;
+    margin-bottom: 5px;
     margin-left: 0;
     background-color: rgba(255, 255, 255, 0);
     border-top-left-radius: 8px;
@@ -182,6 +181,8 @@ Label {
     border-bottom-color: rgb(217, 217, 217);
     height: 30px;
     flex-grow: 1;
+    -unity-text-align: middle-left;
+    padding-bottom: 0;
 }
 
 .unity-base-popup-field__arrow {
@@ -301,4 +302,36 @@ Label {
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;
     border-bottom-left-radius: 20px;
+}
+
+.wrong-pass {
+    flex-wrap: nowrap;
+    flex-grow: 0;
+    white-space: normal;
+    font-size: 11px;
+    color: rgb(212, 3, 0);
+    padding-left: 5px;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+}
+
+.right-pass {
+    flex-wrap: nowrap;
+    flex-grow: 0;
+    white-space: normal;
+    font-size: 11px;
+    color: rgb(0, 195, 5);
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 5px;
 }
