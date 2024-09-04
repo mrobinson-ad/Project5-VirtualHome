@@ -26,9 +26,6 @@
         <ui:Button text="Purchase history" parse-escape-sequences="true" display-tooltip-when-elided="true" name="History-Button" class="button-white">
             <ui:Label tabindex="-1" text="&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" style="align-self: flex-end; margin-right: 0; padding-right: 0; padding-left: 0;" />
         </ui:Button>
-        <ui:Button text="Redeem code" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Redeem-Button" class="button-white">
-            <ui:VisualElement name="Down" style="flex-grow: 0; align-self: flex-end; background-image: url(&apos;project://database/Assets/Sprites/UI/Chevron%20down.png?fileID=21300000&amp;guid=04ccb8e28a357dd4fa207bc40db15923&amp;type=3#Chevron down&apos;); width: 13px; height: 13px; flex-shrink: 0; -unity-background-scale-mode: scale-to-fit; margin-right: 5px; margin-top: 2px;" />
-        </ui:Button>
         <ui:Button text="Manage billing information" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Billing-Button" class="button-white">
             <ui:Label tabindex="-1" text="&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" style="align-self: flex-end; margin-right: 0; padding-right: 0; padding-left: 0;" />
         </ui:Button>

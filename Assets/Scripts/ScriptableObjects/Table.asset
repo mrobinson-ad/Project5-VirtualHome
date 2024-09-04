@@ -28,7 +28,7 @@ MonoBehaviour:
   colors:
   - Black
   - Oak
-  selectedColor: 
+  selectedColor: Oak
   materials:
   - {fileID: 2100000, guid: 5524dd051f5298c42a7aeef836d5eaa9, type: 2}
   - {fileID: 2100000, guid: 0d9f9b67cd44fce4e94810165bf7e6a6, type: 2}

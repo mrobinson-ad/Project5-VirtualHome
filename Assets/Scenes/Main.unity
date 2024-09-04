@@ -502,6 +502,8 @@ MonoBehaviour:
   favoriteList: []
   favoriteBundleList: []
   cartBundleList: []
+  promos: []
+  promoAddress: Assets/Scripts/ScriptableObjects/PromoList.asset
 --- !u!4 &1249031996
 Transform:
   m_ObjectHideFlags: 0

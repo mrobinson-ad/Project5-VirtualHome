@@ -27,7 +27,7 @@ MonoBehaviour:
   colors:
   - Classic
   - Black
-  selectedColor: 
+  selectedColor: Black
   materials:
   - {fileID: 2100000, guid: 13135e5577b8f904091cf1bb7f901e13, type: 2}
   - {fileID: 2100000, guid: 7bee1f9e85689704b84045c5c48a3897, type: 2}

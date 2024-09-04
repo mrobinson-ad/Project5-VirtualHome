@@ -404,19 +404,6 @@ namespace VirtualHome
             }
             #endregion
         }
-        void SetClassList(Label label, string className, bool condition)
-        {
-            if (condition)
-            {
-                if (!label.ClassListContains(className))
-                    label.AddToClassList(className);
-            }
-            else
-            {
-                if (label.ClassListContains(className))
-                    label.RemoveFromClassList(className);
-            }
-        }
 
         #endregion
 
@@ -508,7 +495,7 @@ namespace VirtualHome
         private void SetCheckoutList()
         {
             root.Q<VisualElement>("Cart-View").style.display = DisplayStyle.None;
-            root.Q<VisualElement>("Checkout-View").style.display = DisplayStyle.Flex;
+            root.Q<ScrollView>("Checkout-View").style.display = DisplayStyle.Flex;
             GroupBox checkView = root.Q<GroupBox>("Price-List");
             checkView.Clear();
             float totalPrice = 0;
@@ -545,7 +532,7 @@ namespace VirtualHome
             taxItem.Q<Label>("Product-Name").text = "TVA 10%";
             taxItem.Q<Label>("Product-Color").text = "";
             taxItem.Q<Label>("Product-Price").text = "";
-            taxItem.Q<Label>("Product-Total").text = $"${totalPrice * 0.1}";
+            taxItem.Q<Label>("Product-Total").text = $"${(totalPrice * 0.1):0.00}";
             checkView.Add(taxItem);
             Toggle expressShipping = root.Q<Toggle>("Express-Toggle");
             VisualElement shippingItem = null;
@@ -563,22 +550,77 @@ namespace VirtualHome
                         shippingItem.Q<Label>("Product-Total").text = "$14";
                     }
                     totalPrice += 14;
-                    taxItem.Q<Label>("Product-Total").text = $"${totalPrice * 0.1}";
-                    root.Q<Label>("Billing-Label").text = $"Total: ${totalPrice * 1.1}";
+                    taxItem.Q<Label>("Product-Total").text = $"${(totalPrice * 0.1):0.00}";
+                    root.Q<Label>("Billing-Label").text = $"Total: ${(totalPrice * 1.1):0.00}";
                     int insertIndex = Mathf.Max(0, checkView.childCount - 1);
                     checkView.Insert(insertIndex, shippingItem);
                 }
                 else
                 {
                     totalPrice -= 14;
-                    taxItem.Q<Label>("Product-Total").text = $"${totalPrice * 0.1}";
-                    root.Q<Label>("Billing-Label").text = $"Total: ${totalPrice * 1.1}";
+                    taxItem.Q<Label>("Product-Total").text = $"${(totalPrice * 0.1):0.00}";
+                    root.Q<Label>("Billing-Label").text = $"Total: ${(totalPrice * 1.1):0.00}";
                     checkView.Remove(shippingItem);
                 }
             };
             expressShipping.RegisterCallback(shippingChange);
-
-            root.Q<Label>("Billing-Label").text = $"Total: ${totalPrice * 1.1}";
+            var promoLabel = root.Q<Label>("Promo-Label");
+            var redeemButton = root.Q<Button>("Redeem-Button");
+            EventCallback<ClickEvent> redeemClicked = evt =>
+            {
+                foreach (var promo in FavoriteManager.Instance.promos)
+                {
+                    if (promo.code == root.Q<TextField>("Promo-Field").value)
+                    {
+                        VisualElement promoItem = template.CloneTree();
+                        if (promo.type == PromoType.Shipping)
+                        {
+                            promoItem.Q<Label>("Product-Name").text = "Shipping Promo";
+                            promoItem.Q<Label>("Product-Color").text = "";
+                            promoItem.Q<Label>("Product-Price").text = "";
+                            promoItem.Q<Label>("Product-Total").text = "<color=green>$-14 </color>";
+                            totalPrice -= 14;
+                            taxItem.Q<Label>("Product-Total").text = $"${(totalPrice * 0.1):0.00}";
+                            root.Q<Label>("Billing-Label").text = $"Total: ${(totalPrice * 1.1):0.00}";
+                        }
+                        if (promo.type == PromoType.Flat)
+                        {
+                            promoItem.Q<Label>("Product-Name").text = "Promo";
+                            promoItem.Q<Label>("Product-Color").text = "";
+                            promoItem.Q<Label>("Product-Price").text = "";
+                            promoItem.Q<Label>("Product-Total").text = $"<color=green>$-{promo.amount} </color>";
+                            totalPrice -= promo.amount;
+                            taxItem.Q<Label>("Product-Total").text = $"${(totalPrice * 0.1):0.00}";
+                            root.Q<Label>("Billing-Label").text = $"Total: ${(totalPrice * 1.1):0.00}";
+                        }
+                        if (promo.type == PromoType.Percent)
+                        {
+                            promoItem.Q<Label>("Product-Name").text = "Promo";
+                            promoItem.Q<Label>("Product-Color").text = "";
+                            promoItem.Q<Label>("Product-Price").text = $"-{promo.amount}%";
+                            promoItem.Q<Label>("Product-Total").text = $"<color=green>$-{(promo.amount * totalPrice / 100):0.00} </color>";
+                            totalPrice -= promo.amount * totalPrice / 100;
+                            taxItem.Q<Label>("Product-Total").text = $"${(totalPrice * 0.1):0.00}";
+                            root.Q<Label>("Billing-Label").text = $"Total: ${(totalPrice * 1.1):0.00}";
+                        }
+                        int insertIndex = Mathf.Max(0, checkView.childCount - 1);
+                        checkView.Insert(insertIndex, promoItem);
+                        promoLabel.text = promo.message;
+                        promoLabel.style.display = DisplayStyle.Flex;
+                        SetClassList(promoLabel, "right-pass", true);
+                        redeemButton.SetEnabled(false);
+                        return;
+                    }
+                    else
+                    {
+                        promoLabel.text = root.Q<TextField>("Promo-Field").value + " is not a valid code";
+                        promoLabel.style.display = DisplayStyle.Flex;
+                        SetClassList(promoLabel, "right-pass", false);
+                    }
+                }
+            };
+            redeemButton.RegisterCallback(redeemClicked);
+            root.Q<Label>("Billing-Label").text = $"Total: ${(totalPrice * 1.1):0.00}";
         }
 
         #endregion
@@ -761,7 +803,7 @@ namespace VirtualHome
 
         private IEnumerator WaitLoad()
         {
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(1f);
             contentHandler = GameObject.Find("Plane Finder").GetComponent<ContentHandler>();
             SceneManager.SetActiveScene(SceneManager.GetSceneByName("AR"));
         }
@@ -852,6 +894,10 @@ namespace VirtualHome
 
             EventCallback<ClickEvent> cartClick = evt =>
             {
+                if (product.prefab == null)
+                {
+                    product.LoadPrefab();
+                }
                 CartItem cartItem = new CartItem(product, product.selectedColor);
                 var cartDict = FavoriteManager.Instance.cartDict;
                 if (cartDict == null)
@@ -989,6 +1035,21 @@ namespace VirtualHome
 
             return matchingProducts;
         }
+
+        private void SetClassList(Label label, string className, bool condition)
+        {
+            if (condition)
+            {
+                if (!label.ClassListContains(className))
+                    label.AddToClassList(className);
+            }
+            else
+            {
+                if (label.ClassListContains(className))
+                    label.RemoveFromClassList(className);
+            }
+        }
+
     }
 
 }

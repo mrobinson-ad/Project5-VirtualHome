@@ -28,17 +28,21 @@
         </ui:ScrollView>
         <ui:Label tabindex="-1" text="Cart is empty" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Empty-Label" style="align-self: center; color: rgb(255, 0, 0); font-size: 20px; display: none;" />
     </ui:VisualElement>
-    <ui:VisualElement name="Checkout-View" picking-mode="Ignore" style="flex-grow: 0; position: absolute; width: 100%; height: 80%; display: none; align-self: auto; align-items: flex-start; top: 80px;">
+    <ui:ScrollView name="Checkout-View" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" style="top: 80px; width: 100%; height: 80%; display: none;">
         <ui:Label tabindex="-1" text="Order Summary" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Order-Label" class="h1" style="left: 10px; top: auto;" />
         <ui:GroupBox name="Price-List" style="flex-grow: 0; flex-shrink: 1; width: 100%; margin-right: 0; margin-left: 0; margin-bottom: 20px;" />
         <ui:Label tabindex="-1" text="Shipping and payment" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Billing-Label" class="h1" style="left: 10px; top: auto;" />
         <ui:GroupBox name="Billing-Box" style="flex-shrink: 1; flex-grow: 1; margin-left: 0; width: 100%; padding-left: 20px;">
             <ui:DropdownField label="&lt;b&gt;Payment method&lt;/b&gt;" index="0" choices="MasterCard ending in *3333" name="Payment-Dropdown" style="flex-direction: column; width: 60%; -unity-font-style: normal; flex-grow: 0; flex-shrink: 1;" />
             <ui:DropdownField label="&lt;b&gt;Shipping address&lt;/b&gt;" index="0" choices="My saved address" name="Shipping-Dropdown" style="flex-direction: column; width: 60%; -unity-font-style: normal; flex-grow: 0; flex-shrink: 1;" />
-            <ui:Toggle value="false" name="Express-Toggle" style="flex-direction: row-reverse; align-items: flex-start; justify-content: space-between; margin-top: 20px; width: 40px;" />
+            <ui:Toggle value="false" name="Express-Toggle" style="flex-direction: row-reverse; align-items: flex-start; justify-content: space-between; margin-top: 10px; width: 40px;" />
             <ui:Label tabindex="-1" text="Express shipping" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Express-Label" style="top: -32px; left: 40px;" />
             <ui:Label tabindex="-1" text="2-4 days delivery +$14" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Express-Price" style="top: -40px; left: 40px; color: rgb(117, 117, 117); font-size: 14px;" />
+            <ui:TextField picking-mode="Ignore" label="&lt;b&gt;Promo code&lt;/b&gt;" readonly="false" auto-correction="false" name="Promo-Field" style="flex-direction: column; top: -30px; width: 60%; -unity-font-definition: url(&apos;project://database/Assets/Fonts/Inconsolata-VariableFont_wdth,wght%20SDF.asset?fileID=11400000&amp;guid=d7080907fac86bd489b66402d38296dd&amp;type=2#Inconsolata-VariableFont_wdth,wght SDF&apos;); -unity-font: url(&apos;project://database/Assets/Fonts/Inconsolata-VariableFont_wdth,wght.ttf?fileID=12800000&amp;guid=42da6aa80bfd42646b35590685f4c565&amp;type=3#Inconsolata-VariableFont_wdth,wght&apos;);">
+                <ui:Button text="Redeem" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Redeem-Button" class="button-black" style="flex-shrink: 1; max-width: none; max-height: none; min-height: auto; min-width: auto; height: 25px; width: 80px; align-self: flex-start;" />
+                <ui:Label tabindex="-1" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Promo-Label" class="wrong-pass" style="display: none;" />
+            </ui:TextField>
             <ui:Button text="Confirm" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Confirm-Button" class="button-black" style="align-self: flex-end;" />
         </ui:GroupBox>
-    </ui:VisualElement>
+    </ui:ScrollView>
 </ui:UXML>
