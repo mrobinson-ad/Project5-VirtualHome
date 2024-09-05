@@ -10,16 +10,6 @@ using System.Threading;
 
 namespace VirtualHome
 {
-    public enum CurrentPage
-    {
-        Sales,
-        Search,
-        Favorites,
-        AR,
-        User,
-        Cart
-    }
-
     public enum Category
     {
         Tables,
@@ -43,7 +33,6 @@ namespace VirtualHome
 
         [SerializeField] private List<Bundle_SO> bundleList;
 
-        private CurrentPage currentPage = CurrentPage.Sales;
         public ContentHandler contentHandler;
 
         public GameObject mainCamera;
@@ -77,7 +66,6 @@ namespace VirtualHome
         #region LoadSales
         private void LoadSales()
         {
-            currentPage = CurrentPage.Sales;
             // Sets the current Page to Sales and the root reference
             currentUIDocument.visualTreeAsset = uIDocuments.Find(doc => doc.name == "Sales Page");
             root = currentUIDocument.rootVisualElement;
@@ -146,7 +134,7 @@ namespace VirtualHome
         #region LoadSearch
         private void LoadSearch()
         {
-            currentPage = CurrentPage.Search;
+
             // Sets the current Page to Sales and the root reference
             currentUIDocument.visualTreeAsset = uIDocuments.Find(doc => doc.name == "Search Page");
             root = currentUIDocument.rootVisualElement;
@@ -261,7 +249,7 @@ namespace VirtualHome
 
         private void LoadUser()
         {
-            currentPage = CurrentPage.User;
+
             // Sets the current Page to User and the root reference
             currentUIDocument.visualTreeAsset = uIDocuments.Find(doc => doc.name == "User Page");
             root = currentUIDocument.rootVisualElement;
@@ -411,7 +399,6 @@ namespace VirtualHome
 
         private void LoadCart()
         {
-            currentPage = CurrentPage.Cart;
             // Sets the current Page to Favorites and the root reference
             currentUIDocument.visualTreeAsset = uIDocuments.Find(doc => doc.name == "Cart Page");
             root = currentUIDocument.rootVisualElement;
@@ -626,13 +613,12 @@ namespace VirtualHome
         #endregion
 
         #region LoadFavorites
+
         private void LoadFavorites()
         {
-            currentPage = CurrentPage.Favorites;
             // Sets the current Page to Favorites and the root reference
             currentUIDocument.visualTreeAsset = uIDocuments.Find(doc => doc.name == "Favorites Page");
             root = currentUIDocument.rootVisualElement;
-
             SetListView();
 
             SetNavBar();
@@ -745,8 +731,6 @@ namespace VirtualHome
 
         private void LoadAR()
         {
-
-            currentPage = CurrentPage.AR;
             // Sets the current Page to AR and the root reference
             currentUIDocument.visualTreeAsset = uIDocuments.Find(doc => doc.name == "AR Page");
             root = currentUIDocument.rootVisualElement;
@@ -786,7 +770,7 @@ namespace VirtualHome
                 }
                 else
                 {
-                    chevron.style.rotate = new Rotate(180);
+                    chevron.style.rotate = new Rotate(0);
                     scrollView.style.display = DisplayStyle.None;
                     isDropped = false;
                 }
@@ -1049,7 +1033,6 @@ namespace VirtualHome
                     label.RemoveFromClassList(className);
             }
         }
-
     }
 
 }
