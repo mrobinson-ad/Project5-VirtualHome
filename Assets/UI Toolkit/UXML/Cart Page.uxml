@@ -33,8 +33,8 @@
         <ui:GroupBox name="Price-List" style="flex-grow: 0; flex-shrink: 1; width: 100%; margin-right: 0; margin-left: 0; margin-bottom: 20px;" />
         <ui:Label tabindex="-1" text="Shipping and payment" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Billing-Label" class="h1" style="left: 10px; top: auto;" />
         <ui:GroupBox name="Billing-Box" style="flex-shrink: 1; flex-grow: 1; margin-left: 0; width: 100%; padding-left: 20px;">
-            <ui:DropdownField label="&lt;b&gt;Payment method&lt;/b&gt;" index="0" choices="MasterCard ending in *3333" name="Payment-Dropdown" style="flex-direction: column; width: 60%; -unity-font-style: normal; flex-grow: 0; flex-shrink: 1;" />
-            <ui:DropdownField label="&lt;b&gt;Shipping address&lt;/b&gt;" index="0" choices="My saved address" name="Shipping-Dropdown" style="flex-direction: column; width: 60%; -unity-font-style: normal; flex-grow: 0; flex-shrink: 1;" />
+            <ui:DropdownField label="&lt;b&gt;Payment method&lt;/b&gt;" index="0" choices="MasterCard ending in *3333" name="Payment-Dropdown" style="flex-direction: column; width: 60%; -unity-font-style: normal; flex-grow: 0; flex-shrink: 1; overflow: visible;" />
+            <ui:DropdownField label="&lt;b&gt;Shipping address&lt;/b&gt;" index="0" choices="My saved address" name="Shipping-Dropdown" style="flex-direction: column; width: 60%; -unity-font-style: normal; flex-grow: 0; flex-shrink: 1; overflow: visible;" />
             <ui:Toggle value="false" name="Express-Toggle" style="flex-direction: row-reverse; align-items: flex-start; justify-content: space-between; margin-top: 10px; width: 40px;" />
             <ui:Label tabindex="-1" text="Express shipping" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Express-Label" style="top: -32px; left: 40px;" />
             <ui:Label tabindex="-1" text="2-4 days delivery +$14" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Express-Price" style="top: -40px; left: 40px; color: rgb(117, 117, 117); font-size: 14px;" />

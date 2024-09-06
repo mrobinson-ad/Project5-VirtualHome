@@ -335,3 +335,44 @@ Label {
     padding-bottom: 0;
     padding-left: 5px;
 }
+
+.shortcut {
+    width: 100%;
+    height: 80%;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    background-color: rgb(255, 255, 255);
+    position: absolute;
+    top: 10%;
+    display: flex;
+    left: 0;
+}
+
+.shortcut-off {
+    width: 100%;
+    height: 80%;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    background-color: rgb(255, 255, 255);
+    position: absolute;
+    top: 10%;
+    display: flex;
+    left: 100%;
+}
+
+.no-scroll-dropdown > .unity-base-popup-field__input > .unity-scroll-view__content-viewport {
+    overflow: hidden;
+    display: none;
+}
+
+.unity-scroller {
+    display: none;
+}

@@ -7,6 +7,7 @@ using Unity.VisualScripting;
 using System;
 using System.Linq;
 using System.Threading;
+using UnityEditor.UIElements;
 
 namespace VirtualHome
 {
@@ -260,6 +261,11 @@ namespace VirtualHome
             var registerBox = root.Q<GroupBox>("Register-Box");
             var error = signBox.Q<Label>("Sign-Error");
             var regError = registerBox.Q<Label>("Different-Label");
+            var paymentScroll = root.Q<ScrollView>("Payment-Scroll");
+            var paymentBox = root.Q<GroupBox>("Billing-Box");
+            var paymentMessage = paymentBox.Q<Label>("Payment-Message");
+            var addressBox = root.Q<GroupBox>("Address-Box");
+            var addressMessage = addressBox.Q<Label>("Address-Message");
             loginBar.Q<Button>("Sign-In-Button").RegisterCallback<ClickEvent>(evt =>
             {
                 signBox.Query<TextField>().ForEach(textField => textField.value = string.Empty);
@@ -285,6 +291,23 @@ namespace VirtualHome
                 userBar.style.display = DisplayStyle.None;
                 loginBar.style.display = DisplayStyle.Flex;
             });
+
+            root.Q<Button>("Billing-Button").RegisterCallback<ClickEvent>(evt =>
+            {
+                paymentScroll.RemoveFromClassList("shortcut-off");
+                paymentBox.Query<TextField>().ForEach(textField => textField.value = string.Empty);
+                paymentMessage.style.display = DisplayStyle.None;
+                addressBox.Query<TextField>().ForEach(textField => textField.value = string.Empty);
+                addressMessage.style.display = DisplayStyle.None;
+            });
+            paymentScroll.Q<VisualElement>("Return-Arrow").RegisterCallback<ClickEvent>(evt =>
+            {
+                paymentScroll.AddToClassList("shortcut-off");
+            });
+            SetPayment();
+
+            SetAddress();
+
 
             SetNavBar();
 
@@ -388,6 +411,55 @@ namespace VirtualHome
                         regError.text = "Incorrect information";
                         return;
                     }
+                });
+            }
+
+            void SetPayment()
+            {
+                root.Q<Button>("Save-Payment").RegisterCallback<ClickEvent>(evt =>
+                {
+                    string firstName = paymentBox.Q<TextField>("First-Name-Field").value;
+                    string lastName = paymentBox.Q<TextField>("Last-Name-Field").value;
+                    string card = paymentBox.Q<TextField>("Card-Field").value;
+                    string cvv = paymentBox.Q<TextField>("CVV-Field").value;
+                    string date = paymentBox.Q<DropdownField>("Expiry-Month").value + "/" + paymentBox.Q<DropdownField>("Expiry-Year").value;
+                    string type = paymentBox.Q<DropdownField>("Card-Dropdown").value;
+                    if (IsAnyNullOrEmpty(firstName, lastName, card, cvv, date, type))
+                    {
+                        SetClassList(paymentMessage, "right-pass", false);
+                        paymentMessage.style.display = DisplayStyle.Flex;
+                        paymentMessage.text = "Please fill all the fields";
+                        return;
+                    }
+                    UserPayment userPayment = new UserPayment(firstName, lastName, card, cvv, date, type);
+                    UserManager.Instance.AddPayment(currentUser, userPayment);
+                    SetClassList(paymentMessage, "right-pass", true);
+                    paymentMessage.style.display = DisplayStyle.Flex;
+                    paymentMessage.text = "Payment method has been added";
+                });
+            }
+            void SetAddress()
+            {
+
+                root.Q<Button>("Save-Address").RegisterCallback<ClickEvent>(evt =>
+                {
+                    string firstName = addressBox.Q<TextField>("First-Name-Field").value;
+                    string lastName = addressBox.Q<TextField>("Last-Name-Field").value;
+                    string address = addressBox.Q<TextField>("Address-Field").value;
+                    string city = addressBox.Q<TextField>("City-Field").value;
+                    string state = addressBox.Q<TextField>("State-Field").value;
+                    string postal = addressBox.Q<TextField>("Postal-Field").value;
+                    if (IsAnyNullOrEmpty(firstName, lastName, address, city, state, postal))
+                    {
+                        SetClassList(addressMessage, "right-pass", false);
+                        addressMessage.style.display = DisplayStyle.Flex;
+                        addressMessage.text = "Please fill all the fields";
+                    }
+                    UserAddress userAddress = new UserAddress(firstName, lastName, address, city, state, postal);
+                    UserManager.Instance.AddAddress(currentUser, userAddress);
+                    SetClassList(addressMessage, "right-pass", true);
+                    addressMessage.style.display = DisplayStyle.Flex;
+                    addressMessage.text = "Address has been added";
                 });
             }
             #endregion
@@ -1032,6 +1104,17 @@ namespace VirtualHome
                 if (label.ClassListContains(className))
                     label.RemoveFromClassList(className);
             }
+        }
+        bool IsAnyNullOrEmpty(params string[] values)
+        {
+            foreach (string value in values)
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 
