@@ -199,6 +199,27 @@ namespace VirtualHome
                 Debug.LogError("User not found!");
             }
         }
+        public List<string> GetAddress (string username)
+        {
+            var existingUser = userInfos.userEntries.Find(u => u.Username == username);
+
+            // Check if the user was found
+            if (existingUser != null)
+            {
+                if (existingUser.Addresses.Count > 0)
+                {
+                    var addressList = new List<string>();
+                    foreach (var address in existingUser.Addresses)
+                    {
+                        string entry = address.firstName + "'s Address in " + address.city;
+                        addressList.Add(entry);
+                    }
+                    return addressList;
+                }
+                return null;
+            }
+            return null;
+        }
         public void AddPayment(string username, UserPayment payment)
         {
             var existingUser = userInfos.userEntries.Find(u => u.Username == username);
@@ -219,6 +240,28 @@ namespace VirtualHome
             {
                 Debug.LogError("User not found!");
             }
+        }
+
+        public List<string> GetPayment(string username)
+        {
+            var existingUser = userInfos.userEntries.Find(u => u.Username == username);
+
+            // Check if the user was found
+            if (existingUser != null)
+            {
+                if (existingUser.Payments.Count > 0)
+                {
+                    var paymentList = new List<string>();
+                    foreach(var payment in existingUser.Payments)
+                    {
+                        string entry = payment.cardType + " ending in *" + payment.card[^4..];
+                        paymentList.Add(entry);
+                    }
+                    return paymentList;
+                }
+                return null;
+            }
+            return null;
         }
 
         #endregion

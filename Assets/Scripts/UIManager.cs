@@ -555,6 +555,32 @@ namespace VirtualHome
         {
             root.Q<VisualElement>("Cart-View").style.display = DisplayStyle.None;
             root.Q<ScrollView>("Checkout-View").style.display = DisplayStyle.Flex;
+            var paymentDrop = root.Q<DropdownField>("Payment-Dropdown");
+            if (currentUser != null)
+            {
+                var paymentList = UserManager.Instance.GetPayment(currentUser);
+                if (paymentList != null)
+                {
+                    paymentDrop.choices.Clear();
+                    foreach (var payment in paymentList)
+                    {
+                        paymentDrop.choices.Add(payment);
+                    }
+                }
+            }
+            var addressDrop = root.Q<DropdownField>("Shipping-Dropdown");
+            if (currentUser != null)
+            {
+                var addressList = UserManager.Instance.GetAddress(currentUser);
+                if (addressList != null)
+                {
+                    addressDrop.choices.Clear();
+                    foreach(var address in addressList)
+                    {
+                        addressDrop.choices.Add(address);
+                    }
+                }
+            }
             GroupBox checkView = root.Q<GroupBox>("Price-List");
             checkView.Clear();
             float totalPrice = 0;
