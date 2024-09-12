@@ -67,7 +67,7 @@ public void PlaceGround(HitTestResult hit)
  
 - Unity addressables:
     -
-    By using Unity addressables we can store the 3D models and scriptable objects of the furniture with Unity cloud services in order to deliver a lighter app while allowing the addition of new products without a need to update the app directly.
+    By using Unity addressables and Unity Cloud content Delivery we can store the 3D models and scriptable objects of the furniture with Unity cloud services in order to deliver a lighter app while allowing the addition of new products without a need to update the app directly.
 
 - UIToolkit:
     -
