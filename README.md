@@ -46,12 +46,15 @@ public void PlaceGround(HitTestResult hit)
 <summary>Click here to view some images along with their explanations</summary>
 
 > Adding to favorites and changing colors
+> 
 ![Adding a product to favorites from the product page and changing its color](/GitAssets/ProductPage.gif)
 
 > Searching for products by category or name
+>     
 ![Clicking on a category to view the related products and searching products by name](/GitAssets/Search.gif)
 
 > Dynamic password security checker
+>     
 ![Conditions to meet password security turning from red to green as we achieve them](/GitAssets/Password.gif)
 
 </details>
