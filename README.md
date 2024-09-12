@@ -15,8 +15,9 @@ The AR SDK chosen for this project is Vuforia. It's ease of use and robust off s
 <details>
 <summary>Click here to see more details on the AR</summary>
   
-> Placing an object and removing it
-![Clicking on a button to preview a transparent version of the object, placing it and then removing it with the trash icon in the information panel](/GitAssets/)
+> Placing an object, changing its color and removing it
+![Clicking on a button to preview a transparent version of the object, placing it and then removing it with the trash icon in the information panel](/GitAssets/ARTable.gif)
+![Clicking on a button to preview a transparent version of the object, placing it and then removing it with the trash icon in the information panel](/GitAssets/ARCouch.gif)
 
 > Snippet of code that replaces the default Vuforia behaviors
 ```c#
@@ -33,8 +34,6 @@ public void PlaceGround(HitTestResult hit)
         }
     }
 ```
-> Changing an object's color
-![Changing an object's color by clicking a button in the information panel](/GitAssets/)
 
 > By using both interactive and automatic hit tests we can provide a dynamic preview and a user driven placement
 ![The plane finder object in inspector](/GitAssets/PlaneFinder.PNG)
@@ -46,12 +45,15 @@ public void PlaceGround(HitTestResult hit)
 <summary>Click here to view some images along with their explanations</summary>
 
 > Adding to favorites and changing colors
+> 
 ![Adding a product to favorites from the product page and changing its color](/GitAssets/ProductPage.gif)
 
 > Searching for products by category or name
+>     
 ![Clicking on a category to view the related products and searching products by name](/GitAssets/Search.gif)
 
 > Dynamic password security checker
+>     
 ![Conditions to meet password security turning from red to green as we achieve them](/GitAssets/Password.gif)
 
 </details>
@@ -64,7 +66,7 @@ public void PlaceGround(HitTestResult hit)
  
 - Unity addressables:
     -
-    By using Unity addressables we can store the 3D models and scriptable objects of the furniture with Unity cloud services in order to deliver a lighter app while allowing the addition of new products without a need to update the app directly.
+    By using Unity addressables and Unity Cloud content Delivery we can store the 3D models and scriptable objects of the furniture with Unity cloud services in order to deliver a lighter app while allowing the addition of new products without a need to update the app directly.
 
 - UIToolkit:
     -
