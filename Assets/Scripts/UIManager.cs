@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.SceneManagement;
-using Unity.VisualScripting;
-using System;
 using System.Linq;
-using System.Threading;
-using UnityEditor.UIElements;
+
 
 namespace VirtualHome
 {
@@ -38,7 +35,6 @@ namespace VirtualHome
 
         public GameObject mainCamera;
 
-        public CartDebugger cartDebugger;
 
         public int cartAmount = 0;
 
@@ -994,7 +990,6 @@ namespace VirtualHome
                 }
                 cartAmount++;
                 root.Q<Label>("Cart-Amount").text = cartAmount.ToString();
-                cartDebugger.LogCartContents(cartDict);
             };
 
             cartButton.RegisterCallback(cartClick);

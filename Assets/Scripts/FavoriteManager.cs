@@ -1,85 +1,86 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-public class FavoriteManager : MonoBehaviour
-{
-    public static FavoriteManager Instance { get; private set; } // Singleton
 
-    public List<Product_SO> favoriteList;
 
-    public List<Bundle_SO> favoriteBundleList;
-
-    public Dictionary<CartItem, int> cartDict;
-
-    public List<Bundle_SO> cartBundleList;
-
-    [SerializeField] public List<Promo_SO> promos;
-    
-    private AsyncOperationHandle<PromoList_SO>? loadedHandle;
-    [SerializeField] private string promoAddress;
-    
-    private void Awake()
+    public class FavoriteManager : MonoBehaviour
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(this);
-        }
-        else
-        {
-            Instance = this;
-        }
-    }
+        public static FavoriteManager Instance { get; private set; } // Singleton
 
-    private void Start()
-    {
+        public List<Product_SO> favoriteList;
 
-        loadedHandle = Addressables.LoadAssetAsync<PromoList_SO>(promoAddress);
-        loadedHandle.Value.Completed += OnPrefabLoaded;
+        public List<Bundle_SO> favoriteBundleList;
 
-        void OnPrefabLoaded(AsyncOperationHandle<PromoList_SO> handle)
+        public Dictionary<CartItem, int> cartDict;
+
+        public List<Bundle_SO> cartBundleList;
+
+        [SerializeField] public List<Promo_SO> promos;
+
+        private AsyncOperationHandle<PromoList_SO>? loadedHandle;
+        [SerializeField] private string promoAddress;
+
+        private void Awake()
         {
-            if (handle.Status == AsyncOperationStatus.Succeeded)
+            if (Instance != null && Instance != this)
             {
-                promos = handle.Result.content.list;
-                Debug.Log("Promo list loaded successfuly");
+                Destroy(this);
             }
             else
             {
-                Debug.LogError("Failed to load promo list");
+                Instance = this;
             }
         }
-      
-    }
-}
 
-public class CartItem
-{
-    public Product_SO product;
-    public string color;
-
-    public CartItem(Product_SO product, string color)
-    {
-        this.product = product;
-        this.color = color;
-    }
-
-    // Override Equals to compare CartItems based on product and color
-    public override bool Equals(object obj)
-    {
-        if (obj is CartItem other)
+        private void Start()
         {
-            return product == other.product && color == other.color;
+
+            loadedHandle = Addressables.LoadAssetAsync<PromoList_SO>(promoAddress);
+            loadedHandle.Value.Completed += OnPrefabLoaded;
+
+            void OnPrefabLoaded(AsyncOperationHandle<PromoList_SO> handle)
+            {
+                if (handle.Status == AsyncOperationStatus.Succeeded)
+                {
+                    promos = handle.Result.content.list;
+                    Debug.Log("Promo list loaded successfuly");
+                }
+                else
+                {
+                    Debug.LogError("Failed to load promo list");
+                }
+            }
+
         }
-        return false;
     }
 
-    // Override GetHashCode to match the criteria of Equals
-    public override int GetHashCode()
+    public class CartItem
     {
-        return (product, color).GetHashCode();
+        public Product_SO product;
+        public string color;
+
+        public CartItem(Product_SO product, string color)
+        {
+            this.product = product;
+            this.color = color;
+        }
+
+        // Override Equals to compare CartItems based on product and color
+        public override bool Equals(object obj)
+        {
+            if (obj is CartItem other)
+            {
+                return product == other.product && color == other.color;
+            }
+            return false;
+        }
+
+        // Override GetHashCode to match the criteria of Equals
+        public override int GetHashCode()
+        {
+            return (product, color).GetHashCode();
+        }
     }
-}
