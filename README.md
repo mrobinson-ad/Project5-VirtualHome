@@ -16,7 +16,7 @@ The AR SDK chosen for this project is Vuforia. It's ease of use and robust off s
 <summary>Click here to see more details on the AR</summary>
   
 > Placing an object, changing its color and removing it
-![Clicking on a button to preview a transparent version of the object, placing it and then removing it with the trash icon in the information panel](/GitAssets/ARTable.gif)
+> 
 ![Clicking on a button to preview a transparent version of the object, placing it and then removing it with the trash icon in the information panel](/GitAssets/ARCouch.gif)
 
 > Snippet of code that replaces the default Vuforia behaviors
