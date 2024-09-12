@@ -15,8 +15,9 @@ The AR SDK chosen for this project is Vuforia. It's ease of use and robust off s
 <details>
 <summary>Click here to see more details on the AR</summary>
   
-> Placing an object and removing it
-![Clicking on a button to preview a transparent version of the object, placing it and then removing it with the trash icon in the information panel](/GitAssets/)
+> Placing an object, changing its color and removing it
+![Clicking on a button to preview a transparent version of the object, placing it and then removing it with the trash icon in the information panel](/GitAssets/ARTable.gif)
+![Clicking on a button to preview a transparent version of the object, placing it and then removing it with the trash icon in the information panel](/GitAssets/ARCouch.gif)
 
 > Snippet of code that replaces the default Vuforia behaviors
 ```c#
@@ -33,8 +34,6 @@ public void PlaceGround(HitTestResult hit)
         }
     }
 ```
-> Changing an object's color
-![Changing an object's color by clicking a button in the information panel](/GitAssets/)
 
 > By using both interactive and automatic hit tests we can provide a dynamic preview and a user driven placement
 ![The plane finder object in inspector](/GitAssets/PlaneFinder.PNG)
