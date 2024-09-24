@@ -42,6 +42,31 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dd12a0f9838c32c48840191aee828c3e
+    m_Address: Assets/Sprites/Furniture/Lamp.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 383b66b621ea308439c604132faa5568
+    m_Address: Assets/Sprites/Furniture/ClassicCouch.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8656533b01d0537429eab536f16512b9
+    m_Address: Assets/Sprites/Furniture/BlackCouch.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 49c14d67dc89a4b49bebd56c71b461e9
+    m_Address: Assets/Sprites/Furniture/BlackTable.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2acd29327915c5d4bb018324e6c19419
+    m_Address: Assets/Sprites/Furniture/OakTable.PNG
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 65b98ad5fe444ae41b4864efb1d21d55, type: 2}
   m_SchemaSet:

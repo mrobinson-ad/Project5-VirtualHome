@@ -27,9 +27,11 @@ namespace VirtualHome
 
         private VisualElement root;
 
-        [SerializeField] private List<Product_SO> productList;
+        [SerializeField] private List<Product> productList;
 
-        [SerializeField] private List<Bundle_SO> bundleList;
+        //[SerializeField] private List<Bundle_SO> bundleList;
+
+        [SerializeField] private ProductLoader productLoader;
 
         public ContentHandler contentHandler;
 
@@ -55,6 +57,14 @@ namespace VirtualHome
 
         private void Start()
         {
+            StartCoroutine(Init());
+            
+        }
+
+        private IEnumerator Init()
+        {
+            productList = productLoader.products;
+            yield return new WaitForSeconds(0.5f);
             LoadSales();
         }
 
@@ -81,6 +91,7 @@ namespace VirtualHome
                     }
                 }
             }
+            /*
             //Instantiates the templates to populate the Bundle sales scroll view
             ScrollView BundleView = root.Q<ScrollView>("Bundle-Scroll");
             foreach (var bundle in bundleList)
@@ -121,7 +132,7 @@ namespace VirtualHome
                     });
                     BundleView.Add(newItem);
                 }
-            }
+            }*/
             SetNavBar();
             root.Q<VisualElement>("Percent").SetEnabled(false);
         }
@@ -172,7 +183,7 @@ namespace VirtualHome
                 {
                     case Category.Tables:
                         var tableList = TagProducts("table");
-                        foreach (Product_SO product in tableList)
+                        foreach (Product product in tableList)
                         {
                             SetProductGrid(template, gridScroll, product);
                         }
@@ -180,7 +191,7 @@ namespace VirtualHome
                         break;
                     case Category.Sofas:
                         var sofaList = TagProducts("couch");
-                        foreach (Product_SO product in sofaList)
+                        foreach (Product product in sofaList)
                         {
                             SetProductGrid(template, gridScroll, product);
                         }
@@ -188,7 +199,7 @@ namespace VirtualHome
                         break;
                     case Category.Lamps:
                         var lampList = TagProducts("lamp");
-                        foreach (Product_SO product in lampList)
+                        foreach (Product product in lampList)
                         {
                             SetProductGrid(template, gridScroll, product);
                         }
@@ -487,7 +498,7 @@ namespace VirtualHome
                 {
                     VisualTreeAsset template = uITemplates.Find(t => t.name == "Product-Line-Cart");
                     CartItem cartItem = item.Key;
-                    Product_SO product = cartItem.product;
+                    Product product = cartItem.product;
                     if (template != null)
                     {
                         VisualElement newItem = template.CloneTree();
@@ -584,7 +595,7 @@ namespace VirtualHome
             foreach (var item in FavoriteManager.Instance.cartDict)
             {
                 CartItem cartItem = item.Key;
-                Product_SO product = cartItem.product;
+                Product product = cartItem.product;
                 if (template != null)
                 {
                     VisualElement newItem = template.CloneTree();
@@ -924,7 +935,7 @@ namespace VirtualHome
         #endregion
 
         #region SetProductPage
-        private void SetProductPage(Product_SO product, VisualElement templateHeart)
+        private void SetProductPage(Product product, VisualElement templateHeart)
         {
             Debug.Log(product.productName);
             GroupBox page = root.Q<GroupBox>("Product-Page");
@@ -1039,7 +1050,7 @@ namespace VirtualHome
             page.RemoveFromClassList("product-page-off");
         }
 
-        private void SetProductGrid(VisualTreeAsset template, ScrollView scrollView, Product_SO product)
+        private void SetProductGrid(VisualTreeAsset template, ScrollView scrollView, Product product)
         {
             VisualElement newItem = template.CloneTree();
 
@@ -1087,7 +1098,7 @@ namespace VirtualHome
         }
 
         #endregion
-        public List<Product_SO> SearchProducts(string searchString)
+        public List<Product> SearchProducts(string searchString)
         {
             searchString = searchString.ToLower();
 
@@ -1102,7 +1113,7 @@ namespace VirtualHome
             return matchingProducts;
         }
 
-        public List<Product_SO> TagProducts(string tagSearch)
+        public List<Product> TagProducts(string tagSearch)
         {
             tagSearch = tagSearch.ToLower();
 

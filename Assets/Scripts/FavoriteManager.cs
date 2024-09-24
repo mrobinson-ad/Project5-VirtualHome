@@ -10,13 +10,13 @@ using UnityEngine.ResourceManagement.AsyncOperations;
     {
         public static FavoriteManager Instance { get; private set; } // Singleton
 
-        public List<Product_SO> favoriteList;
+        public List<Product> favoriteList;
 
-        public List<Bundle_SO> favoriteBundleList;
+        //public List<Bundle_SO> favoriteBundleList;
 
         public Dictionary<CartItem, int> cartDict;
 
-        public List<Bundle_SO> cartBundleList;
+        //public List<Bundle_SO> cartBundleList;
 
         [SerializeField] public List<Promo_SO> promos;
 
@@ -59,10 +59,10 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 
     public class CartItem
     {
-        public Product_SO product;
+        public Product product;
         public string color;
 
-        public CartItem(Product_SO product, string color)
+        public CartItem(Product product, string color)
         {
             this.product = product;
             this.color = color;

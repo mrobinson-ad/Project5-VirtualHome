@@ -5,7 +5,7 @@ using Vuforia;
 public class ContentHandler : VuforiaMonoBehaviour
 {
     [SerializeField] private Material transparentPreviewMaterial;
-    public Product_SO objectToPlace;
+    public Product objectToPlace;
     [SerializeField] private AnchorBehaviour anchorStage;
     private GameObject previewObject;
     private bool isPlacing = false;
@@ -23,7 +23,7 @@ public class ContentHandler : VuforiaMonoBehaviour
         }
     }
 
-    private void PlaceNewObject(HitTestResult hit, Product_SO product)
+    private void PlaceNewObject(HitTestResult hit, Product product)
     {
         Instantiate(product.prefab, hit.Position, hit.Rotation, anchorStage.transform);
         isPlacing = false;
@@ -33,7 +33,7 @@ public class ContentHandler : VuforiaMonoBehaviour
         }
     }
 
-    public void ChangeObject(Product_SO objectToSet)
+    public void ChangeObject(Product objectToSet)
     {
         objectToPlace = objectToSet;
         CreatePreviewObject();
