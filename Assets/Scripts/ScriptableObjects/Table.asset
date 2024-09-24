@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea76848e26c9d9b4cae329ddeb703168, type: 3}
   m_Name: Table
   m_EditorClassIdentifier: 
-  productName: Coffee Table
+  productName: Table
   productSprites:
   - {fileID: 21300000, guid: 49c14d67dc89a4b49bebd56c71b461e9, type: 3}
   - {fileID: 21300000, guid: 2acd29327915c5d4bb018324e6c19419, type: 3}

@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Materials
+  m_EditorClassIdentifier: 
+  m_GroupName: Materials
+  m_Data:
+    m_SerializedData: []
+  m_GUID: dfacb1dc676c9534fb9cbf290194332d
+  m_SerializeEntries:
+  - m_GUID: abc00000000005415550779342621911
+    m_Address: Assets/Source/Materials/StandingLamp.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0d9f9b67cd44fce4e94810165bf7e6a6
+    m_Address: Assets/Source/Materials/OakTable.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5524dd051f5298c42a7aeef836d5eaa9
+    m_Address: Assets/Source/Materials/BlackTable.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7bee1f9e85689704b84045c5c48a3897
+    m_Address: Assets/Source/Materials/BlackCouch.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 13135e5577b8f904091cf1bb7f901e13
+    m_Address: Assets/Source/Materials/ClassicCouch.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 65b98ad5fe444ae41b4864efb1d21d55, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 86076c5cddf6af1438baa4f92c2c627e, type: 2}
+    - {fileID: 11400000, guid: 2e96752a5330c6b4a91b852b14a0b981, type: 2}
