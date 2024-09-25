@@ -208,7 +208,6 @@ public class Product
                 // Get the response as a string
                 string jsonResponse = webRequest.downloadHandler.text;
 
-                // Deserialize the JSON response directly
                 try
                 {
                     // Using inline JSON deserialization

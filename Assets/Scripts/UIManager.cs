@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.SceneManagement;
 using System.Linq;
+using System;
 
 
 namespace VirtualHome
@@ -27,7 +28,7 @@ namespace VirtualHome
 
         private VisualElement root;
 
-        [SerializeField] private List<Product> productList;
+        [SerializeField] public List<Product> productList;
 
         //[SerializeField] private List<Bundle_SO> bundleList;
 
@@ -41,6 +42,7 @@ namespace VirtualHome
         public int cartAmount = 0;
 
         private string currentUser;
+        private string currentID;
 
 
         private void Awake()
@@ -314,7 +316,14 @@ namespace VirtualHome
             //SetPayment();
 
             //SetAddress();
-
+            if (currentUser != null)
+            {
+                loginBar.style.display = DisplayStyle.None;
+                signBox.style.display = DisplayStyle.None;
+                userBar.style.display = DisplayStyle.Flex;
+                shortcuts.style.display = DisplayStyle.Flex;
+                userBar.Q<Label>("User-Name-Label").text = currentUser;
+            }
 
             SetNavBar();
 
@@ -336,11 +345,13 @@ namespace VirtualHome
                             {
                                 if (result == "success")
                                 {
+                                    currentUser = UserManager.Instance.currentUser;
+                                    currentID = UserManager.Instance.currentID;
+                                    FavoriteManager.Instance.StartUserList(currentID);
                                     loginBar.style.display = DisplayStyle.None;
                                     signBox.style.display = DisplayStyle.None;
                                     userBar.style.display = DisplayStyle.Flex;
                                     shortcuts.style.display = DisplayStyle.Flex;
-                                    currentUser = UserManager.Instance.currentUser;
                                     userBar.Q<Label>("User-Name-Label").text = currentUser;
                                     return;
                                 }
@@ -531,16 +542,18 @@ namespace VirtualHome
                         {
                             FavoriteManager.Instance.cartDict[cartItem]--;
                             cartAmount--;
+                            if (currentID != null)
+                                FavoriteManager.Instance.StartDelCart(currentID, product.productID.ToString(), (1+product.colors.IndexOf(item.Key.color)).ToString());
                             root.Q<Label>("Cart-Amount").text = cartAmount.ToString();
                             if (product.isSale)
                             {
                                 totalPrice -= float.Parse(product.productSale);
-                                root.Q<Label>("Total-Label").text = $"Total: ${totalPrice}";
+                                root.Q<Label>("Total-Label").text = $"Total: ${totalPrice.ToString("F2")}";
                             }
                             else
                             {
                                 totalPrice -= float.Parse(product.productPrice);
-                                root.Q<Label>("Total-Label").text = $"Total: ${totalPrice}";
+                                root.Q<Label>("Total-Label").text = $"Total: ${totalPrice.ToString("F2")}";
                             }
                             if (FavoriteManager.Instance.cartDict[cartItem] <= 0)
                             {
@@ -786,6 +799,8 @@ namespace VirtualHome
                     newItem.Q<Label>("Product-Short").text = product.productShortDescription;
                     newItem.Q<VisualElement>("Remove-Product").RegisterCallback<ClickEvent>(evt =>
                     {
+                        if (currentID != null)
+                            FavoriteManager.Instance.StartDelFavorite(currentID,product.productID.ToString());
                         FavoriteManager.Instance.favoriteList.Remove(product);
                         listView.Remove(newItem);
                         product.ReleasePrefab();
@@ -828,6 +843,8 @@ namespace VirtualHome
                     newItem.Q<Label>("Product-Short").text = product.productShortDescription;
                     newItem.Q<VisualElement>("Remove-Product").RegisterCallback<ClickEvent>(evt =>
                     {
+                        if (currentID != null)
+                            FavoriteManager.Instance.StartDelFavorite(currentID,product.productID.ToString());
                         FavoriteManager.Instance.favoriteList.Remove(product);
                         gridView.Remove(newItem);
                         product.ReleasePrefab();
@@ -996,11 +1013,8 @@ namespace VirtualHome
                 }
                 CartItem cartItem = new CartItem(product, product.selectedColor);
                 var cartDict = FavoriteManager.Instance.cartDict;
-                if (cartDict == null)
-                {
-                    FavoriteManager.Instance.cartDict = new Dictionary<CartItem, int>();
-                    cartDict = FavoriteManager.Instance.cartDict;
-                }
+                if (currentID != null)
+                        FavoriteManager.Instance.StartAddCart(currentID, product.productID.ToString(), (1+product.colors.IndexOf(product.selectedColor)).ToString());
                 if (!cartDict.TryAdd(cartItem, 1))
                 {
                     // Increment the count if the item was already present
@@ -1020,6 +1034,8 @@ namespace VirtualHome
                     {
                         heart.AddToClassList("heart-filled");
                         templateHeart.AddToClassList("heart-filled");
+                        if (currentID != null)
+                            FavoriteManager.Instance.StartAddFavorite(currentID,product.productID.ToString());
                         FavoriteManager.Instance.favoriteList.Add(product);
                         if (product.prefab == null)
                         {
@@ -1030,6 +1046,8 @@ namespace VirtualHome
                     {
                         heart.RemoveFromClassList("heart-filled");
                         templateHeart.RemoveFromClassList("heart-filled");
+                        if (currentID != null)
+                            FavoriteManager.Instance.StartDelFavorite(currentID,product.productID.ToString());
                         FavoriteManager.Instance.favoriteList.Remove(product);
                         product.ReleasePrefab();
                     }
@@ -1088,6 +1106,8 @@ namespace VirtualHome
                 if (!heart.ClassListContains("heart-filled"))
                 {
                     heart.AddToClassList("heart-filled");
+                    if (currentID != null)
+                            FavoriteManager.Instance.StartAddFavorite(currentID,product.productID.ToString());
                     FavoriteManager.Instance.favoriteList.Add(product);
                     if (product.prefab == null)
                     {
@@ -1097,6 +1117,8 @@ namespace VirtualHome
                 else
                 {
                     heart.RemoveFromClassList("heart-filled");
+                    if (currentID != null)
+                            FavoriteManager.Instance.StartDelFavorite(currentID,product.productID.ToString());
                     FavoriteManager.Instance.favoriteList.Remove(product);
                     product.ReleasePrefab();
                 }

@@ -1,9 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
-using System.Threading.Tasks;
 using System.Collections;
 using Newtonsoft.Json.Linq;
 
@@ -111,27 +108,6 @@ namespace VirtualHome
                     callback(response["error"].ToString());
                 }
             }
-        }
-    }
-
-    [Serializable]
-    public class UserPayment
-    {
-        public string firstName;
-        public string lastName;
-        public string card;
-        public string cvv;
-        public string date;
-        public string cardType;
-
-        public UserPayment(string firstName, string lastName, string card, string cvv, string date, string cardType)
-        {
-            this.firstName = firstName;
-            this.lastName = lastName;
-            this.card = card;
-            this.cvv = cvv;
-            this.date = date;
-            this.cardType = cardType;
         }
     }
 
