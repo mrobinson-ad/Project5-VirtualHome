@@ -38,7 +38,9 @@
         <ui:Button text="Sign in" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Sign-In" class="button-black" style="align-self: center; max-width: 95%; min-width: 95%;" />
         <ui:Label tabindex="-1" text="&lt;u&gt;Forgot password?&lt;/u&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Forgot-Label" style="color: rgb(117, 117, 117);" />
     </ui:GroupBox>
-    <ui:GroupBox name="Register-Box" class="user-box" style="align-items: stretch; position: absolute; top: 20%; padding-top: 15px; padding-right: 20px; padding-left: 20px; justify-content: space-around; padding-bottom: 25px; height: 55%; display: none;">
+    <ui:GroupBox name="Register-Box" class="user-box" style="align-items: stretch; position: absolute; top: 20%; padding-top: 15px; padding-right: 20px; padding-left: 20px; justify-content: space-around; padding-bottom: 25px; height: 60%; display: none;">
+        <ui:TextField label="First name" name="First-Name-Field" style="flex-direction: column;" />
+        <ui:TextField label="Last name" name="Last-Name-Field" style="flex-direction: column;" />
         <ui:TextField label="Username" name="User-Field" style="flex-direction: column;" />
         <ui:TextField label="Email" name="Email-Field" style="flex-direction: column;" />
         <ui:TextField label="Password" name="Password-Field" password="true" mask-character="*" style="flex-direction: column;">
@@ -50,7 +52,7 @@
         <ui:TextField label="Confirm password" name="Password-Confirm-Field" password="true" mask-character="*" style="flex-direction: column;">
             <ui:Label tabindex="-1" text="The passwords do not match!" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Different-Label" class="wrong-pass" style="align-self: flex-start; display: none;" />
         </ui:TextField>
-        <ui:Button text="Register" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Register" class="button-black" style="align-self: center; max-width: 95%; min-width: 95%;" />
+        <ui:Button text="Register" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Register" class="button-black" style="align-self: center; max-width: 95%; min-width: 95%; margin-top: 10px;" />
     </ui:GroupBox>
     <ui:ScrollView horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" name="Payment-Scroll" class="shortcut shortcut-off" style="background-color: rgb(255, 255, 255); flex-grow: 0; transition-duration: 750ms;">
         <ui:VisualElement name="Return-Arrow" style="flex-grow: 0; position: relative; left: 15px; top: auto; background-image: url(&apos;project://database/Assets/Sprites/UI/Chevron%20down.png?fileID=21300000&amp;guid=04ccb8e28a357dd4fa207bc40db15923&amp;type=3#Chevron down&apos;); width: 30px; height: 30px; rotate: 90deg; background-color: rgba(0, 0, 0, 0); -unity-background-image-tint-color: rgb(255, 255, 255); -unity-background-scale-mode: scale-to-fit; flex-shrink: 0;" />

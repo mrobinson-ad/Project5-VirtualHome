@@ -1,352 +1,158 @@
 using System;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using System.Text;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
-using System.Net.Mail;
+using UnityEngine.Networking;
+using System.Threading.Tasks;
+using System.Collections;
+using Newtonsoft.Json.Linq;
 
 namespace VirtualHome
 {
     public class UserManager : MonoBehaviour
     {
         public static UserManager Instance { get; private set; } // Singleton
-
-        #region UserTable declaration
-
         public string currentUser;
-        [SerializeField]
-        private UserInfo userInfos;
-
-        public List<UserEntry> UserTable => userInfos.userEntries; // Expose userEntries as UserTable
-
-        [Serializable]
-        public class UserInfo
-        {
-            public List<UserEntry> userEntries;
-        }
-        [Serializable]
-        public class UserEntry
-        {
-            public string Email;
-            public string Username;
-            public string Password;
-            public string Salt;
-            public List<UserPayment> Payments;
-            public List<UserAddress> Addresses;
-        }
-
-        
-        #endregion
-
+        public string currentID;
 
         private void Awake()
         {
-            if (Instance == null)
+            if (Instance != null && Instance != this)
+            {
+                Destroy(this);
+            }
+            else
             {
                 Instance = this;
-                InitializeUserTable();
-            }
-            else
-            {
-                Destroy(gameObject);
             }
         }
-        #region Initialize UserTable
-        private void InitializeUserTable()
+
+        public void StartRegisterUser(string firstName, string lastName, string userName, string email, string password, System.Action<string> callback)
         {
-            string jsonString = PlayerPrefs.GetString("usersTable", string.Empty);
-            if (string.IsNullOrEmpty(jsonString) || jsonString == "{}")
+            StartCoroutine(RegisterUser(firstName, lastName, userName, email, password, callback));
+        }
+
+        public void StartLogin(string email, string password, System.Action<string> callback)
+        {
+            StartCoroutine(Login(email, password, callback));
+        }
+        private IEnumerator RegisterUser(string firstName, string lastName, string userName, string email, string password, System.Action<string> callback)
+        {
+
+            WWWForm form = new WWWForm();
+            form.AddField("action", "register");
+            form.AddField("firstName", firstName);
+            form.AddField("lastName", lastName);
+            form.AddField("username", userName);
+            form.AddField("email", email);
+            form.AddField("password", password);
+
+            using (UnityWebRequest webRequest = UnityWebRequest.Post("http://localhost/MYG/api/index.php", form))
             {
-                Debug.Log("No user data found, initializing with default users...");
-                InitializeDefaultUsers();
-            }
-            else
-            {
-                Debug.Log("User data found, attempting to load...");
-                userInfos = JsonUtility.FromJson<UserInfo>(jsonString);
-                if (userInfos == null || userInfos.userEntries == null || userInfos.userEntries.Count == 0)
+                yield return webRequest.SendWebRequest();
+                Debug.Log("webSent");
+                if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
                 {
-                    Debug.LogError("Deserialization failed or data is empty, initializing with default users...");
-                    InitializeDefaultUsers();
+                    Debug.LogError("Error registering user: " + webRequest.error);
+                    callback("connection");
+                    yield break;
+                }
+
+                string jsonResponse = webRequest.downloadHandler.text;
+                Debug.Log("Response from server: " + jsonResponse);
+
+                if (jsonResponse.Contains("\"success\":\"User registered successfully.\""))
+                {
+                    callback("success");
+                }
+                else if (jsonResponse.Contains("\"error\":\"Email already registered.\""))
+                {
+                    callback("email");
                 }
                 else
                 {
-                    Debug.Log("Deserialization successful. Loaded users: " + userInfos.userEntries.Count);
-
-                    // Ensure all user entries have a salt
-                    foreach (var userEntry in userInfos.userEntries)
-                    {
-                        if (string.IsNullOrEmpty(userEntry.Salt))
-                        {
-                            userEntry.Salt = GenerateSalt();
-                            userEntry.Password = HashPassword(userEntry.Password, userEntry.Salt);
-                        }
-                    }
-
-                    // Save updated user information
-                    SaveUserTables();
+                    callback("fail");
                 }
             }
         }
-        #endregion
-        #region UserTable functions
 
-        private void InitializeDefaultUsers()
+        private IEnumerator Login(string email, string password, System.Action<string> callback)
         {
-            userInfos = new UserInfo()
+            WWWForm form = new WWWForm();
+            form.AddField("action", "login");
+            form.AddField("email", email);
+            form.AddField("password", password);
+
+            using (UnityWebRequest webRequest = UnityWebRequest.Post("http://localhost/MYG/api/index.php", form))
             {
-                userEntries = new List<UserEntry>()
-            };
-            AddUserEntry("admin", "admin@vhome.com", "Qwerty1234");
-            // Save to PlayerPrefs
-            SaveUserTables();
-        }
+                yield return webRequest.SendWebRequest();
 
-        private void SaveUserTables()
-        {
-            string json = JsonUtility.ToJson(userInfos);
-            PlayerPrefs.SetString("usersTable", json);
-            PlayerPrefs.Save();
-            Debug.Log("User data saved, total users: " + userInfos.userEntries.Count);
-        }
-
-        public void AddUserEntry(string username, string email, string password)
-        {
-            // Generate a random salt
-            string salt = GenerateSalt();
-            // Hash the password with the salt
-            string hashedPassword = HashPassword(password, salt);
-
-            // Create UserEntry
-            UserEntry userEntry = new UserEntry { Username = username, Email = email, Password = hashedPassword, Salt = salt };
-
-            // Ensure userInfos and userEntries are not null
-            if (userInfos == null)
-            {
-                userInfos = new UserInfo()
+                if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
                 {
-                    userEntries = new List<UserEntry>()
-                };
-            }
-            else if (userInfos.userEntries == null)
-            {
-                userInfos.userEntries = new List<UserEntry>();
-            }
-
-            // Add new entry to userEntries
-            userInfos.userEntries.Add(userEntry);
-
-            // Save updated user information
-            SaveUserTables();
-        }
-
-        public UserEntry ValidateUser(string email, string password)
-        {
-            if (userInfos != null && userInfos.userEntries != null)
-            {
-                foreach (var userEntry in userInfos.userEntries)
-                {
-                    if (userEntry.Email == email)
-                    {
-                        string hashedPassword = HashPassword(password, userEntry.Salt);
-                        if (userEntry.Password == hashedPassword)
-                        {
-                            currentUser = userEntry.Username;
-                            return userEntry;
-                        }
-                        break;
-                    }
-                }
-            }
-            return null;
-        }
-
-        public UserEntry GetUserByEmail(string email)
-        {
-            if (userInfos != null && userInfos.userEntries != null)
-            {
-                foreach (var userEntry in userInfos.userEntries)
-                {
-                    if (userEntry.Email == email)
-                    {
-                        return userEntry;
-                    }
-                }
-            }
-            return null; // User with this email not found
-        }
-
-        public void AddAddress(string username, UserAddress address)
-        {
-            var existingUser = userInfos.userEntries.Find(u => u.Username == username);
-
-            // Check if the user was found
-            if (existingUser != null)
-            {
-                // If the Addresses list is null, initialize it
-                if (existingUser.Addresses == null)
-                {
-                    existingUser.Addresses = new List<UserAddress>();
+                    Debug.LogError("Error logging in: " + webRequest.error);
+                    callback("connection");
+                    yield break;
                 }
 
-                existingUser.Addresses.Add(address);
-                SaveUserTables();
-            }
-            else
-            {
-                Debug.LogError("User not found!");
-            }
-        }
-        public List<string> GetAddress (string username)
-        {
-            var existingUser = userInfos.userEntries.Find(u => u.Username == username);
+                string jsonResponse = webRequest.downloadHandler.text;
+                Debug.Log("Response: " + jsonResponse);
 
-            // Check if the user was found
-            if (existingUser != null)
-            {
-                if (existingUser.Addresses.Count > 0)
+                var response = JObject.Parse(jsonResponse);
+
+                if (response["success"] != null)
                 {
-                    var addressList = new List<string>();
-                    foreach (var address in existingUser.Addresses)
-                    {
-                        string entry = address.firstName + "'s Address in " + address.city;
-                        addressList.Add(entry);
-                    }
-                    return addressList;
-                }
-                return null;
-            }
-            return null;
-        }
-        public void AddPayment(string username, UserPayment payment)
-        {
-            var existingUser = userInfos.userEntries.Find(u => u.Username == username);
+                    currentID = response["userID"].ToString();
+                    currentUser = response["username"].ToString();
 
-            // Check if the user was found
-            if (existingUser != null)
-            {
-                // If the Addresses list is null, initialize it
-                if (existingUser.Payments == null)
+                    callback("success");
+                }
+                else if (response["error"] != null)
                 {
-                    existingUser.Payments = new List<UserPayment>();
+                    callback(response["error"].ToString());
                 }
-
-                existingUser.Payments.Add(payment);
-                SaveUserTables();
-            }
-            else
-            {
-                Debug.LogError("User not found!");
-            }
-        }
-
-        public List<string> GetPayment(string username)
-        {
-            var existingUser = userInfos.userEntries.Find(u => u.Username == username);
-
-            // Check if the user was found
-            if (existingUser != null)
-            {
-                if (existingUser.Payments.Count > 0)
-                {
-                    var paymentList = new List<string>();
-                    foreach(var payment in existingUser.Payments)
-                    {
-                        string entry = payment.cardType + " ending in *" + payment.card[^4..];
-                        paymentList.Add(entry);
-                    }
-                    return paymentList;
-                }
-                return null;
-            }
-            return null;
-        }
-
-        #endregion
-        #region Encryption
-        private string GenerateSalt()
-        {
-            byte[] saltBytes = new byte[16];
-            using (var rng = new RNGCryptoServiceProvider())
-            {
-                rng.GetBytes(saltBytes);
-            }
-            return Convert.ToBase64String(saltBytes);
-        }
-
-        private string HashPassword(string password, string salt)
-        {
-            byte[] saltBytes = Convert.FromBase64String(salt);
-            byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
-            byte[] saltedPasswordBytes = new byte[saltBytes.Length + passwordBytes.Length];
-
-            Buffer.BlockCopy(saltBytes, 0, saltedPasswordBytes, 0, saltBytes.Length);
-            Buffer.BlockCopy(passwordBytes, 0, saltedPasswordBytes, saltBytes.Length, passwordBytes.Length);
-
-            using (var sha256 = SHA256.Create())
-            {
-                byte[] hashBytes = sha256.ComputeHash(saltedPasswordBytes);
-                return Convert.ToBase64String(hashBytes);
-            }
-        }
-        #endregion
-
-        public bool IsValidMail(string emailaddress) // Checks if the string is a proper email address format
-        {
-            try
-            {
-                MailAddress m = new MailAddress(emailaddress);
-
-                return true;
-            }
-            catch (FormatException)
-            {
-                return false;
             }
         }
     }
 
     [Serializable]
-        public class UserPayment
-        {
-            public string firstName;
-            public string lastName;
-            public string card;
-            public string cvv;
-            public string date;
-            public string cardType;
+    public class UserPayment
+    {
+        public string firstName;
+        public string lastName;
+        public string card;
+        public string cvv;
+        public string date;
+        public string cardType;
 
-            public UserPayment(string firstName, string lastName, string card, string cvv, string date, string cardType)
-            {
-                this.firstName = firstName;
-                this.lastName = lastName;
-                this.card = card;
-                this.cvv = cvv;
-                this.date = date;
-                this.cardType = cardType;
-            }
+        public UserPayment(string firstName, string lastName, string card, string cvv, string date, string cardType)
+        {
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.card = card;
+            this.cvv = cvv;
+            this.date = date;
+            this.cardType = cardType;
+        }
+    }
+
+    [Serializable]
+    public class UserAddress
+    {
+        public string firstName;
+        public string lastName;
+        public string address;
+        public string city;
+        public string state;
+        public string postal;
+        public UserAddress(string firstName, string lastName, string address, string city, string state, string postal)
+        {
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.address = address;
+            this.city = city;
+            this.state = state;
+            this.postal = postal;
         }
 
-        [Serializable]
-        public class UserAddress
-        {
-            public string firstName;
-            public string lastName;
-            public string address;
-            public string city;
-            public string state;
-            public string postal;
-            public UserAddress(string firstName, string lastName, string address, string city, string state, string postal)
-            {
-                this.firstName = firstName;
-                this.lastName = lastName;
-                this.address = address;
-                this.city = city;
-                this.state = state;
-                this.postal = postal;
-            }
-
-        }
+    }
 }

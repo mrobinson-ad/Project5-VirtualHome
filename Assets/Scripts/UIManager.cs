@@ -58,7 +58,7 @@ namespace VirtualHome
         private void Start()
         {
             StartCoroutine(Init());
-            
+
         }
 
         private IEnumerator Init()
@@ -311,9 +311,9 @@ namespace VirtualHome
             {
                 paymentScroll.AddToClassList("shortcut-off");
             });
-            SetPayment();
+            //SetPayment();
 
-            SetAddress();
+            //SetAddress();
 
 
             SetNavBar();
@@ -332,34 +332,32 @@ namespace VirtualHome
                         error.style.display = DisplayStyle.Flex;
                         return;
                     }
-                    if (!UserManager.Instance.IsValidMail(emailField.value))
-                    {
-                        error.text = "Email is invalid";
-                        error.style.display = DisplayStyle.Flex;
-                        return;
-                    }
-                    var userEntry = UserManager.Instance.ValidateUser(emailField.value, passwordField.value); //Uses UserManager to check if email and password match a single UserEntry
-                    if (userEntry != null)
-                    {
-                        currentUser = userEntry.Username;
-                        loginBar.style.display = DisplayStyle.None;
-                        signBox.style.display = DisplayStyle.None;
-                        userBar.style.display = DisplayStyle.Flex;
-                        shortcuts.style.display = DisplayStyle.Flex;
-                        userBar.Q<Label>("User-Name-Label").text = currentUser;
-                        return;
-                    }
-                    else
-                    {
-                        error.text = "Email or password is incorrect";
-                        error.style.display = DisplayStyle.Flex;
-                        return;
-                    }
+                    UserManager.Instance.StartLogin(emailField.value, passwordField.value, (result) =>
+                            {
+                                if (result == "success")
+                                {
+                                    loginBar.style.display = DisplayStyle.None;
+                                    signBox.style.display = DisplayStyle.None;
+                                    userBar.style.display = DisplayStyle.Flex;
+                                    shortcuts.style.display = DisplayStyle.Flex;
+                                    currentUser = UserManager.Instance.currentUser;
+                                    userBar.Q<Label>("User-Name-Label").text = currentUser;
+                                    return;
+                                }
+                                else
+                                {
+                                    error.text = "Email or password is incorrect";
+                                    error.style.display = DisplayStyle.Flex;
+                                    return;
+                                }
+                            });
                 });
             }
 
             void SetRegister()
             {
+                var firstField = registerBox.Q<TextField>("First-Name-Field");
+                var lastField = registerBox.Q<TextField>("Last-Name-Field");
                 var userField = registerBox.Q<TextField>("User-Field");
                 var emailField = registerBox.Q<TextField>("Email-Field");
                 var passwordField = registerBox.Q<TextField>("Password-Field");
@@ -391,36 +389,45 @@ namespace VirtualHome
 
                 registerBox.Q<Button>("Register").RegisterCallback<ClickEvent>(evt =>
                 {
-                    if (string.IsNullOrEmpty(userField.value) || string.IsNullOrEmpty(passwordField.value) || string.IsNullOrEmpty(emailField.value) || string.IsNullOrEmpty(confirmPasswordField.value))
+                    if (string.IsNullOrEmpty(firstField.value) || string.IsNullOrEmpty(lastField.value) || string.IsNullOrEmpty(userField.value) || string.IsNullOrEmpty(passwordField.value) || string.IsNullOrEmpty(emailField.value) || string.IsNullOrEmpty(confirmPasswordField.value))
                     {
                         regError.style.display = DisplayStyle.Flex;
                         regError.text = "All fields must be filled";
                         return;
                     }
-                    var existingUser = UserManager.Instance.GetUserByEmail(emailField.value);
-                    if (existingUser != null)
+                    if (passwordField.value == confirmPasswordField.value && passwordField.value.Length >= 6 && passwordField.value.Any(char.IsUpper) && passwordField.value.Any(char.IsLower) && passwordField.value.Any(char.IsDigit))
                     {
-                        regError.style.display = DisplayStyle.Flex;
-                        regError.text = "Email is already registered";
-                        return;
-                    }
-                    if (UserManager.Instance.IsValidMail(emailField.value) && passwordField.value == confirmPasswordField.value && passwordField.value.Length >= 6 && passwordField.value.Any(char.IsUpper) && passwordField.value.Any(char.IsLower) && passwordField.value.Any(char.IsDigit))
-                    {
-                        UserManager.Instance.AddUserEntry(userField.value, emailField.value, passwordField.value);
-                        signBox.Query<TextField>().ForEach(textField => textField.value = string.Empty);
-                        error.style.display = DisplayStyle.None;
-                        signBox.style.display = DisplayStyle.Flex;
-                        registerBox.style.display = DisplayStyle.None;
-                    }
-                    else
-                    {
-                        regError.style.display = DisplayStyle.Flex;
-                        regError.text = "Incorrect information";
-                        return;
+                        UserManager.Instance.StartRegisterUser(firstField.value, lastField.value, userField.value, emailField.value, passwordField.value, (result) =>
+                            {
+                                if (result == "success")
+                                {
+                                    signBox.Query<TextField>().ForEach(textField => textField.value = string.Empty);
+                                    error.style.display = DisplayStyle.None;
+                                    signBox.style.display = DisplayStyle.Flex;
+                                    registerBox.style.display = DisplayStyle.None;
+                                }
+
+                                else if (result == "email")
+                                {
+                                    regError.style.display = DisplayStyle.Flex;
+                                    regError.text = "Email is already registered";
+                                }
+                                else if (result == "connection")
+                                {
+                                    regError.style.display = DisplayStyle.Flex;
+                                    regError.text = "Connection error";
+                                }
+                                else
+                                {
+                                    regError.style.display = DisplayStyle.Flex;
+                                    regError.text = "Incorrect information";
+                                    return;
+                                }
+                            });
                     }
                 });
             }
-
+            /*
             void SetPayment()
             {
                 root.Q<Button>("Save-Payment").RegisterCallback<ClickEvent>(evt =>
@@ -468,7 +475,7 @@ namespace VirtualHome
                     addressMessage.style.display = DisplayStyle.Flex;
                     addressMessage.text = "Address has been added";
                 });
-            }
+            } */
             #endregion
         }
 
@@ -562,10 +569,10 @@ namespace VirtualHome
         {
             root.Q<VisualElement>("Cart-View").style.display = DisplayStyle.None;
             root.Q<ScrollView>("Checkout-View").style.display = DisplayStyle.Flex;
-            var paymentDrop = root.Q<DropdownField>("Payment-Dropdown");
+            /*var paymentDrop = root.Q<DropdownField>("Payment-Dropdown");
             if (currentUser != null)
             {
-                var paymentList = UserManager.Instance.GetPayment(currentUser);
+                var paymentList =;
                 if (paymentList != null)
                 {
                     paymentDrop.choices.Clear();
@@ -582,12 +589,12 @@ namespace VirtualHome
                 if (addressList != null)
                 {
                     addressDrop.choices.Clear();
-                    foreach(var address in addressList)
+                    foreach (var address in addressList)
                     {
                         addressDrop.choices.Add(address);
                     }
                 }
-            }
+            }*/
             GroupBox checkView = root.Q<GroupBox>("Price-List");
             checkView.Clear();
             float totalPrice = 0;
