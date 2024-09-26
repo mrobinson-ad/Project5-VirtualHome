@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace VirtualHome
 {
@@ -11,6 +12,8 @@ namespace VirtualHome
         public static UserManager Instance { get; private set; } // Singleton
         public string currentUser;
         public string currentID;
+
+        public string currentAddress;
 
         private void Awake()
         {
@@ -100,7 +103,7 @@ namespace VirtualHome
                 {
                     currentID = response["userID"].ToString();
                     currentUser = response["username"].ToString();
-
+                    StartCoroutine(GetAddress());
                     callback("success");
                 }
                 else if (response["error"] != null)
@@ -109,26 +112,83 @@ namespace VirtualHome
                 }
             }
         }
+
+        public void StartSetAddress(string address, string city, string state, string postal)
+        {
+            StartCoroutine(SetAddress(address, city, state, postal));
+        }
+        private IEnumerator SetAddress(string address, string city, string state, string postal)
+        {
+            WWWForm form = new WWWForm();
+            form.AddField("action", "setaddress");
+            form.AddField("id", currentID);
+            form.AddField("address", address);
+            form.AddField("city", city);
+            form.AddField("state", state);
+            form.AddField("postal", postal);
+
+            using (UnityWebRequest webRequest = UnityWebRequest.Post("http://localhost/MYG/api/index.php", form))
+            {
+                yield return webRequest.SendWebRequest();
+
+                if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
+                {
+                    Debug.LogError("Error setting address: " + webRequest.error);
+                    yield break;
+                }
+                currentAddress = $"{currentUser}'s address in {city}";
+                string jsonResponse = webRequest.downloadHandler.text;
+                Debug.Log("Response: " + jsonResponse);
+            }
+        }
+
+        public IEnumerator GetAddress()
+        {
+            string url = $"http://localhost/MYG/API/getaddress/{currentID}"; // Construct the URL
+
+            using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
+            {
+                yield return webRequest.SendWebRequest(); // Wait for the response
+
+                // Check for errors
+                if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
+                {
+                    Debug.LogError($"Error fetching address for user {currentUser}: {webRequest.error}");
+                }
+                else
+                {
+                    string jsonResponse = webRequest.downloadHandler.text;
+                    Debug.Log(jsonResponse);
+                    try
+                    {
+                        var city = JsonConvert.DeserializeObject<string>(jsonResponse);
+                        Debug.Log(city);
+                        currentAddress = $"{currentUser}'s address in {city}";
+                        Debug.Log($"Fetched address in {city} for {currentUser}.");
+                    }
+                    catch (JsonReaderException ex)
+                    {
+                        Debug.LogError($"JSON Parsing Error: {ex.Message}");
+                    }
+                }
+            }
+        }
     }
 
     [Serializable]
     public class UserAddress
     {
-        public string firstName;
-        public string lastName;
         public string address;
         public string city;
         public string state;
         public string postal;
-        public UserAddress(string firstName, string lastName, string address, string city, string state, string postal)
+        public UserAddress(string address, string city, string state, string postal)
         {
-            this.firstName = firstName;
-            this.lastName = lastName;
             this.address = address;
             this.city = city;
             this.state = state;
             this.postal = postal;
+            UserManager.Instance.StartSetAddress(address, city, state, postal);
         }
-
     }
 }

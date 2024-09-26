@@ -174,7 +174,7 @@ public class FavoriteManager : MonoBehaviour
 
                 if (jsonResponse.Contains("\"success\""))
                 {
-                    Debug.Log("Favorite added successfully");
+                    Debug.Log($"Favorite {productID} added successfully");
                 } else 
                 {
                     Debug.Log("Failed to add favorite");
@@ -207,7 +207,7 @@ public class FavoriteManager : MonoBehaviour
 
                 if (jsonResponse.Contains("\"success\""))
                 {
-                    Debug.Log("Favorite removed successfully");
+                    Debug.Log($"Favorite {productID} removed successfully");
                 } else 
                 {
                     Debug.Log("Failed to add favorite");
@@ -240,7 +240,7 @@ public class FavoriteManager : MonoBehaviour
 
                 if (jsonResponse.Contains("\"success\""))
                 {
-                    Debug.Log("Favorite added successfully");
+                    Debug.Log($"Cart item {productID}/{matID} added successfully");
                 } else 
                 {
                     Debug.Log("Failed to add favorite");
@@ -273,10 +273,10 @@ public class FavoriteManager : MonoBehaviour
 
                 if (jsonResponse.Contains("\"success\""))
                 {
-                    Debug.Log("Favorite added successfully");
+                    Debug.Log($"Cart item {productID}/{matID} removed successfully");
                 } else 
                 {
-                    Debug.Log("Failed to add favorite");
+                    Debug.Log("Failed to remove cart item");
                 }
             }
         }

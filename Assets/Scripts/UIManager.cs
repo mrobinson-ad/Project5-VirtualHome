@@ -271,8 +271,6 @@ namespace VirtualHome
             var error = signBox.Q<Label>("Sign-Error");
             var regError = registerBox.Q<Label>("Different-Label");
             var paymentScroll = root.Q<ScrollView>("Payment-Scroll");
-            var paymentBox = root.Q<GroupBox>("Billing-Box");
-            var paymentMessage = paymentBox.Q<Label>("Payment-Message");
             var addressBox = root.Q<GroupBox>("Address-Box");
             var addressMessage = addressBox.Q<Label>("Address-Message");
             loginBar.Q<Button>("Sign-In-Button").RegisterCallback<ClickEvent>(evt =>
@@ -304,8 +302,6 @@ namespace VirtualHome
             root.Q<Button>("Billing-Button").RegisterCallback<ClickEvent>(evt =>
             {
                 paymentScroll.RemoveFromClassList("shortcut-off");
-                paymentBox.Query<TextField>().ForEach(textField => textField.value = string.Empty);
-                paymentMessage.style.display = DisplayStyle.None;
                 addressBox.Query<TextField>().ForEach(textField => textField.value = string.Empty);
                 addressMessage.style.display = DisplayStyle.None;
             });
@@ -313,9 +309,9 @@ namespace VirtualHome
             {
                 paymentScroll.AddToClassList("shortcut-off");
             });
-            //SetPayment();
 
-            //SetAddress();
+
+            SetAddress();
             if (currentUser != null)
             {
                 loginBar.style.display = DisplayStyle.None;
@@ -438,55 +434,28 @@ namespace VirtualHome
                     }
                 });
             }
-            /*
-            void SetPayment()
-            {
-                root.Q<Button>("Save-Payment").RegisterCallback<ClickEvent>(evt =>
-                {
-                    string firstName = paymentBox.Q<TextField>("First-Name-Field").value;
-                    string lastName = paymentBox.Q<TextField>("Last-Name-Field").value;
-                    string card = paymentBox.Q<TextField>("Card-Field").value;
-                    string cvv = paymentBox.Q<TextField>("CVV-Field").value;
-                    string date = paymentBox.Q<DropdownField>("Expiry-Month").value + "/" + paymentBox.Q<DropdownField>("Expiry-Year").value;
-                    string type = paymentBox.Q<DropdownField>("Card-Dropdown").value;
-                    if (IsAnyNullOrEmpty(firstName, lastName, card, cvv, date, type))
-                    {
-                        SetClassList(paymentMessage, "right-pass", false);
-                        paymentMessage.style.display = DisplayStyle.Flex;
-                        paymentMessage.text = "Please fill all the fields";
-                        return;
-                    }
-                    UserPayment userPayment = new UserPayment(firstName, lastName, card, cvv, date, type);
-                    UserManager.Instance.AddPayment(currentUser, userPayment);
-                    SetClassList(paymentMessage, "right-pass", true);
-                    paymentMessage.style.display = DisplayStyle.Flex;
-                    paymentMessage.text = "Payment method has been added";
-                });
-            }
+            
             void SetAddress()
             {
 
                 root.Q<Button>("Save-Address").RegisterCallback<ClickEvent>(evt =>
                 {
-                    string firstName = addressBox.Q<TextField>("First-Name-Field").value;
-                    string lastName = addressBox.Q<TextField>("Last-Name-Field").value;
                     string address = addressBox.Q<TextField>("Address-Field").value;
                     string city = addressBox.Q<TextField>("City-Field").value;
                     string state = addressBox.Q<TextField>("State-Field").value;
                     string postal = addressBox.Q<TextField>("Postal-Field").value;
-                    if (IsAnyNullOrEmpty(firstName, lastName, address, city, state, postal))
+                    if (IsAnyNullOrEmpty(address, city, state, postal))
                     {
                         SetClassList(addressMessage, "right-pass", false);
                         addressMessage.style.display = DisplayStyle.Flex;
                         addressMessage.text = "Please fill all the fields";
                     }
-                    UserAddress userAddress = new UserAddress(firstName, lastName, address, city, state, postal);
-                    UserManager.Instance.AddAddress(currentUser, userAddress);
+                    UserAddress userAddress = new UserAddress(address, city, state, postal);
                     SetClassList(addressMessage, "right-pass", true);
                     addressMessage.style.display = DisplayStyle.Flex;
-                    addressMessage.text = "Address has been added";
+                    addressMessage.text = "Address has been set";
                 });
-            } */
+            } 
             #endregion
         }
 
@@ -582,32 +551,16 @@ namespace VirtualHome
         {
             root.Q<VisualElement>("Cart-View").style.display = DisplayStyle.None;
             root.Q<ScrollView>("Checkout-View").style.display = DisplayStyle.Flex;
-            /*var paymentDrop = root.Q<DropdownField>("Payment-Dropdown");
-            if (currentUser != null)
-            {
-                var paymentList =;
-                if (paymentList != null)
-                {
-                    paymentDrop.choices.Clear();
-                    foreach (var payment in paymentList)
-                    {
-                        paymentDrop.choices.Add(payment);
-                    }
-                }
-            }
             var addressDrop = root.Q<DropdownField>("Shipping-Dropdown");
             if (currentUser != null)
             {
-                var addressList = UserManager.Instance.GetAddress(currentUser);
-                if (addressList != null)
+                var address = UserManager.Instance.currentAddress;
+                if (address != null)
                 {
                     addressDrop.choices.Clear();
-                    foreach (var address in addressList)
-                    {
-                        addressDrop.choices.Add(address);
-                    }
+                    addressDrop.choices.Add(address);
                 }
-            }*/
+            }
             GroupBox checkView = root.Q<GroupBox>("Price-List");
             checkView.Clear();
             float totalPrice = 0;
