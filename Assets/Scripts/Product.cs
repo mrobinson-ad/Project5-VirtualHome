@@ -59,7 +59,6 @@ public class Product
         public string material;
     }
 
-    // Deserialize the materials and sprites fields
     [JsonProperty("materials")]
     private string materialsJson;
 
@@ -105,7 +104,6 @@ public class Product
         }
     }
 
-    // Load Materials based on JSON field
     public IEnumerator LoadMaterials()
     {
         if (!string.IsNullOrEmpty(materialsJson))
@@ -116,7 +114,6 @@ public class Product
             {
                 colors.Add(matData.color);
 
-                // Load each material using Addressables or Resources.Load
                 AsyncOperationHandle<Material> matHandle = Addressables.LoadAssetAsync<Material>(matData.material);
                 yield return matHandle;
 
@@ -142,7 +139,6 @@ public class Product
 
             foreach (string spritePath in spritePaths)
             {
-                // Load each sprite using Addressables or Resources.Load
                 AsyncOperationHandle<Sprite> spriteHandle = Addressables.LoadAssetAsync<Sprite>(spritePath);
                 yield return spriteHandle;
 
@@ -164,16 +160,14 @@ public class Product
 
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
         {
-            yield return webRequest.SendWebRequest(); // Wait for the response
+            yield return webRequest.SendWebRequest(); 
 
-            // Check for errors
             if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
             {
                 Debug.LogError($"Error fetching tags for product {productID}: {webRequest.error}");
             }
             else
             {
-                // Get the response as a string
                 string jsonResponse = webRequest.downloadHandler.text;
 
                 // Deserialize the JSON response into a List<string>
@@ -205,12 +199,10 @@ public class Product
             }
             else
             {
-                // Get the response as a string
                 string jsonResponse = webRequest.downloadHandler.text;
 
                 try
                 {
-                    // Using inline JSON deserialization
                     var dimensionList = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(jsonResponse);
                     if (dimensionList != null && dimensionList.Count > 0)
                     {
@@ -230,7 +222,7 @@ public class Product
                 {
                     Debug.LogError($"JSON Parsing Error: {ex.Message}");
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
                     Debug.LogError($"An unexpected error occurred: {ex.Message}");
                 }
@@ -259,11 +251,11 @@ public class Product
                 try
                 {
                     // Using inline JSON deserialization
-                    var dimensionList = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(jsonResponse);
-                    if (dimensionList != null && dimensionList.Count > 0)
+                    var saleList = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(jsonResponse);
+                    if (saleList != null && saleList.Count > 0)
                     {
-                        productSale = dimensionList[0]["salePrice"];
-                        isSale = dimensionList[0]["isSale"] == "1" ? true: false;
+                        productSale = saleList[0]["salePrice"];
+                        isSale = saleList[0]["isSale"] == "1" ? true: false;
                         
                     }
                     else
@@ -275,7 +267,7 @@ public class Product
                 {
                     Debug.LogError($"JSON Parsing Error: {ex.Message}");
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
                     Debug.LogError($"An unexpected error occurred: {ex.Message}");
                 }

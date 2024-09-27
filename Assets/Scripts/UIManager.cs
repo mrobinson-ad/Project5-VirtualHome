@@ -5,6 +5,8 @@ using UnityEngine.UIElements;
 using UnityEngine.SceneManagement;
 using System.Linq;
 using System;
+using Unity.VisualScripting.AssemblyQualifiedNameParser;
+using System.Security.Permissions;
 
 
 namespace VirtualHome
@@ -37,6 +39,8 @@ namespace VirtualHome
         public ContentHandler contentHandler;
 
         public GameObject mainCamera;
+
+        public PromoCheck promoCheck;
 
 
         public int cartAmount = 0;
@@ -434,7 +438,7 @@ namespace VirtualHome
                     }
                 });
             }
-            
+
             void SetAddress()
             {
 
@@ -455,7 +459,7 @@ namespace VirtualHome
                     addressMessage.style.display = DisplayStyle.Flex;
                     addressMessage.text = "Address has been set";
                 });
-            } 
+            }
             #endregion
         }
 
@@ -512,7 +516,7 @@ namespace VirtualHome
                             FavoriteManager.Instance.cartDict[cartItem]--;
                             cartAmount--;
                             if (currentID != null)
-                                FavoriteManager.Instance.StartDelCart(currentID, product.productID.ToString(), (1+product.colors.IndexOf(item.Key.color)).ToString());
+                                FavoriteManager.Instance.StartDelCart(currentID, product.productID.ToString(), (1 + product.colors.IndexOf(item.Key.color)).ToString());
                             root.Q<Label>("Cart-Amount").text = cartAmount.ToString();
                             if (product.isSale)
                             {
@@ -633,56 +637,33 @@ namespace VirtualHome
             var redeemButton = root.Q<Button>("Redeem-Button");
             EventCallback<ClickEvent> redeemClicked = evt =>
             {
-                foreach (var promo in FavoriteManager.Instance.promos)
+                var code = root.Q<TextField>("Promo-Field").value;
+                promoCheck.StartPromoCheck(code, (result) =>
                 {
-                    if (promo.code == root.Q<TextField>("Promo-Field").value)
+                    if (result == "failed")
                     {
-                        VisualElement promoItem = template.CloneTree();
-                        if (promo.type == PromoType.Shipping)
-                        {
-                            promoItem.Q<Label>("Product-Name").text = "Shipping Promo";
-                            promoItem.Q<Label>("Product-Color").text = "";
-                            promoItem.Q<Label>("Product-Price").text = "";
-                            promoItem.Q<Label>("Product-Total").text = "<color=green>$-14 </color>";
-                            totalPrice -= 14;
-                            taxItem.Q<Label>("Product-Total").text = $"${(totalPrice * 0.1):0.00}";
-                            root.Q<Label>("Billing-Label").text = $"Total: ${(totalPrice * 1.1):0.00}";
-                        }
-                        if (promo.type == PromoType.Flat)
-                        {
-                            promoItem.Q<Label>("Product-Name").text = "Promo";
-                            promoItem.Q<Label>("Product-Color").text = "";
-                            promoItem.Q<Label>("Product-Price").text = "";
-                            promoItem.Q<Label>("Product-Total").text = $"<color=green>$-{promo.amount} </color>";
-                            totalPrice -= promo.amount;
-                            taxItem.Q<Label>("Product-Total").text = $"${(totalPrice * 0.1):0.00}";
-                            root.Q<Label>("Billing-Label").text = $"Total: ${(totalPrice * 1.1):0.00}";
-                        }
-                        if (promo.type == PromoType.Percent)
-                        {
-                            promoItem.Q<Label>("Product-Name").text = "Promo";
-                            promoItem.Q<Label>("Product-Color").text = "";
-                            promoItem.Q<Label>("Product-Price").text = $"-{promo.amount}%";
-                            promoItem.Q<Label>("Product-Total").text = $"<color=green>$-{(promo.amount * totalPrice / 100):0.00} </color>";
-                            totalPrice -= promo.amount * totalPrice / 100;
-                            taxItem.Q<Label>("Product-Total").text = $"${(totalPrice * 0.1):0.00}";
-                            root.Q<Label>("Billing-Label").text = $"Total: ${(totalPrice * 1.1):0.00}";
-                        }
-                        int insertIndex = Mathf.Max(0, checkView.childCount - 1);
-                        checkView.Insert(insertIndex, promoItem);
-                        promoLabel.text = promo.message;
-                        promoLabel.style.display = DisplayStyle.Flex;
-                        SetClassList(promoLabel, "right-pass", true);
-                        redeemButton.SetEnabled(false);
-                        return;
-                    }
-                    else
-                    {
-                        promoLabel.text = root.Q<TextField>("Promo-Field").value + " is not a valid code";
+                        promoLabel.text = code + " is not a valid code";
                         promoLabel.style.display = DisplayStyle.Flex;
                         SetClassList(promoLabel, "right-pass", false);
                     }
-                }
+                    else
+                    {
+                        VisualElement promoItem = template.CloneTree();
+                        promoItem.Q<Label>("Product-Name").text = "Promo";
+                        promoItem.Q<Label>("Product-Color").text = "";
+                        promoItem.Q<Label>("Product-Price").text = "";
+                        promoItem.Q<Label>("Product-Total").text = $"<color=green>$-{result} </color>";
+                        totalPrice -= float.Parse(result);
+                        taxItem.Q<Label>("Product-Total").text = $"${(totalPrice * 0.1):0.00}";
+                        root.Q<Label>("Billing-Label").text = $"Total: ${(totalPrice * 1.1):0.00}";
+                        int insertIndex = Mathf.Max(0, checkView.childCount - 1);
+                        checkView.Insert(insertIndex, promoItem);
+                        promoLabel.text = $"Enjoy {result}$ off with {code}";
+                        promoLabel.style.display = DisplayStyle.Flex;
+                        SetClassList(promoLabel, "right-pass", true);
+                        redeemButton.SetEnabled(false);
+                    }
+                });
             };
             redeemButton.RegisterCallback(redeemClicked);
             root.Q<Label>("Billing-Label").text = $"Total: ${(totalPrice * 1.1):0.00}";
@@ -753,7 +734,7 @@ namespace VirtualHome
                     newItem.Q<VisualElement>("Remove-Product").RegisterCallback<ClickEvent>(evt =>
                     {
                         if (currentID != null)
-                            FavoriteManager.Instance.StartDelFavorite(currentID,product.productID.ToString());
+                            FavoriteManager.Instance.StartDelFavorite(currentID, product.productID.ToString());
                         FavoriteManager.Instance.favoriteList.Remove(product);
                         listView.Remove(newItem);
                         product.ReleasePrefab();
@@ -797,7 +778,7 @@ namespace VirtualHome
                     newItem.Q<VisualElement>("Remove-Product").RegisterCallback<ClickEvent>(evt =>
                     {
                         if (currentID != null)
-                            FavoriteManager.Instance.StartDelFavorite(currentID,product.productID.ToString());
+                            FavoriteManager.Instance.StartDelFavorite(currentID, product.productID.ToString());
                         FavoriteManager.Instance.favoriteList.Remove(product);
                         gridView.Remove(newItem);
                         product.ReleasePrefab();
@@ -967,7 +948,7 @@ namespace VirtualHome
                 CartItem cartItem = new CartItem(product, product.selectedColor);
                 var cartDict = FavoriteManager.Instance.cartDict;
                 if (currentID != null)
-                        FavoriteManager.Instance.StartAddCart(currentID, product.productID.ToString(), (1+product.colors.IndexOf(product.selectedColor)).ToString());
+                    FavoriteManager.Instance.StartAddCart(currentID, product.productID.ToString(), (1 + product.colors.IndexOf(product.selectedColor)).ToString());
                 if (!cartDict.TryAdd(cartItem, 1))
                 {
                     // Increment the count if the item was already present
@@ -988,7 +969,7 @@ namespace VirtualHome
                         heart.AddToClassList("heart-filled");
                         templateHeart.AddToClassList("heart-filled");
                         if (currentID != null)
-                            FavoriteManager.Instance.StartAddFavorite(currentID,product.productID.ToString());
+                            FavoriteManager.Instance.StartAddFavorite(currentID, product.productID.ToString());
                         FavoriteManager.Instance.favoriteList.Add(product);
                         if (product.prefab == null)
                         {
@@ -1000,7 +981,7 @@ namespace VirtualHome
                         heart.RemoveFromClassList("heart-filled");
                         templateHeart.RemoveFromClassList("heart-filled");
                         if (currentID != null)
-                            FavoriteManager.Instance.StartDelFavorite(currentID,product.productID.ToString());
+                            FavoriteManager.Instance.StartDelFavorite(currentID, product.productID.ToString());
                         FavoriteManager.Instance.favoriteList.Remove(product);
                         product.ReleasePrefab();
                     }
@@ -1060,7 +1041,7 @@ namespace VirtualHome
                 {
                     heart.AddToClassList("heart-filled");
                     if (currentID != null)
-                            FavoriteManager.Instance.StartAddFavorite(currentID,product.productID.ToString());
+                        FavoriteManager.Instance.StartAddFavorite(currentID, product.productID.ToString());
                     FavoriteManager.Instance.favoriteList.Add(product);
                     if (product.prefab == null)
                     {
@@ -1071,7 +1052,7 @@ namespace VirtualHome
                 {
                     heart.RemoveFromClassList("heart-filled");
                     if (currentID != null)
-                            FavoriteManager.Instance.StartDelFavorite(currentID,product.productID.ToString());
+                        FavoriteManager.Instance.StartDelFavorite(currentID, product.productID.ToString());
                     FavoriteManager.Instance.favoriteList.Remove(product);
                     product.ReleasePrefab();
                 }

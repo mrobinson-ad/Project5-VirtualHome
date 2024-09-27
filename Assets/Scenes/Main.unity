@@ -133,6 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 198971087}
   - component: {fileID: 198971086}
+  - component: {fileID: 198971088}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -173,6 +174,7 @@ MonoBehaviour:
   productLoader: {fileID: 803798673}
   contentHandler: {fileID: 0}
   mainCamera: {fileID: 330585543}
+  promoCheck: {fileID: 198971088}
   cartAmount: 0
 --- !u!4 &198971087
 Transform:
@@ -189,6 +191,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &198971088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 198971085}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23ddd56b61eab1540a3c50c47c19ad03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -356,8 +370,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentUser: 
-  userInfos:
-    userEntries: []
+  currentID: 
+  currentAddress: 
 --- !u!4 &519901446
 Transform:
   m_ObjectHideFlags: 0
@@ -496,8 +510,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   favoriteList: []
-  promos: []
-  promoAddress: Assets/Scripts/ScriptableObjects/PromoList.asset
 --- !u!4 &1249031996
 Transform:
   m_ObjectHideFlags: 0

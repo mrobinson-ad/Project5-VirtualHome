@@ -76,7 +76,7 @@ namespace VirtualHome
             }
         }
 
-        private IEnumerator Login(string email, string password, System.Action<string> callback)
+        private IEnumerator Login(string email, string password, Action<string> callback)
         {
             WWWForm form = new WWWForm();
             form.AddField("action", "login");

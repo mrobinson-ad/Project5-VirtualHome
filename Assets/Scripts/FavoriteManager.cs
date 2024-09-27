@@ -22,11 +22,6 @@ public class FavoriteManager : MonoBehaviour
 
     //public List<Bundle_SO> cartBundleList;
 
-    [SerializeField] public List<Promo_SO> promos;
-
-    private AsyncOperationHandle<PromoList_SO>? loadedHandle;
-    [SerializeField] private string promoAddress;
-
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -39,25 +34,6 @@ public class FavoriteManager : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        loadedHandle = Addressables.LoadAssetAsync<PromoList_SO>(promoAddress);
-        loadedHandle.Value.Completed += OnPrefabLoaded;
-
-        void OnPrefabLoaded(AsyncOperationHandle<PromoList_SO> handle)
-        {
-            if (handle.Status == AsyncOperationStatus.Succeeded)
-            {
-                promos = handle.Result.content.list;
-                Debug.Log("Promo list loaded successfuly");
-            }
-            else
-            {
-                Debug.LogError("Failed to load promo list");
-            }
-        }
-
-    }
     public void StartUserList(string id)
     {
         StartCoroutine(GetUser(id));
