@@ -29,6 +29,9 @@
         <ui:Button text="Manage billing information" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Billing-Button" class="button-white">
             <ui:Label tabindex="-1" text="&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" style="align-self: flex-end; margin-right: 0; padding-right: 0; padding-left: 0;" />
         </ui:Button>
+        <ui:Button text="Price management" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Management-Button" class="button-white" style="display: none;">
+            <ui:Label tabindex="-1" text="&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" style="align-self: flex-end; margin-right: 0; padding-right: 0; padding-left: 0;" />
+        </ui:Button>
     </ui:ScrollView>
     <ui:GroupBox name="Sign-Box" class="user-box" style="align-items: stretch; position: absolute; top: 30%; padding-top: 15px; padding-right: 20px; padding-left: 20px; justify-content: space-around; padding-bottom: 25px; height: 35%; display: flex;">
         <ui:TextField label="Email" name="Email-Field" style="flex-direction: column; align-self: auto; -unity-text-align: upper-left;" />
@@ -66,6 +69,17 @@
             </ui:VisualElement>
             <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Address-Message" class="wrong-pass" style="align-self: center; display: none;" />
             <ui:Button text="Save address" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Save-Address" class="button-black" style="align-self: center; max-width: 95%; min-width: 95%; margin-top: 10px;" />
+        </ui:GroupBox>
+    </ui:ScrollView>
+    <ui:ScrollView horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" name="Price-Scroll" class="shortcut shortcut-off" style="background-color: rgb(255, 255, 255); flex-grow: 0; transition-duration: 750ms;">
+        <ui:VisualElement name="Return-Arrow" style="flex-grow: 0; position: relative; left: 15px; top: auto; background-image: url(&apos;project://database/Assets/Sprites/UI/Chevron%20down.png?fileID=21300000&amp;guid=04ccb8e28a357dd4fa207bc40db15923&amp;type=3#Chevron down&apos;); width: 30px; height: 30px; rotate: 90deg; background-color: rgba(0, 0, 0, 0); -unity-background-image-tint-color: rgb(255, 255, 255); -unity-background-scale-mode: scale-to-fit; flex-shrink: 0;" />
+        <ui:Label tabindex="-1" text="Update price" parse-escape-sequences="true" display-tooltip-when-elided="true" enable-rich-text="true" class="h1" style="top: auto;" />
+        <ui:GroupBox name="Product-Box" class="user-box" style="align-items: stretch; position: relative; padding-top: 15px; padding-right: 20px; padding-left: 20px; justify-content: space-around; padding-bottom: 25px; height: 80%; display: flex;">
+            <ui:DropdownField label="Product" index="-1" name="Product-Dropdown" style="flex-direction: column;" />
+            <ui:TextField label="Price" name="Price-Field" hide-mobile-input="false" max-length="10" keyboard-type="NumberPad" style="flex-direction: column; flex-wrap: wrap; white-space: normal; align-self: flex-start;" />
+            <ui:Toggle label="Activate sale" name="Sale-Toggle" style="flex-direction: column;" />
+            <ui:TextField label="Sale price" name="Sale-Field" hide-mobile-input="false" max-length="10" keyboard-type="NumberPad" style="flex-direction: column; align-self: flex-start;" />
+            <ui:Button text="Update price" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Update-Price" class="button-black" style="align-self: center; max-width: 95%; min-width: 95%; margin-top: 10px;" />
         </ui:GroupBox>
     </ui:ScrollView>
 </ui:UXML>

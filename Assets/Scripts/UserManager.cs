@@ -13,6 +13,8 @@ namespace VirtualHome
         public string currentUser;
         public string currentID;
 
+        public int currentRole;
+
         public string currentAddress;
 
         private void Awake()
@@ -103,6 +105,7 @@ namespace VirtualHome
                 {
                     currentID = response["userID"].ToString();
                     currentUser = response["username"].ToString();
+                    currentRole = (int)response["role"];
                     StartCoroutine(GetAddress());
                     callback("success");
                 }
@@ -162,13 +165,18 @@ namespace VirtualHome
                     try
                     {
                         var city = JsonConvert.DeserializeObject<string>(jsonResponse);
+                        if (city.Contains("error"))
+                        {
+                            Debug.Log("No address Found");
+                            yield break;
+                        }
                         Debug.Log(city);
                         currentAddress = $"{currentUser}'s address in {city}";
                         Debug.Log($"Fetched address in {city} for {currentUser}.");
                     }
-                    catch (JsonReaderException ex)
+                    catch (JsonReaderException)
                     {
-                        Debug.LogError($"JSON Parsing Error: {ex.Message}");
+                        Debug.Log($"JSON Parsing Error:");
                     }
                 }
             }

@@ -36,6 +36,8 @@ namespace VirtualHome
 
         [SerializeField] private ProductLoader productLoader;
 
+        [SerializeField] private AdminManager adminManager;
+
         public ContentHandler contentHandler;
 
         public GameObject mainCamera;
@@ -47,6 +49,8 @@ namespace VirtualHome
 
         private string currentUser;
         private string currentID;
+
+        private int? currentRole;
 
 
         private void Awake()
@@ -276,6 +280,8 @@ namespace VirtualHome
             var regError = registerBox.Q<Label>("Different-Label");
             var paymentScroll = root.Q<ScrollView>("Payment-Scroll");
             var addressBox = root.Q<GroupBox>("Address-Box");
+            var priceScroll = root.Q<ScrollView>("Price-Scroll");
+            var priceBox = root.Q<GroupBox>("Product-Box");
             var addressMessage = addressBox.Q<Label>("Address-Message");
             loginBar.Q<Button>("Sign-In-Button").RegisterCallback<ClickEvent>(evt =>
             {
@@ -299,8 +305,14 @@ namespace VirtualHome
             userBar.Q<Button>("Logout-Button").RegisterCallback<ClickEvent>(evt =>
             {
                 currentUser = null;
+                currentID = null;
+                currentRole = null;
                 userBar.style.display = DisplayStyle.None;
                 loginBar.style.display = DisplayStyle.Flex;
+                shortcuts.style.display = DisplayStyle.None;
+                signBox.style.display = DisplayStyle.Flex;
+                FavoriteManager.Instance.favoriteList.Clear();
+                FavoriteManager.Instance.cartDict.Clear();
             });
 
             root.Q<Button>("Billing-Button").RegisterCallback<ClickEvent>(evt =>
@@ -314,6 +326,16 @@ namespace VirtualHome
                 paymentScroll.AddToClassList("shortcut-off");
             });
 
+            root.Q<Button>("Management-Button").RegisterCallback<ClickEvent>(evt =>
+            {
+                priceScroll.RemoveFromClassList("shortcut-off");
+                priceBox.Query<TextField>().ForEach(textField => textField.value = string.Empty);
+                
+            });
+            priceScroll.Q<VisualElement>("Return-Arrow").RegisterCallback<ClickEvent>(evt =>
+            {
+                priceScroll.AddToClassList("shortcut-off");
+            });
 
             SetAddress();
             if (currentUser != null)
@@ -323,6 +345,10 @@ namespace VirtualHome
                 userBar.style.display = DisplayStyle.Flex;
                 shortcuts.style.display = DisplayStyle.Flex;
                 userBar.Q<Label>("User-Name-Label").text = currentUser;
+                if (currentRole <= 3)
+                {
+                    SetManagement();
+                }
             }
 
             SetNavBar();
@@ -347,12 +373,17 @@ namespace VirtualHome
                                 {
                                     currentUser = UserManager.Instance.currentUser;
                                     currentID = UserManager.Instance.currentID;
+                                    currentRole = UserManager.Instance.currentRole;
                                     FavoriteManager.Instance.StartUserList(currentID);
                                     loginBar.style.display = DisplayStyle.None;
                                     signBox.style.display = DisplayStyle.None;
                                     userBar.style.display = DisplayStyle.Flex;
                                     shortcuts.style.display = DisplayStyle.Flex;
                                     userBar.Q<Label>("User-Name-Label").text = currentUser;
+                                    if (currentRole <= 3)
+                                    {
+                                        SetManagement();
+                                    }
                                     return;
                                 }
                                 else
@@ -458,6 +489,41 @@ namespace VirtualHome
                     SetClassList(addressMessage, "right-pass", true);
                     addressMessage.style.display = DisplayStyle.Flex;
                     addressMessage.text = "Address has been set";
+                });
+            }
+
+            void SetManagement()
+            {
+                root.Q<Button>("Management-Button").style.display = DisplayStyle.Flex;
+                var productDropdown = priceBox.Q<DropdownField>("Product-Dropdown");
+                var priceField = priceBox.Q<TextField>("Price-Field");
+                var saleField = priceBox.Q<TextField>("Sale-Field");
+                var saleToggle = priceBox.Q<Toggle>("Sale-Toggle");
+                productDropdown.choices.Clear();
+                foreach (Product product in productList)
+                {
+                    productDropdown.choices.Add(product.productName);
+                }
+
+                productDropdown.RegisterValueChangedCallback(evt =>
+                {
+                    Product selectedProduct = productList.FirstOrDefault(p => p.productName == evt.newValue);
+
+                    if (selectedProduct != null)
+                    {
+                        priceField.value = selectedProduct.productPrice.ToString();
+                        saleField.value = selectedProduct.productSale.ToString();
+                        saleToggle.value = selectedProduct.isSale;
+                    }
+                });
+
+                root.Q<Button>("Update-Price").RegisterCallback<ClickEvent>(evt =>
+                {
+                    string productID = (productDropdown.index + 1).ToString();
+                    string price = priceField.value;
+                    string salePrice = saleField.value;
+                    string isSale = saleToggle.value ? "1" : "0";
+                    adminManager.StartUpdatePrice(currentID, productID, price, isSale, salePrice);
                 });
             }
             #endregion
