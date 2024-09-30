@@ -2,6 +2,9 @@
 The fifth project in the MakeYourGame online XR App developper course is to make a furniture store app with AR previewing capabilities.
 Please note that as my device doesn't support AR depth perception the AR placement is not always at ground level in the showcased pictures and gifs.
 
+> [!IMPORTANT]
+> You can try the app on android by downloading the apk here [VirtualHome](https://drive.google.com/uc?export=download&id=1HYSxyUtpPn3FsmQmZhu1qAfRHk91LJxD
+)
 
 ### The concept of the App
 For this app I wanted the design to be sobre and intuitive and bring emphasis on the products being sold, this is the reasoning behind the color scheme being a gray scale.
