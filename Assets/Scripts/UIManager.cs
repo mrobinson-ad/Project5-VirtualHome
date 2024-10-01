@@ -7,6 +7,7 @@ using System.Linq;
 using System;
 using Unity.VisualScripting.AssemblyQualifiedNameParser;
 using System.Security.Permissions;
+using Unity.VisualScripting;
 
 
 namespace VirtualHome
@@ -282,7 +283,10 @@ namespace VirtualHome
             var addressBox = root.Q<GroupBox>("Address-Box");
             var priceScroll = root.Q<ScrollView>("Price-Scroll");
             var priceBox = root.Q<GroupBox>("Product-Box");
+            var promoBox = root.Q<GroupBox>("Promo-Box");
             var addressMessage = addressBox.Q<Label>("Address-Message");
+            var notificationBox = root.Q<GroupBox>("Notification-Box");
+            var notificationMessage = root.Q<Label>("Notification-Label");
             loginBar.Q<Button>("Sign-In-Button").RegisterCallback<ClickEvent>(evt =>
             {
                 signBox.Query<TextField>().ForEach(textField => textField.value = string.Empty);
@@ -307,6 +311,7 @@ namespace VirtualHome
                 currentUser = null;
                 currentID = null;
                 currentRole = null;
+                root.Q<Button>("Management-Button").style.display = DisplayStyle.None;
                 userBar.style.display = DisplayStyle.None;
                 loginBar.style.display = DisplayStyle.Flex;
                 shortcuts.style.display = DisplayStyle.None;
@@ -447,6 +452,7 @@ namespace VirtualHome
                                     error.style.display = DisplayStyle.None;
                                     signBox.style.display = DisplayStyle.Flex;
                                     registerBox.style.display = DisplayStyle.None;
+                                    StartCoroutine(ShowNotification($"Account created successfully for {userField.value}"));
                                 }
 
                                 else if (result == "email")
@@ -494,6 +500,7 @@ namespace VirtualHome
 
             void SetManagement()
             {
+                adminManager.StartGetPromos(currentRole.ToString());
                 root.Q<Button>("Management-Button").style.display = DisplayStyle.Flex;
                 var productDropdown = priceBox.Q<DropdownField>("Product-Dropdown");
                 var priceField = priceBox.Q<TextField>("Price-Field");
@@ -524,7 +531,57 @@ namespace VirtualHome
                     string salePrice = saleField.value;
                     string isSale = saleToggle.value ? "1" : "0";
                     adminManager.StartUpdatePrice(currentID, productID, price, isSale, salePrice);
+                    StartCoroutine(ShowNotification($"{productDropdown.value} price updated successfully"));
                 });
+
+                var promoDropdown = promoBox.Q<DropdownField>("Promo-Dropdown");
+                var codeField = promoBox.Q<TextField>("Code-Field");
+                var valueField = promoBox.Q<TextField>("Value-Field");
+                var amountField = promoBox.Q<TextField>("Amount-Field");
+                promoDropdown.choices.Clear();
+                promoDropdown.choices.Add("New Promo");
+                foreach (Promo promo in adminManager.promos)
+                {
+                    promoDropdown.choices.Add(promo.promoID);
+                }
+
+                promoDropdown.RegisterValueChangedCallback(evt =>
+                {
+                    if (promoDropdown.value == "New product")
+                    {
+                        codeField.value = "";
+                        valueField.value = "";
+                        amountField.value = "";
+                        return;
+                    }
+
+                    Promo selectedPromo = adminManager.promos.FirstOrDefault(p => p.promoID == evt.newValue);
+                    
+                    if (selectedPromo != null)
+                    {
+                        codeField.value = selectedPromo.promoCode.ToString();
+                        valueField.value = selectedPromo.promoValue.ToString();
+                        amountField.value = selectedPromo.promoAmount.ToString();
+                    }
+                });
+
+                root.Q<Button>("Update-Promo").RegisterCallback<ClickEvent>(evt =>
+                {
+                    
+                    string code = codeField.value;
+                    string value = valueField.value;
+                    string amount = amountField.value;
+                    adminManager.StartUpdatePromo(currentID, code, value, amount);
+                    StartCoroutine(ShowNotification($"Promo {code} updated successfully"));
+                });
+            }
+
+            IEnumerator ShowNotification(string message)
+            {
+                notificationMessage.text = message;
+                notificationBox.RemoveFromClassList("notification-off");
+                yield return new WaitForSeconds(2.5f);
+                notificationBox.AddToClassList("notification-off");
             }
             #endregion
         }
