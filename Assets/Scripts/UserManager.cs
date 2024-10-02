@@ -38,7 +38,7 @@ namespace VirtualHome
         {
             StartCoroutine(Login(email, password, callback));
         }
-        private IEnumerator RegisterUser(string firstName, string lastName, string userName, string email, string password, System.Action<string> callback)
+        public IEnumerator RegisterUser(string firstName, string lastName, string userName, string email, string password, System.Action<string> callback)
         {
 
             WWWForm form = new WWWForm();
@@ -78,7 +78,7 @@ namespace VirtualHome
             }
         }
 
-        private IEnumerator Login(string email, string password, Action<string> callback)
+        public IEnumerator Login(string email, string password, Action<string> callback)
         {
             WWWForm form = new WWWForm();
             form.AddField("action", "login");
@@ -105,7 +105,11 @@ namespace VirtualHome
                 {
                     currentID = response["userID"].ToString();
                     currentUser = response["username"].ToString();
-                    currentRole = (int)response["role"];
+                    JToken roleToken = response["role"];
+                    if (roleToken != null && roleToken.Type != JTokenType.Null && roleToken.ToString() != "null")
+                    {
+                        currentRole = (int)roleToken;
+                    }
                     StartCoroutine(GetAddress());
                     callback("success");
                 }

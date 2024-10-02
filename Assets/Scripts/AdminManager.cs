@@ -4,113 +4,116 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
 
-public class AdminManager : MonoBehaviour
+namespace VirtualHome
 {
-
-    public List<Promo> promos = new List<Promo>();
-    public void StartUpdatePrice(string userID, string productID, string price, string isSale, string salePrice)
+    public class AdminManager : MonoBehaviour
     {
-        StartCoroutine(UpdatePrice(userID, productID, price, isSale, salePrice));
-    }
-    private IEnumerator UpdatePrice(string userID, string productID, string price, string isSale, string salePrice)
-    {
-        WWWForm form = new WWWForm();
-        form.AddField("action", "updateprice");
-        form.AddField("userID", userID);
-        form.AddField("productID", productID);
-        form.AddField("price", price);
-        form.AddField("isSale", isSale);
-        form.AddField("salePrice", salePrice);
 
-        using (UnityWebRequest webRequest = UnityWebRequest.Post("http://localhost/MYG/api/index.php", form))
+        public List<Promo> promos = new List<Promo>();
+        public void StartUpdatePrice(string userID, string productID, string price, string isSale, string salePrice)
         {
-            yield return webRequest.SendWebRequest();
-
-            if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
-            {
-                Debug.Log("Error Updating price: " + webRequest.error);
-                yield break;
-            }
-            string jsonResponse = webRequest.downloadHandler.text;
-            Debug.Log("Response: " + jsonResponse);
+            StartCoroutine(UpdatePrice(userID, productID, price, isSale, salePrice));
         }
-    }
-
-    public void StartGetPromos(string userID)
-    {
-        StartCoroutine(GetPromos(userID));
-    }
-    private IEnumerator GetPromos(string userID)
-    {
-        using (UnityWebRequest webRequest = UnityWebRequest.Get("http://localhost/MYG/API/getpromos/" + userID))
+        private IEnumerator UpdatePrice(string userID, string productID, string price, string isSale, string salePrice)
         {
-            yield return webRequest.SendWebRequest();
+            WWWForm form = new WWWForm();
+            form.AddField("action", "updateprice");
+            form.AddField("userID", userID);
+            form.AddField("productID", productID);
+            form.AddField("price", price);
+            form.AddField("isSale", isSale);
+            form.AddField("salePrice", salePrice);
 
-            if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
+            using (UnityWebRequest webRequest = UnityWebRequest.Post("http://localhost/MYG/api/index.php", form))
             {
-                Debug.LogError("Error fetching product data: " + webRequest.error);
-            }
-            else
-            {
-                string jsonResponse = webRequest.downloadHandler.text;
+                yield return webRequest.SendWebRequest();
 
-                if (jsonResponse.Contains("error"))
+                if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
                 {
-                    Debug.Log("Error getting promos");
+                    Debug.Log("Error Updating price: " + webRequest.error);
                     yield break;
                 }
-                // Parse JSON response into a list of Promo objects
-                promos = Promo.FromJsonArray(jsonResponse);
+                string jsonResponse = webRequest.downloadHandler.text;
+                Debug.Log("Response: " + jsonResponse);
             }
         }
-    }
 
-    public void StartUpdatePromo(string userID, string code, string value, string amount)
-    {
-        StartCoroutine(UpdatePromo(userID, code, value, amount));
-    }
-    private IEnumerator UpdatePromo(string userID, string code, string value, string amount)
-    {
-        WWWForm form = new WWWForm();
-        form.AddField("action", "updatepromo");
-        form.AddField("userID", userID);
-        form.AddField("code", code);
-        form.AddField("value", value);
-        form.AddField("amount", amount);
-
-        using (UnityWebRequest webRequest = UnityWebRequest.Post("http://localhost/MYG/api/index.php", form))
+        public void StartGetPromos(string userID)
         {
-            yield return webRequest.SendWebRequest();
-
-            if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
-            {
-                Debug.Log("Error updating promo: " + webRequest.error);
-                yield break;
-            }
-            string jsonResponse = webRequest.downloadHandler.text;
-            Debug.Log("Response: " + jsonResponse);
+            StartCoroutine(GetPromos(userID));
         }
+        private IEnumerator GetPromos(string userID)
+        {
+            using (UnityWebRequest webRequest = UnityWebRequest.Get("http://localhost/MYG/API/getpromos/" + userID))
+            {
+                yield return webRequest.SendWebRequest();
+
+                if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
+                {
+                    Debug.LogError("Error fetching product data: " + webRequest.error);
+                }
+                else
+                {
+                    string jsonResponse = webRequest.downloadHandler.text;
+
+                    if (jsonResponse.Contains("error"))
+                    {
+                        Debug.Log("Error getting promos");
+                        yield break;
+                    }
+                    // Parse JSON response into a list of Promo objects
+                    promos = Promo.FromJsonArray(jsonResponse);
+                }
+            }
+        }
+
+        public void StartUpdatePromo(string userID, string code, string value, string amount)
+        {
+            StartCoroutine(UpdatePromo(userID, code, value, amount));
+        }
+        private IEnumerator UpdatePromo(string userID, string code, string value, string amount)
+        {
+            WWWForm form = new WWWForm();
+            form.AddField("action", "updatepromo");
+            form.AddField("userID", userID);
+            form.AddField("code", code);
+            form.AddField("value", value);
+            form.AddField("amount", amount);
+
+            using (UnityWebRequest webRequest = UnityWebRequest.Post("http://localhost/MYG/api/index.php", form))
+            {
+                yield return webRequest.SendWebRequest();
+
+                if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
+                {
+                    Debug.Log("Error updating promo: " + webRequest.error);
+                    yield break;
+                }
+                string jsonResponse = webRequest.downloadHandler.text;
+                Debug.Log("Response: " + jsonResponse);
+            }
+        }
+
+
     }
 
-
-}
-
-[System.Serializable]
-public class Promo
-{
-    [JsonProperty("promoID")]
-    public string promoID;
-
-    [JsonProperty("code")]
-    public string promoCode;
-
-    [JsonProperty("value")]
-    public string promoValue;
-
-    [JsonProperty("amount")]
-    public string promoAmount;
-    public static List<Promo> FromJsonArray(string jsonString)
+    [System.Serializable]
+    public class Promo
     {
-        return JsonConvert.DeserializeObject<List<Promo>>(jsonString);
+        [JsonProperty("promoID")]
+        public string promoID;
+
+        [JsonProperty("code")]
+        public string promoCode;
+
+        [JsonProperty("value")]
+        public string promoValue;
+
+        [JsonProperty("amount")]
+        public string promoAmount;
+        public static List<Promo> FromJsonArray(string jsonString)
+        {
+            return JsonConvert.DeserializeObject<List<Promo>>(jsonString);
+        }
     }
 }

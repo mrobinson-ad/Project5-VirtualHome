@@ -7,269 +7,272 @@ using UnityEngine.AddressableAssets;
 using System.Collections;
 using System;
 
-[System.Serializable]
-public class Product
+namespace VirtualHome
 {
-    public int productID;
-
-    [JsonProperty("name")]
-    public string productName;
-
-    [JsonProperty("price")]
-    public string productPrice;
-
-    [JsonProperty("short")]
-    public string productShortDescription;
-
-    [JsonProperty("description")]
-    public string productDescription;
-
-    [JsonProperty("prefab")]
-    public string prefabAddress;
-
-    [JsonIgnore]
-    public GameObject prefab;
-
-    public Vector3 productDimensions;
-
-    public bool isSale;
-
-    public string productSale;
-
-    public string selectedColor;
-
-    // Colors list from materials
-    public List<string> colors = new List<string>();
-
-    // List to store loaded materials
-    public List<Material> productMaterials = new List<Material>();
-
-    // List to store loaded sprites
-    public List<Sprite> productSprites = new List<Sprite>();
-
-    // List to store tags
-    public List<String> tags = new List<String>();
-
-    private AsyncOperationHandle<GameObject>? loadedHandle;
-
-    // JSON parsing for materials (color and material path)
-    public class MaterialData
+    [System.Serializable]
+    public class Product
     {
-        public string color;
-        public string material;
-    }
+        public int productID;
 
-    [JsonProperty("materials")]
-    private string materialsJson;
+        [JsonProperty("name")]
+        public string productName;
 
-    [JsonProperty("sprites")]
-    private string spritesJson;
+        [JsonProperty("price")]
+        public string productPrice;
 
-    // Deserialize JSON array into List<Product>
-    public static List<Product> FromJsonArray(string jsonString)
-    {
-        return JsonConvert.DeserializeObject<List<Product>>(jsonString);
-    }
+        [JsonProperty("short")]
+        public string productShortDescription;
 
-    // Load Prefab asynchronously using Addressables
-    public void LoadPrefab()
-    {
-        if (!string.IsNullOrEmpty(prefabAddress))
+        [JsonProperty("description")]
+        public string productDescription;
+
+        [JsonProperty("prefab")]
+        public string prefabAddress;
+
+        [JsonIgnore]
+        public GameObject prefab;
+
+        public Vector3 productDimensions;
+
+        public bool isSale;
+
+        public string productSale;
+
+        public string selectedColor;
+
+        // Colors list from materials
+        public List<string> colors = new List<string>();
+
+        // List to store loaded materials
+        public List<Material> productMaterials = new List<Material>();
+
+        // List to store loaded sprites
+        public List<Sprite> productSprites = new List<Sprite>();
+
+        // List to store tags
+        public List<String> tags = new List<String>();
+
+        private AsyncOperationHandle<GameObject>? loadedHandle;
+
+        // JSON parsing for materials (color and material path)
+        public class MaterialData
         {
-            loadedHandle = Addressables.LoadAssetAsync<GameObject>(prefabAddress);
-            loadedHandle.Value.Completed += OnPrefabLoaded;
-
-            void OnPrefabLoaded(AsyncOperationHandle<GameObject> handle)
-            {
-                if (handle.Status == AsyncOperationStatus.Succeeded)
-                {
-                    prefab = handle.Result;
-                    Debug.Log("Prefab loaded successfully for " + productName);
-                }
-                else
-                {
-                    Debug.LogError("Failed to load prefab for " + productName);
-                }
-            }
+            public string color;
+            public string material;
         }
-    }
-     public void ReleasePrefab()
-    {
-        if (loadedHandle.HasValue)
+
+        [JsonProperty("materials")]
+        private string materialsJson;
+
+        [JsonProperty("sprites")]
+        private string spritesJson;
+
+        // Deserialize JSON array into List<Product>
+        public static List<Product> FromJsonArray(string jsonString)
         {
-            Addressables.Release(loadedHandle.Value);
-            loadedHandle = null;
-            prefab = null;
-            Debug.Log("Prefab released for " + productName);
+            return JsonConvert.DeserializeObject<List<Product>>(jsonString);
         }
-    }
 
-    public IEnumerator LoadMaterials()
-    {
-        if (!string.IsNullOrEmpty(materialsJson))
+        // Load Prefab asynchronously using Addressables
+        public void LoadPrefab()
         {
-            List<MaterialData> materialDataList = JsonConvert.DeserializeObject<List<MaterialData>>(materialsJson);
-
-            foreach (var matData in materialDataList)
+            if (!string.IsNullOrEmpty(prefabAddress))
             {
-                colors.Add(matData.color);
+                loadedHandle = Addressables.LoadAssetAsync<GameObject>(prefabAddress);
+                loadedHandle.Value.Completed += OnPrefabLoaded;
 
-                AsyncOperationHandle<Material> matHandle = Addressables.LoadAssetAsync<Material>(matData.material);
-                yield return matHandle;
-
-                if (matHandle.Status == AsyncOperationStatus.Succeeded)
+                void OnPrefabLoaded(AsyncOperationHandle<GameObject> handle)
                 {
-                    productMaterials.Add(matHandle.Result);
-                }
-                else
-                {
-                    Debug.LogError($"Failed to load material {matData.material} for {productName}");
-                }
-            }
-            selectedColor = colors[0];
-        }
-    }
-
-    // Load Sprites based on JSON field
-    public IEnumerator LoadSprites()
-    {
-        if (!string.IsNullOrEmpty(spritesJson))
-        {
-            List<string> spritePaths = JsonConvert.DeserializeObject<List<string>>(spritesJson);
-
-            foreach (string spritePath in spritePaths)
-            {
-                AsyncOperationHandle<Sprite> spriteHandle = Addressables.LoadAssetAsync<Sprite>(spritePath);
-                yield return spriteHandle;
-
-                if (spriteHandle.Status == AsyncOperationStatus.Succeeded)
-                {
-                    productSprites.Add(spriteHandle.Result);
-                }
-                else
-                {
-                    Debug.LogError($"Failed to load sprite {spritePath} for {productName}");
-                }
-            }
-        }
-    }
-
-    public IEnumerator FetchTags()
-    {
-        string url = $"http://localhost/MYG/API/gettags/{productID}"; // Construct the URL
-
-        using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
-        {
-            yield return webRequest.SendWebRequest(); 
-
-            if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
-            {
-                Debug.LogError($"Error fetching tags for product {productID}: {webRequest.error}");
-            }
-            else
-            {
-                string jsonResponse = webRequest.downloadHandler.text;
-
-                // Deserialize the JSON response into a List<string>
-                try
-                {
-                    tags = JsonConvert.DeserializeObject<List<string>>(jsonResponse);
-                    Debug.Log($"Tags for product {productID}: {string.Join(", ", tags)}");
-                }
-                catch (JsonReaderException ex)
-                {
-                    Debug.LogError($"JSON Parsing Error: {ex.Message}");
-                }
-            }
-        }
-    }
-
-     public IEnumerator FetchDimensions()
-    {
-        string url = $"http://localhost/MYG/API/getdimensions/{productID}"; // Construct the URL
-
-        using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
-        {
-            yield return webRequest.SendWebRequest(); // Wait for the response
-
-            // Check for errors
-            if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
-            {
-                Debug.LogError($"Error fetching dimensions for product {productID}: {webRequest.error}");
-            }
-            else
-            {
-                string jsonResponse = webRequest.downloadHandler.text;
-
-                try
-                {
-                    var dimensionList = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(jsonResponse);
-                    if (dimensionList != null && dimensionList.Count > 0)
+                    if (handle.Status == AsyncOperationStatus.Succeeded)
                     {
-                        productDimensions = new Vector3(
-                            float.Parse(dimensionList[0]["x"]),
-                            float.Parse(dimensionList[0]["y"]),
-                            float.Parse(dimensionList[0]["z"])
-                        );
-                        Debug.Log($"Dimensions for product {productID}: {productDimensions}");
+                        prefab = handle.Result;
+                        Debug.Log("Prefab loaded successfully for " + productName);
                     }
                     else
                     {
-                        Debug.LogWarning($"No dimensions found for product {productID}.");
+                        Debug.LogError("Failed to load prefab for " + productName);
                     }
-                }
-                catch (JsonReaderException ex)
-                {
-                    Debug.LogError($"JSON Parsing Error: {ex.Message}");
-                }
-                catch (Exception ex)
-                {
-                    Debug.LogError($"An unexpected error occurred: {ex.Message}");
                 }
             }
         }
-    }
-    public IEnumerator FetchSales()
-    {
-        string url = $"http://localhost/MYG/API/getsales/{productID}"; // Construct the URL
-
-        using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
+        public void ReleasePrefab()
         {
-            yield return webRequest.SendWebRequest(); // Wait for the response
-
-            // Check for errors
-            if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
+            if (loadedHandle.HasValue)
             {
-                Debug.LogError($"Error fetching sales for product {productID}: {webRequest.error}");
+                Addressables.Release(loadedHandle.Value);
+                loadedHandle = null;
+                prefab = null;
+                Debug.Log("Prefab released for " + productName);
             }
-            else
-            {
-                // Get the response as a string
-                string jsonResponse = webRequest.downloadHandler.text;
+        }
 
-                // Deserialize the JSON response directly
-                try
+        public IEnumerator LoadMaterials()
+        {
+            if (!string.IsNullOrEmpty(materialsJson))
+            {
+                List<MaterialData> materialDataList = JsonConvert.DeserializeObject<List<MaterialData>>(materialsJson);
+
+                foreach (var matData in materialDataList)
                 {
-                    // Using inline JSON deserialization
-                    var saleList = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(jsonResponse);
-                    if (saleList != null && saleList.Count > 0)
+                    colors.Add(matData.color);
+
+                    AsyncOperationHandle<Material> matHandle = Addressables.LoadAssetAsync<Material>(matData.material);
+                    yield return matHandle;
+
+                    if (matHandle.Status == AsyncOperationStatus.Succeeded)
                     {
-                        productSale = saleList[0]["salePrice"];
-                        isSale = saleList[0]["isSale"] == "1" ? true: false;
-                        
+                        productMaterials.Add(matHandle.Result);
                     }
                     else
                     {
-                        Debug.LogWarning($"No sales found for product {productID}.");
+                        Debug.LogError($"Failed to load material {matData.material} for {productName}");
                     }
                 }
-                catch (JsonReaderException ex)
+                selectedColor = colors[0];
+            }
+        }
+
+        // Load Sprites based on JSON field
+        public IEnumerator LoadSprites()
+        {
+            if (!string.IsNullOrEmpty(spritesJson))
+            {
+                List<string> spritePaths = JsonConvert.DeserializeObject<List<string>>(spritesJson);
+
+                foreach (string spritePath in spritePaths)
                 {
-                    Debug.LogError($"JSON Parsing Error: {ex.Message}");
+                    AsyncOperationHandle<Sprite> spriteHandle = Addressables.LoadAssetAsync<Sprite>(spritePath);
+                    yield return spriteHandle;
+
+                    if (spriteHandle.Status == AsyncOperationStatus.Succeeded)
+                    {
+                        productSprites.Add(spriteHandle.Result);
+                    }
+                    else
+                    {
+                        Debug.LogError($"Failed to load sprite {spritePath} for {productName}");
+                    }
                 }
-                catch (Exception ex)
+            }
+        }
+
+        public IEnumerator FetchTags()
+        {
+            string url = $"http://localhost/MYG/API/gettags/{productID}"; // Construct the URL
+
+            using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
+            {
+                yield return webRequest.SendWebRequest();
+
+                if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
                 {
-                    Debug.LogError($"An unexpected error occurred: {ex.Message}");
+                    Debug.LogError($"Error fetching tags for product {productID}: {webRequest.error}");
+                }
+                else
+                {
+                    string jsonResponse = webRequest.downloadHandler.text;
+
+                    // Deserialize the JSON response into a List<string>
+                    try
+                    {
+                        tags = JsonConvert.DeserializeObject<List<string>>(jsonResponse);
+                        Debug.Log($"Tags for product {productID}: {string.Join(", ", tags)}");
+                    }
+                    catch (JsonReaderException ex)
+                    {
+                        Debug.LogError($"JSON Parsing Error: {ex.Message}");
+                    }
+                }
+            }
+        }
+
+        public IEnumerator FetchDimensions()
+        {
+            string url = $"http://localhost/MYG/API/getdimensions/{productID}"; // Construct the URL
+
+            using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
+            {
+                yield return webRequest.SendWebRequest(); // Wait for the response
+
+                // Check for errors
+                if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
+                {
+                    Debug.LogError($"Error fetching dimensions for product {productID}: {webRequest.error}");
+                }
+                else
+                {
+                    string jsonResponse = webRequest.downloadHandler.text;
+
+                    try
+                    {
+                        var dimensionList = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(jsonResponse);
+                        if (dimensionList != null && dimensionList.Count > 0)
+                        {
+                            productDimensions = new Vector3(
+                                float.Parse(dimensionList[0]["x"]),
+                                float.Parse(dimensionList[0]["y"]),
+                                float.Parse(dimensionList[0]["z"])
+                            );
+                            Debug.Log($"Dimensions for product {productID}: {productDimensions}");
+                        }
+                        else
+                        {
+                            Debug.LogWarning($"No dimensions found for product {productID}.");
+                        }
+                    }
+                    catch (JsonReaderException ex)
+                    {
+                        Debug.LogError($"JSON Parsing Error: {ex.Message}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.LogError($"An unexpected error occurred: {ex.Message}");
+                    }
+                }
+            }
+        }
+        public IEnumerator FetchSales()
+        {
+            string url = $"http://localhost/MYG/API/getsales/{productID}"; // Construct the URL
+
+            using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
+            {
+                yield return webRequest.SendWebRequest(); // Wait for the response
+
+                // Check for errors
+                if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
+                {
+                    Debug.LogError($"Error fetching sales for product {productID}: {webRequest.error}");
+                }
+                else
+                {
+                    // Get the response as a string
+                    string jsonResponse = webRequest.downloadHandler.text;
+
+                    // Deserialize the JSON response directly
+                    try
+                    {
+                        // Using inline JSON deserialization
+                        var saleList = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(jsonResponse);
+                        if (saleList != null && saleList.Count > 0)
+                        {
+                            productSale = saleList[0]["salePrice"];
+                            isSale = saleList[0]["isSale"] == "1" ? true : false;
+
+                        }
+                        else
+                        {
+                            Debug.LogWarning($"No sales found for product {productID}.");
+                        }
+                    }
+                    catch (JsonReaderException ex)
+                    {
+                        Debug.LogError($"JSON Parsing Error: {ex.Message}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.LogError($"An unexpected error occurred: {ex.Message}");
+                    }
                 }
             }
         }

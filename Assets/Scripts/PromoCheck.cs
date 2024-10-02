@@ -3,45 +3,48 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class PromoCheck : MonoBehaviour
+namespace VirtualHome
 {
-
-    public void StartPromoCheck(string code, Action<string> callback)
+    public class PromoCheck : MonoBehaviour
     {
-        StartCoroutine(CheckPromo(code, callback));
-    }
-    private IEnumerator CheckPromo(string code, Action<string> callback)
-    {
-        string url = $"http://localhost/MYG/API/checkpromo/{code}"; // Construct the URL
 
-        using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
+        public void StartPromoCheck(string code, Action<string> callback)
         {
-            yield return webRequest.SendWebRequest(); 
+            StartCoroutine(CheckPromo(code, callback));
+        }
+        private IEnumerator CheckPromo(string code, Action<string> callback)
+        {
+            string url = $"http://localhost/MYG/API/checkpromo/{code}"; // Construct the URL
 
-            if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
+            using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
             {
-                Debug.LogError($"Error fetching promo for code {code}: {webRequest.error}");
-            }
-            else
-            {
-                
-                string jsonResponse = webRequest.downloadHandler.text;
-                
-                try
+                yield return webRequest.SendWebRequest();
+
+                if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
                 {
-                    if(jsonResponse.Contains("error"))
-                    {
-                        callback("failed");
-                        Debug.LogWarning(jsonResponse);
-                    }
-                    else
-                    {
-                        callback(jsonResponse);
-                    }
+                    Debug.LogError($"Error fetching promo for code {code}: {webRequest.error}");
                 }
-                catch (Exception ex)
+                else
                 {
-                    Debug.LogError($"An unexpected error occurred: {ex.Message}");
+
+                    string jsonResponse = webRequest.downloadHandler.text;
+
+                    try
+                    {
+                        if (jsonResponse.Contains("error"))
+                        {
+                            callback("failed");
+                            Debug.LogWarning(jsonResponse);
+                        }
+                        else
+                        {
+                            callback(jsonResponse);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.LogError($"An unexpected error occurred: {ex.Message}");
+                    }
                 }
             }
         }

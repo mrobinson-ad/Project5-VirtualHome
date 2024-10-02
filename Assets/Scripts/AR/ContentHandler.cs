@@ -1,82 +1,84 @@
 using UnityEngine;
-using UnityEngine.Rendering.Universal.Internal;
 using Vuforia;
 
-public class ContentHandler : VuforiaMonoBehaviour
+namespace VirtualHome
 {
-    [SerializeField] private Material transparentPreviewMaterial;
-    public Product objectToPlace;
-    [SerializeField] private AnchorBehaviour anchorStage;
-    private GameObject previewObject;
-    private bool isPlacing = false;
-
-    public void PlaceGround(HitTestResult hit)
+    public class ContentHandler : VuforiaMonoBehaviour
     {
-        if (anchorStage.name != "Base Plane")
+        [SerializeField] private Material transparentPreviewMaterial;
+        public Product objectToPlace;
+        [SerializeField] private AnchorBehaviour anchorStage;
+        private GameObject previewObject;
+        private bool isPlacing = false;
+
+        public void PlaceGround(HitTestResult hit)
         {
-            anchorStage = VuforiaBehaviour.Instance.ObserverFactory.CreateAnchorBehaviour("Base Plane", hit);
+            if (anchorStage.name != "Base Plane")
+            {
+                anchorStage = VuforiaBehaviour.Instance.ObserverFactory.CreateAnchorBehaviour("Base Plane", hit);
+            }
+
+            if (isPlacing)
+            {
+                PlaceNewObject(hit, objectToPlace);
+            }
         }
 
-        if (isPlacing)
+        private void PlaceNewObject(HitTestResult hit, Product product)
         {
-            PlaceNewObject(hit, objectToPlace);
+            Instantiate(product.prefab, hit.Position, hit.Rotation, anchorStage.transform);
+            isPlacing = false;
+            if (previewObject != null)
+            {
+                previewObject.SetActive(false);
+            }
         }
-    }
 
-    private void PlaceNewObject(HitTestResult hit, Product product)
-    {
-        Instantiate(product.prefab, hit.Position, hit.Rotation, anchorStage.transform);
-        isPlacing = false;
-        if (previewObject != null)
+        public void ChangeObject(Product objectToSet)
+        {
+            objectToPlace = objectToSet;
+            CreatePreviewObject();
+        }
+
+        public void CancelPlacing()
         {
             previewObject.SetActive(false);
-        }
-    }
-
-    public void ChangeObject(Product objectToSet)
-    {
-        objectToPlace = objectToSet;
-        CreatePreviewObject();
-    }
-
-    public void CancelPlacing()
-    {
-        previewObject.SetActive(false);
-        isPlacing = false;
-    }
-
-    private void CreatePreviewObject()
-    {
-        if (previewObject != null)
-        {
-            Destroy(previewObject);
+            isPlacing = false;
         }
 
-        if (objectToPlace != null)
+        private void CreatePreviewObject()
         {
-            previewObject = Instantiate(objectToPlace.prefab);
-            SetTransparentMaterial(previewObject);
-            previewObject.SetActive(true);
-            isPlacing = true;
+            if (previewObject != null)
+            {
+                Destroy(previewObject);
+            }
+
+            if (objectToPlace != null)
+            {
+                previewObject = Instantiate(objectToPlace.prefab);
+                SetTransparentMaterial(previewObject);
+                previewObject.SetActive(true);
+                isPlacing = true;
+            }
         }
-    }
 
-    private void SetTransparentMaterial(GameObject obj)
-    {
-        Renderer[] renderers = obj.GetComponentsInChildren<Renderer>();
-        foreach (Renderer renderer in renderers)
+        private void SetTransparentMaterial(GameObject obj)
         {
+            Renderer[] renderers = obj.GetComponentsInChildren<Renderer>();
+            foreach (Renderer renderer in renderers)
+            {
 
-            renderer.material = transparentPreviewMaterial;
+                renderer.material = transparentPreviewMaterial;
+            }
         }
-    }
 
-    public void UpdatePreviewPosition(HitTestResult hit)
-    {
-        if (isPlacing && previewObject != null)
+        public void UpdatePreviewPosition(HitTestResult hit)
         {
-            previewObject.transform.position = hit.Position;
-            previewObject.transform.rotation = hit.Rotation;
+            if (isPlacing && previewObject != null)
+            {
+                previewObject.transform.position = hit.Position;
+                previewObject.transform.rotation = hit.Rotation;
+            }
         }
     }
 }

@@ -3,45 +3,48 @@ using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
 
-public class ProductLoader : MonoBehaviour
+namespace VirtualHome
 {
-    private string apiUrl = "http://localhost/MYG/API/getall";  // Example URL
-    public List<Product> products;
-    void Awake()
+    public class ProductLoader : MonoBehaviour
     {
-        StartCoroutine(GetProductData());
-    }
-
-    // Coroutine to make a web request and get product JSON array
-    IEnumerator GetProductData()
-    {
-        using (UnityWebRequest webRequest = UnityWebRequest.Get(apiUrl))
+        private string apiUrl = "http://localhost/MYG/API/getall";  // Example URL
+        public List<Product> products;
+        void Awake()
         {
-            yield return webRequest.SendWebRequest();
+            StartCoroutine(GetProductData());
+        }
 
-            if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
+        // Coroutine to make a web request and get product JSON array
+        IEnumerator GetProductData()
+        {
+            using (UnityWebRequest webRequest = UnityWebRequest.Get(apiUrl))
             {
-                Debug.LogError("Error fetching product data: " + webRequest.error);
-            }
-            else
-            {
-                // Get JSON response as string (this will be an array of products)
-                string jsonResponse = webRequest.downloadHandler.text;
+                yield return webRequest.SendWebRequest();
 
-                // Parse JSON response into a list of Product objects
-                products = Product.FromJsonArray(jsonResponse);
-
-                // Process each product
-                foreach (Product product in products)
+                if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
                 {
-                    Debug.Log($"Product Name: {product.productName}, Price: {product.productPrice}");
+                    Debug.LogError("Error fetching product data: " + webRequest.error);
+                }
+                else
+                {
+                    // Get JSON response as string (this will be an array of products)
+                    string jsonResponse = webRequest.downloadHandler.text;
 
-                    // Load materials and sprites asynchronously
-                    StartCoroutine(product.LoadMaterials());
-                    StartCoroutine(product.LoadSprites());
-                    StartCoroutine(product.FetchTags());
-                    StartCoroutine(product.FetchDimensions());
-                    StartCoroutine(product.FetchSales());
+                    // Parse JSON response into a list of Product objects
+                    products = Product.FromJsonArray(jsonResponse);
+
+                    // Process each product
+                    foreach (Product product in products)
+                    {
+                        Debug.Log($"Product Name: {product.productName}, Price: {product.productPrice}");
+
+                        // Load materials and sprites asynchronously
+                        StartCoroutine(product.LoadMaterials());
+                        StartCoroutine(product.LoadSprites());
+                        StartCoroutine(product.FetchTags());
+                        StartCoroutine(product.FetchDimensions());
+                        StartCoroutine(product.FetchSales());
+                    }
                 }
             }
         }
