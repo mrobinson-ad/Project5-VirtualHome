@@ -8,6 +8,7 @@ using System;
 using Unity.VisualScripting.AssemblyQualifiedNameParser;
 using System.Security.Permissions;
 using Unity.VisualScripting;
+using UnityEditor.Build.Content;
 
 
 namespace VirtualHome
@@ -980,6 +981,13 @@ namespace VirtualHome
 
         #endregion
 
+        private void LoadInfo()
+        {
+            currentUIDocument.visualTreeAsset = uIDocuments.Find(doc => doc.name == "Help Page");
+            root = currentUIDocument.rootVisualElement;
+            SetNavBar();
+        }
+
         private void SetNavBar()
         {
             root.Q<Label>("Cart-Amount").text = cartAmount.ToString();
@@ -1011,6 +1019,11 @@ namespace VirtualHome
             root.Q<VisualElement>("Camera").RegisterCallback<ClickEvent>(evt =>
             {
                 LoadAR();
+            });
+
+            root.Q<VisualElement>("Bell").RegisterCallback<ClickEvent>(evt =>
+            {
+                LoadInfo();
             });
         }
         #endregion

@@ -3,7 +3,7 @@
     <Style src="project://database/Assets/UI%20Toolkit/UnityThemes/VirtualHome.uss?fileID=7433441132597879392&amp;guid=980025167d3f7f74e9651ac8734173f2&amp;type=3#VirtualHome" />
     <ui:GroupBox name="Top-Bar" class="top-bar">
         <ui:VisualElement name="Star" style="flex-grow: 0; width: 50px; height: 50px; background-image: url(&apos;project://database/Assets/Sprites/UI/Star.png?fileID=21300000&amp;guid=18e63a8a19bff1042b73e533d1587fa3&amp;type=3#Star&apos;); -unity-background-scale-mode: scale-to-fit; border-top-left-radius: 4px; border-top-right-radius: 4px; border-bottom-right-radius: 4px; border-bottom-left-radius: 4px; align-self: flex-start; justify-content: space-between;" />
-        <ui:VisualElement name="Bell" style="flex-grow: 0; width: 50px; height: 50px; background-image: url(&apos;project://database/Assets/Sprites/UI/Bell.png?fileID=21300000&amp;guid=fe77035b3cc6c144380f2fa74276d5a8&amp;type=3#Bell&apos;); -unity-background-scale-mode: scale-to-fit; border-top-left-radius: 4px; border-top-right-radius: 4px; border-bottom-right-radius: 4px; border-bottom-left-radius: 4px; align-self: flex-end;" />
+        <ui:VisualElement name="Bell" style="flex-grow: 0; width: 50px; height: 50px; background-image: url(&apos;project://database/Assets/Sprites/UI/Info@.png?fileID=21300000&amp;guid=4939aa48d16308b4b9cf9b45a3671cff&amp;type=3#Info@&apos;); -unity-background-scale-mode: scale-to-fit; border-top-left-radius: 4px; border-top-right-radius: 4px; border-bottom-right-radius: 4px; border-bottom-left-radius: 4px; align-self: flex-end;" />
     </ui:GroupBox>
     <ui:GroupBox name="Navigation-Bar" class="nav-bar nav-button">
         <ui:VisualElement name="Percent" class="nav-button" style="flex-grow: 1; background-image: url(&apos;project://database/Assets/Sprites/UI/Percent.png?fileID=21300000&amp;guid=f9eab16b1d952c842b3979886ad52f1b&amp;type=3#Percent&apos;); -unity-background-scale-mode: scale-to-fit;" />
@@ -14,7 +14,7 @@
             <ui:Label tabindex="-1" text="0" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Cart-Amount" style="-unity-font-style: bold; font-size: 22px; -unity-text-align: upper-center; left: auto; top: -20px; align-self: flex-end; position: absolute; right: 0; background-color: rgba(117, 117, 117, 0.39); border-top-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-bottom-left-radius: 15px;" />
         </ui:VisualElement>
     </ui:GroupBox>
-    <ui:VisualElement name="Cart-View" picking-mode="Ignore" style="flex-grow: 1; position: absolute; width: 100%; height: 100%; display: flex;">
+    <ui:VisualElement name="Cart-View" picking-mode="Ignore" style="flex-grow: 1; position: absolute; width: 100%; height: 100%; display: flex; top: 2px; left: 0;">
         <ui:Label tabindex="-1" text="Cart" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Cart-Label" class="h1" style="left: 10px; top: 15%;" />
         <ui:ScrollView name="List-Scroll" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" style="position: absolute; top: 20%; width: 100%; height: 30%; padding-top: 10px; padding-right: 20px; padding-left: 20px; padding-bottom: 5px; justify-content: flex-start; visibility: visible; display: flex;" />
         <ui:Button text="Proceed to checkout" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Checkout-Button" class="button-black" style="align-self: flex-end; top: 390px; max-width: 200px; min-width: 180px;" />

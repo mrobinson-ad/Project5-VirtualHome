@@ -161,6 +161,7 @@ MonoBehaviour:
   - {fileID: 9197481963319205126, guid: 7d16661aac47e614c8579e89785b1f45, type: 3}
   - {fileID: 9197481963319205126, guid: a5b9b950316b1d546bf1341f5ff99d2c, type: 3}
   - {fileID: 9197481963319205126, guid: 5775d3884f734c34bbc818f5ff7fcc16, type: 3}
+  - {fileID: 9197481963319205126, guid: ef9b1dccdb2b4af49a330bfb69c2c5bd, type: 3}
   uITemplates:
   - {fileID: 9197481963319205126, guid: 60d08b2f7c21cb143badfeda28e8791a, type: 3}
   - {fileID: 9197481963319205126, guid: aa3de69b579e3034998572c887a884ef, type: 3}
@@ -402,6 +403,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a11e17dfe4cdff4290c4c5f5ff5ef95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  promos: []
 --- !u!1 &521926872
 GameObject:
   m_ObjectHideFlags: 0
