@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 198971087}
   - component: {fileID: 198971086}
   - component: {fileID: 198971088}
+  - component: {fileID: 198971089}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -174,6 +175,7 @@ MonoBehaviour:
   productList: []
   productLoader: {fileID: 803798673}
   adminManager: {fileID: 519901447}
+  payPalManager: {fileID: 198971089}
   contentHandler: {fileID: 0}
   mainCamera: {fileID: 330585543}
   promoCheck: {fileID: 198971088}
@@ -205,6 +207,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23ddd56b61eab1540a3c50c47c19ad03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &198971089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 198971085}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35db88fddef8dcb42a0459ebd2a4a767, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  orderPrice: 0
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0

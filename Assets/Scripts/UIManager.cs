@@ -35,6 +35,7 @@ namespace VirtualHome
         [SerializeField] private ProductLoader productLoader;
 
         [SerializeField] private AdminManager adminManager;
+        [SerializeField] private PayPalManager payPalManager;
 
         public ContentHandler contentHandler;
 
@@ -315,6 +316,7 @@ namespace VirtualHome
                 signBox.style.display = DisplayStyle.Flex;
                 FavoriteManager.Instance.favoriteList.Clear();
                 FavoriteManager.Instance.cartDict.Clear();
+                cartAmount = 0;
             });
 
             root.Q<Button>("Billing-Button").RegisterCallback<ClickEvent>(evt =>
@@ -675,6 +677,7 @@ namespace VirtualHome
         {
             root.Q<VisualElement>("Cart-View").style.display = DisplayStyle.None;
             root.Q<ScrollView>("Checkout-View").style.display = DisplayStyle.Flex;
+            var orderButton = root.Q<Button>("Confirm-Button");
             var addressDrop = root.Q<DropdownField>("Shipping-Dropdown");
             if (currentUser != null)
             {
@@ -787,6 +790,15 @@ namespace VirtualHome
             };
             redeemButton.RegisterCallback(redeemClicked);
             root.Q<Label>("Billing-Label").text = $"Total: ${(totalPrice * 1.1):0.00}";
+
+            EventCallback<ClickEvent> confirmClicked = evt =>
+            {
+                payPalManager.orderPrice = totalPrice *1.1f;
+                payPalManager.payPalOrder = new PayPalOrder("CAPTURE", "default", "USD", (totalPrice * 1.1f).ToString());
+                payPalManager.StartCoroutine(payPalManager.StartOrder());
+            };
+
+            orderButton.RegisterCallback(confirmClicked);
         }
 
         #endregion
