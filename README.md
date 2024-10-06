@@ -72,15 +72,19 @@ public void PlaceGround(HitTestResult hit)
     -
     The app is built using UIToolkit for a lightweight and easily editable UI. By using USS classes and transitions we can easily change elements at runtime and create simple but smooth animation. We make full use of templates by instantiating all elements related to products at runtime to easily accomodate new additions.
   
-- Scriptable Objects
+- API
     -
-    As mentioned before all the products are stored as scriptable objects. This allows us to easily create, edit and delete various information about each product including dynamic variables like whether they are on sale or not.
+    As part of project 6, all scriptable objects have been moved to a database which is accessed by a custom API. Both the database and the php responsible for the API are hosted on oracle cloud and the domain is obtained through No-IP and SSL is ensured with Let's Encrypt.
   
 - User Tab
     -
-    While most of the user tab features are built for design and developement purposes (The created user being stored in playerprefs) the idea behind it is to provide quality of life features for users by saving their favorites, saving their shipping address and having access to their purchase history and ongoing orders. These features will be expanded upon in a further project where we will work on databases.
+     The user tab allows users to change their shipping address and see their order history (stored in the database along with the sandbox Paypal transaction ID). Users with administrator roles additionally can change the prices and sale status of products and edit promo codes.
 
 - LeanTouch
     -
     To facilitate the touch input interactions I use Lean touch for tapping, rotating and dragging models in the AR preview.
+
+- Paypal
+    -
+    Using paypal developer sandbox environement a simulation is integrated for checkout. You can try it by using the following credentials when prompted Sandboxmail@vhome.com : SandboxPass
 
