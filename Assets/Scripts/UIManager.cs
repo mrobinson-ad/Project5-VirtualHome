@@ -72,8 +72,8 @@ namespace VirtualHome
 
         private IEnumerator Init()
         {
+            yield return new WaitForSeconds(1f);
             productList = productLoader.products;
-            yield return new WaitForSeconds(0.5f);
             LoadSales();
         }
 
