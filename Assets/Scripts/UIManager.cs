@@ -794,7 +794,7 @@ namespace VirtualHome
             EventCallback<ClickEvent> confirmClicked = evt =>
             {
                 payPalManager.orderPrice = totalPrice *1.1f;
-                payPalManager.payPalOrder = new PayPalOrder("CAPTURE", "default", "USD", (totalPrice * 1.1f).ToString());
+                payPalManager.payPalOrder = new PayPalOrder("CAPTURE", "default", "USD", (totalPrice * 1.1f).ToString("F2"));
                 payPalManager.StartCoroutine(payPalManager.StartOrder());
             };
 
