@@ -110,7 +110,7 @@ namespace VirtualHome
                     {
                         currentRole = (int)roleToken;
                     }
-                    //StartCoroutine(GetAddress());
+                    StartCoroutine(GetAddress());
                     callback("success");
                 }
                 else if (response["error"] != null)

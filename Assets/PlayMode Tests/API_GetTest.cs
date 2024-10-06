@@ -6,7 +6,7 @@ using UnityEngine.Networking;
 
 public class API_GetTest
 {
-    private const string baseUrl = "http://localhost/MYG/api/";
+    private const string baseUrl = "https://virtualhome.hopto.org/";
 
     // Helper function to send GET requests
     private UnityWebRequest CreateWebRequest(string action, string parameters = "")
