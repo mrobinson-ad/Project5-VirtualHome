@@ -14,7 +14,7 @@ namespace VirtualHome
         }
         private IEnumerator CheckPromo(string code, Action<string> callback)
         {
-            string url = $"http://localhost/MYG/API/checkpromo/{code}"; // Construct the URL
+            string url = $"https://virtualhome.hopto.org/checkpromo/{code}"; // Construct the URL
 
             using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
             {

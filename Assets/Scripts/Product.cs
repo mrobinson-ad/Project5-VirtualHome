@@ -158,7 +158,7 @@ namespace VirtualHome
 
         public IEnumerator FetchTags()
         {
-            string url = $"http://localhost/MYG/API/gettags/{productID}"; // Construct the URL
+            string url = $"https://virtualhome.hopto.org/gettags/{productID}"; // Construct the URL
 
             using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
             {
@@ -188,7 +188,7 @@ namespace VirtualHome
 
         public IEnumerator FetchDimensions()
         {
-            string url = $"http://localhost/MYG/API/getdimensions/{productID}"; // Construct the URL
+            string url = $"https://virtualhome.hopto.org/getdimensions/{productID}"; // Construct the URL
 
             using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
             {
@@ -233,7 +233,7 @@ namespace VirtualHome
         }
         public IEnumerator FetchSales()
         {
-            string url = $"http://localhost/MYG/API/getsales/{productID}"; // Construct the URL
+            string url = $"https://virtualhome.hopto.org/getsales/{productID}"; // Construct the URL
 
             using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
             {

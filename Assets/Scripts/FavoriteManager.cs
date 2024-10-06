@@ -42,7 +42,7 @@ namespace VirtualHome
 
         private IEnumerator GetUser(string userID)
         {
-            string url = $"http://localhost/MYG/API/getuser/{userID}"; // Construct the URL
+            string url = $"https://virtualhome.hopto.org/getuser/{userID}"; // Construct the URL
 
             using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
             {
@@ -134,7 +134,7 @@ namespace VirtualHome
 
         private IEnumerator AddFavorite(string userID, string productID)
         {
-            string url = $"http://localhost/MYG/API/addfavorite/{userID}/{productID}"; // Construct the URL
+            string url = $"https://virtualhome.hopto.org/addfavorite/{userID}/{productID}"; // Construct the URL
 
             using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
             {
@@ -168,7 +168,7 @@ namespace VirtualHome
 
         private IEnumerator DelFavorite(string userID, string productID)
         {
-            string url = $"http://localhost/MYG/API/removefavorite/{userID}/{productID}"; // Construct the URL
+            string url = $"https://virtualhome.hopto.org/removefavorite/{userID}/{productID}"; // Construct the URL
 
             using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
             {
@@ -202,7 +202,7 @@ namespace VirtualHome
 
         private IEnumerator AddCart(string userID, string productID, string matID)
         {
-            string url = $"http://localhost/MYG/API/addcart/{userID}/{productID}/{matID}"; // Construct the URL
+            string url = $"https://virtualhome.hopto.org/addcart/{userID}/{productID}/{matID}"; // Construct the URL
 
             using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
             {
@@ -236,7 +236,7 @@ namespace VirtualHome
 
         private IEnumerator DelCart(string userID, string productID, string matID)
         {
-            string url = $"http://localhost/MYG/API/removecart/{userID}/{productID}/{matID}"; // Construct the URL
+            string url = $"https://virtualhome.hopto.org/removecart/{userID}/{productID}/{matID}"; // Construct the URL
 
             using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
             {

@@ -49,7 +49,7 @@ namespace VirtualHome
             form.AddField("email", email);
             form.AddField("password", password);
 
-            using (UnityWebRequest webRequest = UnityWebRequest.Post("http://localhost/MYG/api/index.php", form))
+            using (UnityWebRequest webRequest = UnityWebRequest.Post("https://virtualhome.hopto.org/", form))
             {
                 yield return webRequest.SendWebRequest();
                 Debug.Log("webSent");
@@ -85,7 +85,7 @@ namespace VirtualHome
             form.AddField("email", email);
             form.AddField("password", password);
 
-            using (UnityWebRequest webRequest = UnityWebRequest.Post("http://localhost/MYG/api/index.php", form))
+            using (UnityWebRequest webRequest = UnityWebRequest.Post("https://virtualhome.hopto.org/", form))
             {
                 yield return webRequest.SendWebRequest();
 
@@ -134,7 +134,7 @@ namespace VirtualHome
             form.AddField("state", state);
             form.AddField("postal", postal);
 
-            using (UnityWebRequest webRequest = UnityWebRequest.Post("http://localhost/MYG/api/index.php", form))
+            using (UnityWebRequest webRequest = UnityWebRequest.Post("https://virtualhome.hopto.org/", form))
             {
                 yield return webRequest.SendWebRequest();
 
@@ -151,7 +151,7 @@ namespace VirtualHome
 
         public IEnumerator GetAddress()
         {
-            string url = $"http://localhost/MYG/API/getaddress/{currentID}"; // Construct the URL
+            string url = $"https://virtualhome.hopto.org/getaddress/{currentID}"; // Construct the URL
 
             using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
             {

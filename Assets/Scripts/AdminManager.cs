@@ -24,7 +24,7 @@ namespace VirtualHome
             form.AddField("isSale", isSale);
             form.AddField("salePrice", salePrice);
 
-            using (UnityWebRequest webRequest = UnityWebRequest.Post("http://localhost/MYG/api/index.php", form))
+            using (UnityWebRequest webRequest = UnityWebRequest.Post("https://virtualhome.hopto.org/", form))
             {
                 yield return webRequest.SendWebRequest();
 
@@ -44,7 +44,7 @@ namespace VirtualHome
         }
         private IEnumerator GetPromos(string userID)
         {
-            using (UnityWebRequest webRequest = UnityWebRequest.Get("http://localhost/MYG/API/getpromos/" + userID))
+            using (UnityWebRequest webRequest = UnityWebRequest.Get("https://virtualhome.hopto.org/getpromos/" + userID))
             {
                 yield return webRequest.SendWebRequest();
 
@@ -80,7 +80,7 @@ namespace VirtualHome
             form.AddField("value", value);
             form.AddField("amount", amount);
 
-            using (UnityWebRequest webRequest = UnityWebRequest.Post("http://localhost/MYG/api/index.php", form))
+            using (UnityWebRequest webRequest = UnityWebRequest.Post("https://virtualhome.hopto.org/", form))
             {
                 yield return webRequest.SendWebRequest();
 

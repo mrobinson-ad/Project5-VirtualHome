@@ -7,7 +7,7 @@ namespace VirtualHome
 {
     public class ProductLoader : MonoBehaviour
     {
-        private string apiUrl = "http://localhost/MYG/API/getall";  // Example URL
+        private string apiUrl = "https://virtualhome.hopto.org/getall";  // Example URL
         public List<Product> products;
         void Awake()
         {

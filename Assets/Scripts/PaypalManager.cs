@@ -205,7 +205,7 @@ namespace VirtualHome
             form.AddField("paypalID", paypalID);
             form.AddField("price", price);
 
-            using (UnityWebRequest webRequest = UnityWebRequest.Post("http://localhost/MYG/api/index.php", form))
+            using (UnityWebRequest webRequest = UnityWebRequest.Post("https://virtualhome.hopto.org/", form))
             {
                 yield return webRequest.SendWebRequest();
 
