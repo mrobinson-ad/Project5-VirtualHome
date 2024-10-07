@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="Order-Line" style="flex-grow: 0; width: 100%; height: 35px; justify-content: flex-start; flex-direction: row; align-items: stretch; border-bottom-color: rgba(117, 117, 117, 0.69); border-bottom-width: 1px;">
+        <ui:Label tabindex="-1" text="Name" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Order-Name" style="left: 5px; align-self: auto; -unity-text-align: upper-left; font-size: 14px; width: 130px; flex-shrink: 1;" />
+        <ui:Label tabindex="-1" text="Date" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Order-Date" style="left: auto; align-self: auto; -unity-text-align: upper-left; font-size: 14px; color: rgb(117, 117, 117); width: 60px; flex-shrink: 1;" />
+        <ui:Label tabindex="-1" text="$0000" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Order-Total" style="left: auto; align-self: auto; -unity-text-align: upper-right; font-size: 16px; flex-direction: column; right: auto; color: rgb(117, 117, 117); border-bottom-color: rgb(117, 117, 117); width: 80px; flex-shrink: 1; flex-grow: 1; margin-right: 10px;" />
+    </ui:VisualElement>
+</ui:UXML>

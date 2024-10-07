@@ -172,6 +172,7 @@ MonoBehaviour:
   - {fileID: 9197481963319205126, guid: ab8bc5927a7ee4a42aac3ab65d6ab833, type: 3}
   - {fileID: 9197481963319205126, guid: 4203368de2a0dc54bb832d50d63fdc9f, type: 3}
   - {fileID: 9197481963319205126, guid: e3fc04f34d1e3274bbd7fd7fb8a06839, type: 3}
+  - {fileID: 9197481963319205126, guid: d01e0d416f706f14f9d9a11fab62afce, type: 3}
   productList: []
   productLoader: {fileID: 803798673}
   adminManager: {fileID: 519901447}
@@ -391,6 +392,7 @@ MonoBehaviour:
   currentID: 
   currentRole: 0
   currentAddress: 
+  orders: []
 --- !u!4 &519901446
 Transform:
   m_ObjectHideFlags: 0

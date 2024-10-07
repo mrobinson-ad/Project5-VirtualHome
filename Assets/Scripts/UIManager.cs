@@ -282,6 +282,7 @@ namespace VirtualHome
             var priceScroll = root.Q<ScrollView>("Price-Scroll");
             var priceBox = root.Q<GroupBox>("Product-Box");
             var promoBox = root.Q<GroupBox>("Promo-Box");
+            var historyScroll = root.Q<ScrollView>("Order-Scroll");
             var addressMessage = addressBox.Q<Label>("Address-Message");
             var notificationBox = root.Q<GroupBox>("Notification-Box");
             var notificationMessage = root.Q<Label>("Notification-Label");
@@ -317,6 +318,7 @@ namespace VirtualHome
                 FavoriteManager.Instance.favoriteList.Clear();
                 FavoriteManager.Instance.cartDict.Clear();
                 cartAmount = 0;
+                root.Q<Label>("Cart-Amount").text = cartAmount.ToString();
             });
 
             root.Q<Button>("Billing-Button").RegisterCallback<ClickEvent>(evt =>
@@ -334,11 +336,20 @@ namespace VirtualHome
             {
                 priceScroll.RemoveFromClassList("shortcut-off");
                 priceBox.Query<TextField>().ForEach(textField => textField.value = string.Empty);
-                
+
             });
             priceScroll.Q<VisualElement>("Return-Arrow").RegisterCallback<ClickEvent>(evt =>
             {
                 priceScroll.AddToClassList("shortcut-off");
+            });
+
+            root.Q<Button>("History-Button").RegisterCallback<ClickEvent>(evt =>
+            {
+                historyScroll.RemoveFromClassList("shortcut-off");
+            });
+            historyScroll.Q<VisualElement>("Return-Arrow").RegisterCallback<ClickEvent>(evt =>
+            {
+                historyScroll.AddToClassList("shortcut-off");
             });
 
             SetAddress();
@@ -354,7 +365,10 @@ namespace VirtualHome
                     SetManagement();
                 }
             }
-
+            if (UserManager.Instance.orders.Count > 0)
+            {
+                SetOrderHistory();
+            }
             SetNavBar();
 
             #region SetLoginFields
@@ -555,7 +569,7 @@ namespace VirtualHome
                     }
 
                     Promo selectedPromo = adminManager.promos.FirstOrDefault(p => p.promoID == evt.newValue);
-                    
+
                     if (selectedPromo != null)
                     {
                         codeField.value = selectedPromo.promoCode.ToString();
@@ -566,7 +580,7 @@ namespace VirtualHome
 
                 root.Q<Button>("Update-Promo").RegisterCallback<ClickEvent>(evt =>
                 {
-                    
+
                     string code = codeField.value;
                     string value = valueField.value;
                     string amount = amountField.value;
@@ -582,12 +596,31 @@ namespace VirtualHome
                 yield return new WaitForSeconds(2.5f);
                 notificationBox.AddToClassList("notification-off");
             }
-            #endregion
+
+            void SetOrderHistory()
+            {
+                GroupBox historyBox = root.Q<GroupBox>("Order-Box");
+                historyBox.Clear();
+                VisualTreeAsset template = uITemplates.Find(t => t.name == "Order-Line");
+                foreach (UserOrder order in UserManager.Instance.orders)
+                {
+                    if (template != null)
+                    {
+                        VisualElement newItem = template.CloneTree();
+
+                        newItem.Q<Label>("Order-Name").text = order.paypalID;
+                        newItem.Q<Label>("Order-Date").text = order.date;
+                        newItem.Q<Label>("Order-Total").text = "$"+order.price;
+                        historyBox.Add(newItem);
+                    }
+                }
+                #endregion
+            }
         }
 
         #endregion
 
-        #region LoadCart
+            #region LoadCart
 
         private void LoadCart()
         {
@@ -793,7 +826,7 @@ namespace VirtualHome
 
             EventCallback<ClickEvent> confirmClicked = evt =>
             {
-                payPalManager.orderPrice = totalPrice *1.1f;
+                payPalManager.orderPrice = totalPrice * 1.1f;
                 payPalManager.payPalOrder = new PayPalOrder("CAPTURE", "default", "USD", (totalPrice * 1.1f).ToString("F2"));
                 payPalManager.StartCoroutine(payPalManager.StartOrder());
             };

@@ -4,6 +4,7 @@ using UnityEngine.Networking;
 using System.Collections;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace VirtualHome
 {
@@ -16,6 +17,8 @@ namespace VirtualHome
         public int currentRole;
 
         public string currentAddress;
+
+        public List<UserOrder> orders = new List<UserOrder>();
 
         private void Awake()
         {
@@ -111,6 +114,7 @@ namespace VirtualHome
                         currentRole = (int)roleToken;
                     }
                     StartCoroutine(GetAddress());
+                    StartCoroutine(GetOrders());
                     callback("success");
                 }
                 else if (response["error"] != null)
@@ -174,13 +178,58 @@ namespace VirtualHome
                             Debug.Log("No address Found");
                             yield break;
                         }
-                        Debug.Log(city);
                         currentAddress = $"{currentUser}'s address in {city}";
                         Debug.Log($"Fetched address in {city} for {currentUser}.");
                     }
                     catch (JsonReaderException)
                     {
                         Debug.Log($"JSON Parsing Error:");
+                    }
+                }
+            }
+        }
+
+
+        private IEnumerator GetOrders()
+        {
+            string url = $"https://virtualhome.hopto.org/getorders/{currentID}";
+
+            using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
+            {
+                yield return webRequest.SendWebRequest(); // Wait for the response
+
+                // Check for errors
+                if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
+                {
+                    Debug.LogError($"Error fetching order history for user {currentUser}: {webRequest.error}");
+                }
+                else
+                {
+                    string jsonResponse = webRequest.downloadHandler.text;
+                    Debug.Log(jsonResponse);
+                    try
+                    {
+                        
+                        List<UserOrder> orders = JsonConvert.DeserializeObject<List<UserOrder>>(jsonResponse);
+
+                        if (orders == null || orders.Count == 0)
+                        {
+                            Debug.Log("No orders found");
+                            yield break;
+                        }
+
+                        UserManager.Instance.orders.Clear();
+                        
+                        foreach (var order in orders)
+                        {
+                            new UserOrder(order.paypalID, order.date, order.price);
+                        }
+
+                        Debug.Log($"Fetched {orders.Count} orders for {currentUser}.");
+                    }
+                    catch (JsonException ex)
+                    {
+                        Debug.Log($"JSON Parsing Error: {ex.Message}");
                     }
                 }
             }
@@ -201,6 +250,22 @@ namespace VirtualHome
             this.state = state;
             this.postal = postal;
             UserManager.Instance.StartSetAddress(address, city, state, postal);
+        }
+    }
+
+    [Serializable]
+    public class UserOrder
+    {
+        public string paypalID;
+        public string date;
+        public string price;
+
+        public UserOrder(string paypalID, string date, string price)
+        {
+            this.paypalID = paypalID;
+            this.date = date;
+            this.price = price;
+            UserManager.Instance.orders.Add(this);
         }
     }
 }

@@ -90,6 +90,11 @@
             <ui:Button text="Update promos" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Update-Promo" class="button-black" style="align-self: center; max-width: 95%; min-width: 95%; margin-top: 10px;" />
         </ui:GroupBox>
     </ui:ScrollView>
+    <ui:ScrollView horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" name="Order-Scroll" class="shortcut shortcut-off" style="background-color: rgb(255, 255, 255); flex-grow: 0; transition-duration: 750ms;">
+        <ui:VisualElement name="Return-Arrow" style="flex-grow: 0; position: relative; left: 15px; top: auto; background-image: url(&apos;project://database/Assets/Sprites/UI/Chevron%20down.png?fileID=21300000&amp;guid=04ccb8e28a357dd4fa207bc40db15923&amp;type=3#Chevron down&apos;); width: 30px; height: 30px; rotate: 90deg; background-color: rgba(0, 0, 0, 0); -unity-background-image-tint-color: rgb(255, 255, 255); -unity-background-scale-mode: scale-to-fit; flex-shrink: 0;" />
+        <ui:Label tabindex="-1" text="Order history" parse-escape-sequences="true" display-tooltip-when-elided="true" enable-rich-text="true" class="h1" style="top: auto;" />
+        <ui:GroupBox name="Order-Box" style="flex-grow: 1; flex-shrink: 1;" />
+    </ui:ScrollView>
     <ui:GroupBox name="Notification-Box" class="notification notification-off" style="transition-property: all; transition-duration: 1s; transition-timing-function: ease-in-out-sine; justify-content: center; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-top-width: 6px; border-right-width: 6px; border-bottom-width: 6px; border-left-width: 6px;">
         <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Notification-Label" class="h1" style="top: auto; align-self: center; align-items: center; white-space: normal; -unity-text-align: middle-center;" />
     </ui:GroupBox>
